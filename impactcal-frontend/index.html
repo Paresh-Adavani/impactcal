@@ -1,0 +1,154 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ImpactCal — Shock absorber &amp; crane buffer selection | ADONI TECH</title>
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css?v=202608251359">
+</head><body>
+<header class="noprint"><div class="wrap">
+  <img src="img/logo.png" alt="ADONI TECH" class="brandmark">
+  <div class="sub">ImpactCal<br>Selection &amp; RFQ Suite</div>
+  <nav>
+    <button id="tabCrane" class="on">Crane buffers</button>
+    <button id="tabInd">Industrial shock absorbers</button>
+    <a href="admin.html">Admin</a>
+  </nav>
+</div></header>
+
+<div class="wrap noprint">
+  <div class="steps">
+    <div class="step on" data-s="1"><span class="n">1</span><span><b>Project</b><small>name · customer</small></span></div>
+    <div class="step" data-s="2"><span class="n">2</span><span><b>Application</b><small>pick the picture</small></span></div>
+    <div class="step" data-s="3"><span class="n">3</span><span><b>Duty</b><small>mass · speed · cycles</small></span></div>
+    <div class="step" data-s="4"><span class="n">4</span><span><b>Results</b><small>ranked selection</small></span></div>
+    <div class="step" data-s="5"><span class="n">5</span><span><b>Request</b><small>RFQ &amp; drawings</small></span></div>
+  </div>
+
+  <!-- 1 project -->
+  <section class="card" data-p="1">
+    <h3>Project details</h3>
+    <p class="hint">Saved in this browser. Email and phone are needed only when you send the request.</p>
+    <div class="grid">
+      <div><label>Project name</label><input id="pname" placeholder="e.g. Bay 3 gantry — end stops"></div>
+      <div><label>Customer / company</label><input id="pcust" placeholder="e.g. Kirloskar Brothers Ltd."></div>
+      <div><label>Contact person</label><input id="pcontact"></div>
+      <div><label>Reference no.</label><input id="pref" placeholder="AT/CB/2026/xx"></div>
+      <div><label>Equipment</label><input id="pequip" placeholder="e.g. 20 t EOT crane, 22 m span"></div>
+      <div><label>Prepared by</label><input id="pby"></div>
+      <div><label>Email</label><input id="pemail" type="email"></div>
+      <div><label>Phone / WhatsApp</label><input id="pphone"></div>
+      <div><label>GSTIN <span class="muted">(for the quotation)</span></label><input id="pgstin" placeholder="27AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase"></div>
+    </div>
+    <div id="gstinMsg"></div>
+    <div class="row" style="margin-top:14px"><button class="btn" data-go="2">Next: application →</button>
+      <button class="btn ghost" id="loadExample">Load a worked example</button></div>
+  </section>
+
+  <!-- 2 application -->
+  <section class="card hidden" data-p="2">
+    <h3>Which of these is your application?</h3>
+    <p class="hint">Click the picture that matches. The governing standard sets the design speed and the deceleration limit.</p>
+    <div id="caseGrid" class="picker"></div>
+    <div class="grid" style="margin-top:16px;max-width:640px">
+      <div><label>Governing standard</label><select id="standard"></select></div>
+      <div><label>Restrict to series <span class="muted">(optional)</span></label><select id="series" multiple size="4"></select></div>
+    </div>
+    <div id="stdNote" class="note blue"></div>
+    <div class="row"><button class="btn ghost" data-go="1">← Back</button><button class="btn" data-go="3">Next: duty →</button></div>
+  </section>
+
+  <!-- 3 duty -->
+  <section class="card hidden" data-p="3">
+    <div class="dutyhead"><div><h3 id="dutyTitle"></h3>
+      <p class="hint">MKS units. Only the fields this case needs are shown.</p></div>
+      <img id="dutyPic" alt="" class="dutypic"></div>
+    <div class="grid" id="dutyFields"></div>
+    <div class="row" style="margin-top:14px">
+      <button class="btn ghost" data-go="2">← Back</button>
+      <button class="btn" id="calc">Calculate and select →</button>
+    </div>
+  </section>
+
+  <!-- 4 results -->
+  <section class="card hidden" data-p="4">
+    <div class="spread"><h3>Selection</h3><div id="picks"></div></div>
+    <div id="dutyOut"></div>
+    <div class="tw"><table id="resTbl">
+      <thead><tr><th></th><th>Model</th><th>Series</th><th class="n">Stroke mm</th><th class="n">Nm/cycle</th>
+        <th class="n">Nm/h</th><th class="n">Use /str</th><th class="n">Use /h</th><th class="n">Decel m/s²</th>
+        <th class="n">Force kN</th><th class="n">Eff. mass kg</th><th>Notes</th></tr></thead><tbody></tbody></table></div>
+    <div class="row" style="margin-top:12px"><button class="btn ghost" id="showMore"></button></div>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="3">← Back</button>
+      <button class="btn" id="toRfq" disabled>Request drawings &amp; quotation →</button>
+      <button class="btn ghost" id="printReport" disabled>Print this selection (A4)</button></div>
+  </section>
+
+  <!-- 5 rfq -->
+  <section class="card hidden" data-p="5">
+    <h3>Request drawings and quotation</h3>
+    <p class="hint">Your selection and calculation are attached. CAD files are released by ADONI TECH after review — usually within one working day.</p>
+    <div id="rfqLines"></div>
+    <div class="grid" style="margin-top:14px">
+      <div><label>Quantity per position</label><input id="rqty" type="number" value="2" min="1"></div>
+      <div><label>Mounting</label><select id="rmount"></select></div>
+      <div><label>Rod end</label><select id="rcap"></select></div>
+      <div><label>Drawing formats</label><select id="rfmt" multiple size="5">
+        <option value="PDF" selected>PDF (2D dimensioned)</option><option value="DXF">DXF</option>
+        <option value="DWG">DWG</option><option value="STEP" selected>STEP (3D)</option><option value="IGES">IGES (3D)</option>
+      </select></div>
+    </div>
+    <div style="margin-top:12px"><label>Message</label><textarea id="rmsg" rows="3" placeholder="Anything else we should know — ambient temperature, duty cycle, mounting constraints…"></textarea></div>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="4">← Back</button>
+      <button class="btn" id="sendRfq">Send request</button></div>
+    <div id="rfqOut"></div>
+  </section>
+</div>
+
+<!-- ============ A4 selection report — the only thing that prints ============ -->
+<div id="report" class="a4" hidden>
+  <div class="rpt-head">
+    <div><img src="img/logo.png" alt="ADONI TECH" class="rpt-logo">
+      <div class="rpt-addr" id="rAddr"></div></div>
+    <div class="rpt-meta">
+      <div class="rpt-title">SHOCK ABSORBER SELECTION</div>
+      <div id="rMeta"></div>
+    </div>
+  </div>
+  <div class="rpt-grid">
+    <div><div class="rpt-sec">Project</div><table class="kv" id="rProject"></table></div>
+    <div><div class="rpt-sec">Application</div><table class="kv" id="rApp"></table>
+      <img id="rPic" alt="" class="rpt-pic"></div>
+  </div>
+  <div class="rpt-sec">Input data</div>
+  <table class="kv cols3" id="rInputs"></table>
+  <div class="rpt-sec">Calculation</div>
+  <table class="kv cols2" id="rCalc"></table>
+  <div class="rpt-sec">Selected model</div>
+  <table class="rpt-tbl" id="rModel"></table>
+  <div id="rFlags"></div>
+  <div class="rpt-foot">
+    <div id="rNote"></div>
+    <div class="rpt-sign"><div>Prepared by <b id="rBy"></b></div><div>For ADONI TECH</div></div>
+  </div>
+</div>
+
+<!-- ============ RFQ sent overlay ============ -->
+<div id="sentOverlay" class="overlay noprint" hidden>
+  <div class="sentbox">
+    <svg class="plane" viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+      <circle class="ring" cx="60" cy="60" r="46" fill="none" stroke="#F57C00" stroke-width="4"
+              stroke-linecap="round" stroke-dasharray="289" stroke-dashoffset="289"/>
+      <path class="env" d="M34 46 h52 v30 h-52 z" fill="none" stroke="#1B3160" stroke-width="3.5" stroke-linejoin="round"/>
+      <path class="flap" d="M34 46 l26 20 l26 -20" fill="none" stroke="#1B3160" stroke-width="3.5"
+            stroke-linecap="round" stroke-linejoin="round"/>
+      <path class="tick" d="M42 61 l13 13 l24 -26" fill="none" stroke="#0E8A4D" stroke-width="6"
+            stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="60" stroke-dashoffset="60"/>
+    </svg>
+    <h3 id="sentTitle">Sending…</h3>
+    <p id="sentMsg" class="muted"></p>
+    <button class="btn ghost" id="sentClose" hidden>Close</button>
+  </div>
+</div>
+<script src="app.js?v=202608251359"></script>
+</body></html>
