@@ -50,9 +50,14 @@
     <h3>Which of these is your application?</h3>
     <p class="hint">Click the picture that matches. The governing standard sets the design speed and the deceleration limit.</p>
     <div id="caseGrid" class="picker"></div>
+    <h4 class="seriesh">Restrict to series <span class="muted">(optional — pick up to 3)</span></h4>
+    <p class="hint">Click the pictures of the families you want. Leave them all unpicked to search the whole catalogue.</p>
+    <div class="seriesbar"><span class="count" id="seriesCount"></span>
+      <button class="btn ghost sm" type="button" id="seriesClear">Clear</button></div>
+    <div id="seriesGrid" class="picker series"></div>
     <div class="grid" style="margin-top:16px;max-width:640px">
       <div><label>Governing standard</label><select id="standard"></select></div>
-      <div><label>Restrict to series <span class="muted">(optional)</span></label><select id="series" multiple size="4"></select></div>
+      <div><label>Restrict to series <span class="muted">(list, same setting)</span></label><select id="series" multiple size="4"></select></div>
     </div>
     <div id="stdNote" class="note blue"></div>
     <div class="row"><button class="btn ghost" data-go="1">← Back</button><button class="btn" data-go="3">Next: duty →</button></div>
