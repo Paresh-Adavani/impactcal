@@ -29,6 +29,33 @@ const CASE_ART = {
   I10:['I10.svg','Mass lowered under control','hoist overtravel, weight adds to the stroke'],
   I11:['I11.png','Swinging arm with propelling torque','uniform weight distribution'],
 };
+const CB_IMG = 'https://www.cranebuffer.com/wp-content/uploads/';
+const AT_IMG = 'https://www.adonitech.co.in/wp-content/uploads/';
+/* picture, what the family is, one line on how it works */
+const SERIES_ART = {
+  AC  :[AT_IMG+'2026/02/precision__3___1_-removebg-preview.png','Fixed damping',
+        'Self-compensating. Damping set at the factory — pick the code 0–4 to suit the load.'],
+  ACX :[AT_IMG+'2024/12/Industrial-Shock-Absorbers-2-300x200.png','Fixed damping, extended',
+        'Self-compensating, more energy per cycle in the same thread size.'],
+  AD  :[AT_IMG+'2025/03/DSC_2230-removebg-preview-1-1-212x300.png','Adjustable damping',
+        'Damping set on installation by turning the adjustment ring.'],
+  YSRA:[AT_IMG+'2025/01/industrial-shock-absorber-two-locknuts-221x300.jpg','Hydraulic, small bore',
+        'Compact threaded hydraulic absorber, mounted with locknuts.'],
+  AKHG:[CB_IMG+'2025/01/adonitech__7_-220x300.jpg','Hydraulic, nitrogen return',
+        'Heavy crane buffer. A nitrogen chamber pushes the rod back out after impact.'],
+  AKHS:[CB_IMG+'2025/02/adonitech__7___2_-removebg-preview.png','Hydraulic, spring return',
+        'Heavy crane buffer. A return spring replaces the gas chamber.'],
+  ED  :[CB_IMG+'2025/01/1-removebg-preview-300x200.png','Hydraulic crane buffer',
+        'Heavy-duty buffer for crane and wagon end stops.'],
+  EI  :[CB_IMG+'2025/01/adonitech__7_-1.jpg','Hydraulic crane buffer',
+        'Industrial-duty buffer for travelling machinery.'],
+  SB  :[CB_IMG+'2025/02/IMG-20250211-WA0009-221x300.jpg','Steel coil spring',
+        'Spring buffer. Stores the energy and gives it back — efficiency 0.50.'],
+  JHQC:[CB_IMG+'2026/01/1111-300x249.jpg','Polyurethane, non-metallic',
+        'Bolted elastomer pad, no moving parts — efficiency 0.158.'],
+};
+const SERIES_MAX = 3;
+
 const F = {
   m:['Mass','kg','the mass that actually reaches the buffer'],
   v:['Rated travel speed','m/min','the standard applies its own factor to this'],
@@ -62,6 +89,35 @@ function step(n) {
   $$('.step').forEach(s => s.classList.toggle('on', s.dataset.s == n));
   $$('[data-p]').forEach(p => p.classList.toggle('hidden', p.dataset.p != n));
   window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ---------------- series picture menu (pick up to 3) ---------------- */
+function selectedSeries() { return [...$('#series').selectedOptions].map(o => o.value); }
+function setSeries(list) {
+  const keep = [...new Set(list)].slice(0, SERIES_MAX);
+  [...$('#series').options].forEach(o => { o.selected = keep.includes(o.value); });
+  S.series = keep; save(); drawSeries();
+}
+function drawSeries() {
+  const sel = selectedSeries(), full = sel.length >= SERIES_MAX;
+  $('#seriesGrid').innerHTML = META.series.map(s => {
+    const a = SERIES_ART[s.series] || ['', s.series, ''];
+    const on = sel.includes(s.series);
+    return `<button type="button" class="pick ${on ? 'on' : ''}" data-series="${esc(s.series)}"
+      ${(!on && full) ? 'disabled' : ''}>
+      <span class="thumb"><img src="${esc(a[0])}" alt="${esc(s.series)} buffer"
+        loading="lazy" onerror="this.remove()"></span>
+      <span class="code">${esc(s.series)}</span>
+      <b>${esc(a[1])}</b><small>${esc(a[2])}</small>
+      <span class="n">${s.n} models</span></button>`;
+  }).join('');
+  $$('#seriesGrid .pick').forEach(b => b.onclick = () => {
+    const c = b.dataset.series, cur = selectedSeries();
+    setSeries(cur.includes(c) ? cur.filter(x => x !== c) : [...cur, c]);
+  });
+  $('#seriesCount').innerHTML = sel.length
+    ? `<b>${sel.length} of ${SERIES_MAX}</b> picked — only ${sel.map(esc).join(', ')} will be offered.`
+    : `Nothing picked — the whole catalogue is searched. You can pick up to ${SERIES_MAX} series.`;
 }
 
 function drawPicker() {
@@ -111,6 +167,9 @@ async function boot() {
   $('#standard').innerHTML = META.standards.map(s =>
     `<option value="${s.code}">${esc(s.name)}</option>`).join('');
   $('#series').innerHTML = META.series.map(s => `<option value="${s.series}">${s.series} (${s.n})</option>`).join('');
+  $('#series').onchange = () => setSeries(selectedSeries());
+  $('#seriesClear').onclick = () => setSeries([]);
+  setSeries(Array.isArray(S.series) ? S.series : []);
   $('#rmount').innerHTML = '<option value="">—</option>' +
     META.accessories.filter(a => a.kind === 'mounting').map(a => `<option>${esc(a.name)}</option>`).join('');
   $('#rcap').innerHTML = '<option value="">—</option>' +
@@ -142,7 +201,7 @@ function stdNote() {
 /* ------------------------------ calculate ------------------------------ */
 async function calculate() {
   const body = { duty:duty(), case_id:CASE, standard:$('#standard').value,
-    series:[...$('#series').selectedOptions].map(o => o.value), limit:200 };
+    series:selectedSeries(), limit:200 };
   const ms = $('#d_max_stroke'); if (ms && ms.value) body.max_stroke_mm = Number(ms.value);
   RESULT = await api('/api/select', { method:'POST', headers:{'content-type':'application/json'}, body:JSON.stringify(body) });
   CHOSEN = null; EXPANDED = false;
