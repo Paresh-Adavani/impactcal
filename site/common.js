@@ -60,7 +60,7 @@ function renderHeader(active) {
     <nav>${links.map(([h, k]) => `<a href="${h}" class="${active === k ? 'on' : ''}" data-t="${k}"></a>`).join('')}
       ${u && (u.role === 'admin' || u.role === 'sales') ? `<a href="admin.html" class="${active === 'nav_admin' ? 'on' : ''}" data-t="nav_admin"></a>` : ''}
       <select class="lang" id="langSel">${I18N.langs.map(l => `<option value="${l}" ${l === I18N.lang ? 'selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('')}</select>
-      ${u ? `<button id="logoutBtn" title="${esc(u.email)}"><span class="pill ${u.role === 'admin' ? 'brand' : ''}">${esc(u.role)}</span> ${esc(u.email.split('@')[0])} ✕</button>` : `<a href="login.html?next=${encodeURIComponent(location.pathname.split('/').pop() || 'index.html')}" data-t="nav_login"></a>`}
+      ${u ? `<button id="logoutBtn" title="${esc(u.email)}"><span class="pill ${u.role === 'admin' ? 'brand' : ''}">${esc(u.role)}</span> ${esc(u.name || u.email.split('@')[0])} ✕</button>` : `<a href="login.html?next=${encodeURIComponent(location.pathname.split('/').pop() || 'index.html')}" data-t="nav_login"></a>`}
     </nav>`;
   $('#langSel').onchange = e => setLang(e.target.value);
   const lb = $('#logoutBtn'); if (lb) lb.onclick = () => AUTH.logout();

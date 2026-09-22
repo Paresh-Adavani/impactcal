@@ -47,7 +47,7 @@ function render() {
   </div>
   <div class="card"><h3>Drawings to send</h3>
     <p class="hint">GA drawings from the library that match the quoted models. Ticked PDFs are ${D.drawings_mode === 'attach' ? 'attached to the offer mail' : 'sent as expiring download links'}. Greyed ones are indexed but not yet uploaded to the app (run Drive sync in the admin panel).</p>
-    ${D.drawings.length ? D.drawings.map(d => `<label class="dw"><input type="checkbox" data-path="${esc(d.path)}" ${(q.drawings || []).some(x => x.path === d.path) ? 'checked' : ''} ${d.available ? '' : 'disabled'}><span style="flex:1;${d.available ? '' : 'opacity:.5'}"><b>${esc(d.filename)}</b> <small class="muted">${esc([d.mounting, d.accessory, d.status].filter(Boolean).join(' · '))}</small></span></label>`).join('') : '<div class="muted">No GA drawing indexed for these models.</div>'}
+    ${D.drawings.length ? D.drawings.map(d => `<label class="dw"><input type="checkbox" data-path="${esc(d.path)}" ${(q.drawings || []).some(x => x.path === d.path) ? 'checked' : ''} ${d.available ? '' : 'disabled'}><span style="flex:1;${d.available ? '' : 'opacity:.5'}"><b>${esc(d.filename)}</b> <small class="muted">${esc([d.mounting, d.accessory, d.status].filter(Boolean).join(' · '))}${d.available ? '' : ' · <b>not uploaded yet</b> (Admin → Drawings)'}</small></span></label>`).join('') : '<div class="muted">No GA drawing indexed for these models.</div>'}
     <div class="row" style="margin-top:10px"><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="radio" name="dm" value="attach" ${D.drawings_mode !== 'link' ? 'checked' : ''} style="width:auto">Attach PDFs</label><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="radio" name="dm" value="link" ${D.drawings_mode === 'link' ? 'checked' : ''} style="width:auto">Send expiring links</label></div>
   </div>
   <div class="card"><h3>Bank details on this quotation (${cur})</h3>${Object.keys(D.bank).filter(k => D.bank[k]).length ? `<table class="kv">${Object.entries(D.bank).filter(([, v]) => v).map(([k, v]) => `<tr><td class="muted">${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>` : '<div class="note warn">Bank details are empty — fill them in the admin panel (Settings) before sending.</div>'}
@@ -71,7 +71,10 @@ $('#save').onclick = () => save().catch(e => alert(e.message));
 $('#send').onclick = async () => {
   try {
     const q = await save(true);
-    if (q.items.some(i => !i.rate)) { if (!confirm('Some lines have zero rate. Send anyway?')) { render(); return; } }
+    if (q.items.some(i => i.kind === 'product' && !i.rate)) { if (!confirm('Some product lines have ZERO rate - the customer would receive a quotation for 0. Send anyway?')) { render(); return; } }
+    if (q.sent_at) { if (!confirm(`This quotation was already sent on ${new Date(q.sent_at).toLocaleString()} to ${q.sent_to || q.customer.email}. Send it AGAIN?`)) { render(); return; } }
+    const notAvail = (q.drawings || []).filter(d => !(D.drawings || []).some(x => x.path === d.path && x.available)).map(d => d.filename);
+    if (notAvail.length) { if (!confirm(`These drawings are ticked but not uploaded to the library yet, so they will NOT be attached: ${notAvail.join(', ')}. Send without them?`)) { render(); return; } }
     if (!confirm(`Approve ${q.number} for ${q.currency} ${n2(q.totals.grand_total)} and email it to ${q.customer.email}?`)) { render(); return; }
     $('#send').disabled = true; $('#send').textContent = 'Sending…';
     const r = await api('approve/' + encodeURIComponent(ID) + '/send', { method: 'POST', headers: hdr(), body: { approved_by: $('#by').value, drawings_mode: (document.querySelector('input[name=dm]:checked') || {}).value } });
