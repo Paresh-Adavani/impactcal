@@ -43,7 +43,7 @@ mail.rfq_to,"adonitech@gmail.com,sales@adonitech.co.in",
 mail.approver_to,adonitech@gmail.com,
 mail.cc_on_offer,sales@adonitech.co.in,
 sales.domains,adonitech.co.in,
-sales.emails,"adonitech@gmail.com,adonisatara@gmail.com",Comma list: these logins see prices
+sales.emails,"adonitechpune@gmail.com,adonisatara@gmail.com,vidyaadavani1@gmail.com,adonitech@gmail.com",Comma list: these logins see prices
 drawings.release_days,30,
 drawings.mode,attach,attach = PDF attached to offer mail; link = expiring download links
 ui.languages,"en,hi,mr,de,fr,es,ko,ta,te,kn,ml,bn,gu,ur,ar,th,vi",
@@ -53,3 +53,6 @@ whatsapp.phone_id,,
 whatsapp.to,919890852663,
 whatsapp.template,impactcal_approval,
 engine.share_drive_work,0,0 = ACE convention: propelling work F·s charged to each absorber (safer). 1 = divide F·s by the number of absorbers (ImpactCal 1.x behaviour)
+sales.people,adonitechpune@gmail.com=Krishnakant Harpale; adonisatara@gmail.com=Shital Hirve; vidyaadavani1@gmail.com=Vidya Adavani; adonitech@gmail.com=Paresh Adavani,"email=Display name; used on the RFQ queue, approval page and the cc line of offers"
+crm.enabled,1,"Push every RFQ as a lead to UnitePro CRM (needs env UNITEPRO_TOKEN on Netlify). 0 = off"
+crm.source,ImpactCal Web,"Lead source name shown in UnitePro"

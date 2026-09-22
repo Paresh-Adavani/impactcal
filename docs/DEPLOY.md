@@ -90,3 +90,13 @@ set `WHATSAPP_TOKEN` (permanent System User token), settings `whatsapp.phone_id`
 ## 8. Custom domain (optional)
 
 Site configuration → Domain management → add `impactcal.adonitech.co.in` (CNAME to the Netlify site). Set `PUBLIC_URL` accordingly.
+
+
+## CRM (UnitePro)
+
+| Variable | Purpose |
+|---|---|
+| `UNITEPRO_TOKEN` | Bearer token from UnitePro (Settings → API / webhook). Required for lead push. |
+| `UNITEPRO_URL` | Optional; default `https://app.unitepro.in/api/webhook/sendLeads`. |
+
+Switch with `crm.enabled` in `data/settings.csv` (1/0). Test from Admin → Tools → CRM. Failures never block an RFQ; see Audit (`crm.*`).

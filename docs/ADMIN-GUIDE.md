@@ -56,3 +56,12 @@ column is filled (Excel → upload on the CSV tab). `ui.languages` in settings c
 * Netlify Blobs holds RFQs, quotations, uploads and drawings — durable, but export monthly: **Team & activity → Export RFQs CSV**,
   Quotations → *Export CSV*; Drive sync pushes the same files nightly to `RFQ-EXPORTS/`.
 * The PC folder is mirrored by Google Drive for Desktop; `tools\BACKUP.bat` makes a dated zip of `data/` and `GA-LIBRARY/`.
+
+
+## CRM leads (UnitePro)
+
+Every RFQ is sent to UnitePro as a lead: client = customer company, brand = contact person, industry = equipment, phone/e-mail/GSTIN/state, keywords = models, requirement = "RFQ n: model × qty", remarks = calculation summary + message + admin link. Tools → CRM has *Status*, *Preview test lead* (nothing sent) and *Push a test lead*. Turn off with settings `crm.enabled=0`.
+
+## Customer copy of the RFQ
+
+The acknowledgement to the customer repeats everything they entered (inputs in MKS, calculated result, models, message) and attaches `Selection-<RFQ>.pdf`. The sales copy gets the same PDF.

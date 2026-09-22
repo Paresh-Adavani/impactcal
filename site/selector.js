@@ -22,12 +22,23 @@ const DEF = { H_M: 2.5, n: 2, C: 20, temp_min: -10, temp_max: 60 };
 const art = id => 'img/cases/' + (CASE_ART[id] ? CASE_ART[id][0] : 'I1.png');
 const COUNTRIES = ['India', 'United States', 'Germany', 'United Kingdom', 'France', 'Spain', 'Italy', 'Netherlands', 'Korea, Republic of', 'Japan', 'China', 'Singapore', 'Malaysia', 'Thailand', 'Vietnam', 'Indonesia', 'Australia', 'United Arab Emirates', 'Saudi Arabia', 'Qatar', 'Oman', 'Egypt', 'South Africa', 'Nigeria', 'Kenya', 'Brazil', 'Mexico', 'Canada', 'Turkey', 'Bangladesh', 'Sri Lanka', 'Nepal', 'Other'];
 
+function focusNext(sel) { const el = $(sel); if (!el) return; el.classList.remove('focus'); void el.offsetWidth; el.classList.add('focus'); setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 60); setTimeout(() => el.classList.remove('focus'), 2600); }
 function step(n) { $$('.step').forEach(s => s.classList.toggle('on', s.dataset.s == n)); $$('[data-p]').forEach(p => p.classList.toggle('hidden', p.dataset.p != n)); window.scrollTo({ top: 0, behavior: 'smooth' }); }
 
+let ROLLED = false;   // case grid rolled up after a pick so the next choices are in view
 function drawPicker() {
   const cs = META.cases.filter(c => c.group === GROUP);
-  $('#caseGrid').innerHTML = cs.map(c => { const a = CASE_ART[c.id] || [null, c.title, '']; return `<button class="pick ${c.id === CASE ? 'on' : ''}" data-case="${c.id}"><span class="thumb"><img src="${art(c.id)}" alt="" loading="lazy"></span><b>${esc(t(a[1]))}</b><small>${esc(t(a[2]))}</small></button>`; }).join('');
-  $$('#caseGrid .pick').forEach(b => b.onclick = () => { CASE = b.dataset.case; S.case = CASE; save(); drawPicker(); fields(); });
+  const grid = $('#caseGrid');
+  if (ROLLED && CASE && cs.some(c => c.id === CASE)) {
+    const a = CASE_ART[CASE] || [null, '', ''];
+    grid.classList.add('rolled');
+    grid.innerHTML = `<div class="chosen-strip"><img src="${art(CASE)}" alt=""><span><small class="muted">${esc(t('chosen_case'))}</small><br><b>${esc(t(a[1]))}</b> <span class="muted">— ${esc(t(a[2]))}</span></span><button class="btn ghost small" id="changeCase">${esc(t('change_case'))}</button></div>`;
+    $('#changeCase').onclick = () => { ROLLED = false; drawPicker(); grid.scrollIntoView({ behavior: 'smooth', block: 'start' }); };
+  } else {
+    grid.classList.remove('rolled');
+    grid.innerHTML = cs.map(c => { const a = CASE_ART[c.id] || [null, c.title, '']; return `<button class="pick ${c.id === CASE ? 'on' : ''}" data-case="${c.id}"><span class="thumb"><img src="${art(c.id)}" alt="" loading="lazy"></span><b>${esc(t(a[1]))}</b><small>${esc(t(a[2]))}</small></button>`; }).join('');
+    $$('#caseGrid .pick').forEach(b => b.onclick = () => { CASE = b.dataset.case; S.case = CASE; save(); ROLLED = true; drawPicker(); fields(); focusNext('#seriesBlock'); });
+  }
   const ss = META.series.filter(s => s.group === GROUP);
   $('#seriesGrid').innerHTML = ss.map(s => `<button class="pick ${SERIES.has(s.series) ? 'on' : ''}" data-series="${s.series}"><span class="thumb"><img src="${s.icon}" alt=""></span><b>${esc(s.series)}</b><small>${esc(s.title.replace(/^[A-Z]+ — /, ''))} · ${s.n} ${t('models')}</small></button>`).join('');
   $$('#seriesGrid .pick').forEach(b => b.onclick = () => { const k = b.dataset.series; SERIES.has(k) ? SERIES.delete(k) : SERIES.add(k); S.series = [...SERIES]; save(); drawPicker(); });

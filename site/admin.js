@@ -111,17 +111,19 @@ async function drawings() {
 /* ---------------- users & activity ---------------- */
 async function users() {
   const [us, au] = await Promise.all([api('admin/users'), api('admin/audit?days=14')]);
-  V().innerHTML = `<div class="card tbl-card"><h3>Logins</h3><p class="hint">Roles come from settings: <b>sales.emails</b> / <b>sales.domains</b> see prices; admin addresses are set by the ADMIN_EMAILS environment variable.</p><div class="tw"><table><thead><tr><th>Email</th><th>Role</th><th>Logins</th><th>Last login</th></tr></thead><tbody>${us.map(u => `<tr><td>${esc(u.email)}</td><td><span class="pill ${u.role === 'admin' ? 'brand' : ''}">${u.role}</span></td><td class="n">${u.logins}</td><td>${dt(u.last_login)}</td></tr>`).join('') || '<tr><td colspan="4" class="muted">nobody yet</td></tr>'}</tbody></table></div></div>
+  V().innerHTML = `<div class="card tbl-card"><h3>Logins</h3><p class="hint">Roles come from settings: <b>sales.emails</b> / <b>sales.domains</b> see prices; admin addresses are set by the ADMIN_EMAILS environment variable.</p><div class="tw"><table><thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Logins</th><th>Last login</th></tr></thead><tbody>${us.map(u => `<tr><td>${esc(u.name || '')}</td><td>${esc(u.email)}</td><td><span class="pill ${u.role === 'admin' ? 'brand' : ''}">${u.role}</span></td><td class="n">${u.logins}</td><td>${dt(u.last_login)}</td></tr>`).join('') || '<tr><td colspan="5" class="muted">nobody yet</td></tr>'}</tbody></table></div></div>
   <div class="card tbl-card"><div class="spread"><h3>Activity (14 days)</h3><a class="btn sm ghost" href="/api/admin/export/rfqs.csv?token=${encodeURIComponent(AUTH.token)}">Export RFQs CSV</a></div><div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>What</th><th>Ref</th><th>Detail</th></tr></thead><tbody>${au.map(a => `<tr><td>${dt(a.at)}</td><td>${esc(a.who)}</td><td>${esc(a.what)}</td><td class="mono">${esc(a.ref)}</td><td><small>${esc(a.detail)}</small></td></tr>`).join('')}</tbody></table></div></div>`;
 }
 
 /* ---------------- tools ---------------- */
 async function tools() {
   V().innerHTML = `<div class="card"><h3>Mail</h3><div class="row"><button class="btn ghost" id="mv">Verify SMTP</button><button class="btn ghost" id="mt">Send me a test mail</button></div><div id="mOut"></div></div>
+  <div class="card"><h3>CRM (UnitePro)</h3><p class="hint">Every RFQ is pushed as a lead when <b>crm.enabled=1</b> (Settings) and the env var <b>UNITEPRO_TOKEN</b> is set on Netlify.</p><div class="row"><button class="btn ghost" id="cs">Status</button><button class="btn ghost" id="cd">Preview test lead</button><button class="btn" id="ct">Push a test lead</button></div><div id="cOut"></div></div>
   <div class="card"><h3>Exchange rate</h3><div class="row"><button class="btn ghost" id="fx">Show current</button><button class="btn ghost" id="fxr">Refresh from source</button></div><div id="fxOut"></div></div>
   <div class="card"><h3>Health</h3><div class="row"><button class="btn ghost" id="hl">Check</button></div><div id="hOut"></div></div>`;
   const put = (id, r) => $(id).innerHTML = `<div class="log">${esc(JSON.stringify(r, null, 2))}</div>`;
   $('#mv').onclick = async () => put('#mOut', await api('admin/mail/verify')); $('#mt').onclick = async () => put('#mOut', await api('admin/mail/test', { method: 'POST' }));
+  $('#cs').onclick = async () => put('#cOut', await api('admin/crm/status')); $('#cd').onclick = async () => put('#cOut', await api('admin/crm/test', { method: 'POST', body: { dry: true } })); $('#ct').onclick = async () => put('#cOut', await api('admin/crm/test', { method: 'POST', body: {} }));
   $('#fx').onclick = async () => put('#fxOut', await api('admin/fx')); $('#fxr').onclick = async () => put('#fxOut', await api('admin/fx/refresh', { method: 'POST' }));
   $('#hl').onclick = async () => put('#hOut', await api('health'));
 }

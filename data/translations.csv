@@ -195,3 +195,5 @@ verify,Verify,सत्यापित करें,पडताळा,Prüfen,V
 send_again,Send again,फिर भेजें,पुन्हा पाठवा,Erneut senden,Renvoyer,Enviar de nuevo,다시 보내기,,,,,,,,,,
 code_sent,Code sent — check your inbox (and spam).,कोड भेजा गया — इनबॉक्स (और स्पैम) देखें।,कोड पाठवला — इनबॉक्स (व स्पॅम) पहा.,Code gesendet — Posteingang (und Spam) prüfen.,Code envoyé — vérifiez votre boîte (et les spams).,Código enviado — revise su bandeja (y spam).,코드를 보냈습니다 — 받은편지함(스팸 포함)을 확인하세요.,,,,,,,,,,
 code_not_sent,Mail could not be sent.,मेल नहीं भेजा जा सका।,मेल पाठवता आला नाही.,Mail konnte nicht gesendet werden.,L’e-mail n’a pas pu être envoyé.,No se pudo enviar el correo.,메일을 보낼 수 없습니다.,,,,,,,,,,
+chosen_case,Your application,आपका अनुप्रयोग,तुमचा उपयोग,Ihre Anwendung,Votre application,Su aplicación,선택한 용도,Your application,Your application,Your application,Your application,Your application,Your application,Your application,Your application,Your application,Your application
+change_case,Change,बदलें,बदला,Ändern,Modifier,Cambiar,변경,Change,Change,Change,Change,Change,Change,Change,Change,Change,Change

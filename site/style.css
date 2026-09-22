@@ -49,3 +49,13 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:24px 16px}
 .price{color:var(--ok);font-weight:600;white-space:nowrap}
 @media (max-width:640px){.wrap{padding:10px}.card{padding:14px}.picker{grid-template-columns:repeat(2,1fr)}.pick .thumb{height:80px}header .sub{display:none}th,td{padding:6px 5px;font-size:12.5px}}
 @media print{header,.noprint,footer{display:none!important}body{background:#fff}.card{border:0;box-shadow:none}}
+
+/* rolled-up application picker + highlight of the next choice block */
+.picker.rolled{display:block}
+.chosen-strip{display:flex;align-items:center;gap:14px;background:#FFF7EF;border:2px solid var(--orange);border-radius:12px;padding:8px 12px}
+.chosen-strip img{height:56px;max-width:96px}
+.chosen-strip span{flex:1;line-height:1.3}
+.btn.small{padding:6px 12px;font-size:13px}
+.next-block{border-radius:12px;padding:4px 8px;margin:0 -8px;scroll-margin-top:84px;transition:box-shadow .3s,background .3s}
+.next-block.focus{background:#FFF7EF;box-shadow:0 0 0 3px #FFE3C8;animation:nb-pulse 1.3s ease-in-out 2}
+@keyframes nb-pulse{0%,100%{box-shadow:0 0 0 3px #FFE3C8}50%{box-shadow:0 0 0 6px #F57C00}}
