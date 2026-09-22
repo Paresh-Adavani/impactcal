@@ -15,15 +15,15 @@ company.email,sales@adonitech.co.in,
 company.web,www.adonitech.co.in,
 company.iso,ISO 9001:2015,
 bank.inr.beneficiary,ADONI TECH,
-bank.inr.bank,HDFC Bank Ltd,
-bank.inr.branch,"Sadar Bazar Branch, Satara 415 001, Maharashtra, India",
-bank.inr.account,50200032942329,Fill in: printed on INR quotations
-bank.inr.ifsc,HDFC0000790,
-bank.inr.type,Current,
+bank.inr.bank,State Bank of India,
+bank.inr.branch,"Ganesh Chowk, Kodoli MIDC, Satara - 415001",
+bank.inr.account,44659085263,Printed on INR quotations (Indian customers)
+bank.inr.ifsc,SBIN0063691,
+bank.inr.type,Cash Credit A/C,
 bank.usd.beneficiary,ADONI TECH,
-bank.usd.bank,HDFC Bank Ltd,
+bank.usd.bank,HDFC BANK LTD,
 bank.usd.branch,"Sadar Bazar Branch, Satara 415 001, Maharashtra, India",
-bank.usd.account,50200032942329 (account currency USD),
+bank.usd.account,50200032942329,Printed on USD / all overseas quotations; account currency USD
 bank.usd.swift,HDFCINBB,Fill in: printed on USD quotations
 bank.usd.ad_code,IFSC HDFC0000790,
 bank.usd.correspondent,,
@@ -54,5 +54,5 @@ whatsapp.to,919890852663,
 whatsapp.template,impactcal_approval,
 engine.share_drive_work,0,0 = ACE convention: propelling work F·s charged to each absorber (safer). 1 = divide F·s by the number of absorbers (ImpactCal 1.x behaviour)
 sales.people,adonitechpune@gmail.com=Krishnakant Harpale; adonisatara@gmail.com=Shital Hirve; vidyaadavani1@gmail.com=Vidya Adavani; adonitech@gmail.com=Paresh Adavani,"email=Display name; used on the RFQ queue, approval page and the cc line of offers"
-crm.enabled,1,"Push every RFQ as a lead to UnitePro CRM (needs env UNITEPRO_TOKEN on Netlify). 0 = off"
-crm.source,ImpactCal Web,"Lead source name shown in UnitePro"
+crm.enabled,1,Push every RFQ as a lead to UnitePro CRM (needs env UNITEPRO_TOKEN on Netlify). 0 = off
+crm.source,ImpactCal Web,Lead source name shown in UnitePro
