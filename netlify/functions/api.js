@@ -4,7 +4,7 @@ const serverless = require('serverless-http');
 const store = require('../../lib/store');
 const { app } = require('../../lib/app');
 
-const handler = serverless(app);
+const handler = serverless(app, { binary: ['application/pdf', 'application/octet-stream', 'image/*', 'application/zip'] });   // PDFs and drawings must not be re-encoded as text
 
 /** Netlify keeps the original URL on a rewrite, so the path may arrive as
  *  /api/select, /.netlify/functions/api/select or /d/<token>. Normalise to the Express routes. */
