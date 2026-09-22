@@ -1,0 +1,6 @@
+node_modules/
+data/_store/
+_legacy/
+docs/reference-catalogues/*.pdf
+.netlify/
+*.log

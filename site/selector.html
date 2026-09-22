@@ -1,0 +1,94 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ImpactCal — Shock absorber &amp; crane buffer selection | ADONI TECH</title>
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="style.css?v=2">
+</head><body>
+<header><div class="wrap"></div></header>
+<div class="wrap noprint">
+  <div class="tabs"><button id="tabCrane" class="on" data-t="line_crane">Crane buffers</button><button id="tabInd" data-t="line_industrial">Industrial shock absorbers</button></div>
+  <div class="steps">
+    <div class="step on" data-s="1"><span class="n">1</span><span><b data-t="step_project">Project</b><small data-t="step_project_sub">name · customer</small></span></div>
+    <div class="step" data-s="2"><span class="n">2</span><span><b data-t="step_app">Application</b><small data-t="step_app_sub">pick the picture</small></span></div>
+    <div class="step" data-s="3"><span class="n">3</span><span><b data-t="step_duty">Duty</b><small data-t="step_duty_sub">mass · speed · cycles</small></span></div>
+    <div class="step" data-s="4"><span class="n">4</span><span><b data-t="step_results">Results</b><small data-t="step_results_sub">ranked selection</small></span></div>
+    <div class="step" data-s="5"><span class="n">5</span><span><b data-t="step_request">Request</b><small data-t="step_request_sub">RFQ &amp; drawings</small></span></div>
+  </div>
+
+  <section class="card" data-p="1">
+    <h3 data-t="project_title">Project details</h3>
+    <p class="hint" data-t="project_hint">Saved in this browser. Email and phone are needed only when you send the request.</p>
+    <div class="grid">
+      <div><label data-t="f_pname">Project name</label><input id="pname" data-t-ph="ph_pname" placeholder="e.g. Bay 3 gantry — end stops"></div>
+      <div><label data-t="f_pcust">Customer / company</label><input id="pcust"></div>
+      <div><label data-t="f_pcontact">Contact person</label><input id="pcontact"></div>
+      <div><label data-t="f_pref">Reference no.</label><input id="pref"></div>
+      <div><label data-t="f_pequip">Equipment</label><input id="pequip" data-t-ph="ph_pequip" placeholder="e.g. 20 t EOT crane, 22 m span"></div>
+      <div><label data-t="f_pby">Prepared by</label><input id="pby"></div>
+      <div><label data-t="f_email">Email</label><input id="pemail" type="email"></div>
+      <div><label data-t="f_phone">Phone / WhatsApp</label><input id="pphone"></div>
+      <div><label data-t="f_country">Country</label><select id="pcountry"></select></div>
+      <div id="gstinBox"><label><span data-t="f_gstin">GSTIN</span> <span class="muted" data-t="f_gstin_sub">(for the quotation)</span></label><input id="pgstin" placeholder="27AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase"></div>
+    </div>
+    <div id="gstinMsg"></div>
+    <div class="row" style="margin-top:14px"><button class="btn" data-go="2" data-t="next_app">Next: application →</button><button class="btn ghost" id="loadExample" data-t="load_example">Load a worked example</button></div>
+  </section>
+
+  <section class="card hidden" data-p="2">
+    <h3 data-t="app_title">Which of these is your application?</h3>
+    <p class="hint" data-t="app_hint">Click the picture that matches. The governing standard sets the design speed and the deceleration limit.</p>
+    <div id="caseGrid" class="picker"></div>
+    <h3 style="margin-top:18px" data-t="series_title">Model type</h3>
+    <p class="hint" data-t="series_hint">Optional — tick the types you would accept. Leave all unticked to search the whole catalogue.</p>
+    <div id="seriesGrid" class="picker"></div>
+    <div class="grid" style="margin-top:16px;max-width:640px"><div><label data-t="f_standard">Governing standard</label><select id="standard"></select></div></div>
+    <div id="stdNote" class="note blue"></div>
+    <div class="row"><button class="btn ghost" data-go="1" data-t="back">← Back</button><button class="btn" data-go="3" data-t="next_duty">Next: duty →</button></div>
+  </section>
+
+  <section class="card hidden" data-p="3">
+    <div class="dutyhead"><div><h3 id="dutyTitle"></h3><p class="hint" data-t="duty_hint">MKS units. Only the fields this case needs are shown.</p></div><img id="dutyPic" alt="" class="dutypic"></div>
+    <div class="grid" id="dutyFields"></div>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="2" data-t="back">← Back</button><button class="btn" id="calc" data-t="calc">Calculate and select →</button></div>
+  </section>
+
+  <section class="card hidden" data-p="4">
+    <div class="spread"><h3 data-t="results_title">Selection</h3><div class="row"><div id="picks"></div><select id="curSel" class="hidden" style="width:auto"><option value="INR">₹ INR</option><option value="USD">$ USD (export)</option></select></div></div>
+    <div id="dutyOut"></div>
+    <div class="tw"><table id="resTbl"><thead><tr><th></th><th data-t="th_model">Model</th><th data-t="th_series">Type</th><th class="n" data-t="th_stroke">Stroke mm</th><th class="n">Nm/cycle</th><th class="n">Nm/h</th><th class="n" data-t="th_use_stroke">Use /str</th><th class="n" data-t="th_use_hour">Use /h</th><th class="n" data-t="th_decel">Decel m/s²</th><th class="n" data-t="th_force">Force kN</th><th class="n" data-t="th_me">Eff. mass kg</th><th class="n price-col hidden" data-t="th_price">Price</th><th class="n price-col hidden" data-t="th_lead">Lead time</th><th data-t="th_notes">Notes</th></tr></thead><tbody></tbody></table></div>
+    <div class="row" style="margin-top:12px"><button class="btn ghost" id="showMore"></button></div>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="3" data-t="back">← Back</button><button class="btn" id="toRfq" disabled data-t="to_rfq">Request drawings &amp; quotation →</button><button class="btn ghost" id="printReport" disabled data-t="print_a4">Print this selection (A4)</button></div>
+  </section>
+
+  <section class="card hidden" data-p="5">
+    <h3 data-t="rfq_title">Request drawings and quotation</h3>
+    <p class="hint" data-t="rfq_hint">Your selection and calculation are attached. Drawings are released by ADONI TECH after review — usually within one working day.</p>
+    <div id="rfqLines"></div>
+    <div class="grid" style="margin-top:14px">
+      <div><label data-t="f_qty">Quantity per position</label><input id="rqty" type="number" value="2" min="1"></div>
+      <div><label data-t="f_mount">Mounting</label><select id="rmount"></select></div>
+      <div><label data-t="f_cap">Rod end</label><select id="rcap"></select></div>
+      <div><label data-t="f_formats">Drawing formats</label><select id="rfmt" multiple size="5"><option value="PDF" selected>PDF (2D GA)</option><option value="DXF">DXF</option><option value="DWG">DWG</option><option value="STEP" selected>STEP (3D)</option><option value="IGES">IGES (3D)</option></select></div>
+    </div>
+    <div style="margin-top:12px"><label data-t="f_message">Message</label><textarea id="rmsg" rows="3" data-t-ph="ph_message" placeholder="Anything else we should know — ambient temperature, duty cycle, mounting constraints…"></textarea></div>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="4" data-t="back">← Back</button><button class="btn" id="sendRfq" data-t="send_rfq">Send request</button></div>
+    <div id="rfqOut"></div>
+  </section>
+</div>
+
+<!-- A4 selection report — the only thing that prints -->
+<div id="report" class="a4" hidden>
+  <style>.a4{background:#fff;color:#111;font-size:10.5pt;padding:14mm;max-width:210mm;margin:auto}.a4 .rpt-head{display:flex;justify-content:space-between;border-bottom:2pt solid #F57C00;padding-bottom:6pt;margin-bottom:8pt}.a4 .rpt-title{font-size:16pt;font-weight:700;color:#1B3160;text-align:right}.a4 .rpt-sec{font-weight:600;color:#1B3160;border-bottom:.5pt solid #ccc;margin:8pt 0 4pt;font-size:10pt}.a4 table.kv td{padding:2pt 6pt 2pt 0;border:0;font-size:9.5pt}.a4 table.kv td:first-child{color:#555;width:38%}.a4 .rpt-grid{display:grid;grid-template-columns:1fr 1fr;gap:12pt}.a4 .rpt-pic{max-height:90pt}.a4 .rpt-tbl th,.a4 .rpt-tbl td{font-size:9.5pt;padding:3pt 6pt;border:.5pt solid #ccc}.a4 .rpt-foot{margin-top:12pt;font-size:8.5pt;color:#555}.a4 .rpt-sign{display:flex;justify-content:space-between;margin-top:22pt}@media screen{#report{display:none!important}}@media print{body>*:not(#report){display:none!important}#report{display:block!important}}</style>
+  <div class="rpt-head"><div><img src="img/logo.png" alt="ADONI TECH" style="height:30pt"><div id="rAddr" style="font-size:8.5pt;color:#444;margin-top:4pt"></div></div><div><div class="rpt-title" id="rptTitle">SHOCK ABSORBER SELECTION</div><div id="rMeta" style="font-size:9pt;text-align:right"></div></div></div>
+  <div class="rpt-grid"><div><div class="rpt-sec">Project</div><table class="kv" id="rProject"></table></div><div><div class="rpt-sec">Application</div><table class="kv" id="rApp"></table><img id="rPic" alt="" class="rpt-pic"></div></div>
+  <div class="rpt-sec">Input data</div><table class="kv" id="rInputs"></table>
+  <div class="rpt-sec">Calculation</div><table class="kv" id="rCalc"></table>
+  <div class="rpt-sec">Selected model</div><table class="rpt-tbl" id="rModel"></table><div id="rFlags"></div>
+  <div class="rpt-foot"><div id="rNote"></div><div class="rpt-sign"><div>Prepared by <b id="rBy"></b></div><div>For ADONI TECH PVT. LTD.</div></div></div>
+</div>
+
+<div id="sentOverlay" class="overlay noprint" hidden><div class="sentbox"><div id="sentIcon" style="font-size:44px">✉️</div><h3 id="sentTitle"></h3><p id="sentMsg" class="muted"></p><button class="btn ghost" id="sentClose" hidden data-t="close">Close</button></div></div>
+<footer>ADONI TECH PVT. LTD. · Satara MIDC, Maharashtra · GSTIN 27AHAPA3555B1Z1</footer>
+<script src="common.js?v=2"></script><script src="selector.js?v=2"></script>
+</body></html>

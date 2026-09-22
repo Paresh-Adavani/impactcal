@@ -1,6 +1,0 @@
-node_modules/
-.env
-data/impactcal.db*
-data/tmp/
-data/cad/
-admin-key.txt

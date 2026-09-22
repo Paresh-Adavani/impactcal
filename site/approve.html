@@ -1,0 +1,85 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Approve quotation — ImpactCal | ADONI TECH</title><link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="style.css?v=2">
+<style>.line{border:1px solid var(--line);border-radius:10px;padding:10px;margin-bottom:8px;background:#fff}.line .g{display:grid;grid-template-columns:repeat(auto-fill,minmax(110px,1fr));gap:8px;margin-top:6px}.tot td{padding:3px 8px;border:0}.tot tr:last-child td{font-weight:700;border-top:2px solid var(--navy)}.dw{display:flex;gap:8px;align-items:center;padding:6px 0;border-bottom:1px solid var(--line);cursor:pointer}.dw input{width:auto}#main{padding-bottom:80px}.sticky{position:sticky;bottom:0;background:#fff;border-top:2px solid var(--orange);padding:10px 12px;display:flex;gap:8px;flex-wrap:wrap;z-index:5}</style>
+</head><body>
+<header><div class="wrap"><a href="index.html"><img src="img/logo.png" alt="ADONI TECH" class="brandmark"></a><div class="sub">ImpactCal<br>Quotation approval</div></div></header>
+<div class="wrap" style="max-width:820px" id="main"><div class="card">Loading…</div></div>
+<div class="sticky noprint" id="bar" hidden>
+  <button class="btn ghost" id="save">Save changes</button>
+  <a class="btn ghost" id="pdf" target="_blank" style="text-decoration:none">Preview PDF</a>
+  <button class="btn" id="send" style="margin-left:auto">Approve &amp; send to customer</button>
+</div>
+<script src="common.js?v=2"></script>
+<script>
+const P = new URLSearchParams(location.search), ID = P.get('id'), T = P.get('t');
+const hdr = () => T ? { 'x-approve-token': T } : {};
+let D = null;
+const n2 = v => Number(v || 0).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+async function load() {
+  D = await api('approve/' + encodeURIComponent(ID), { headers: hdr() });
+  render();
+}
+function render() {
+  const q = D.quotation, c = q.customer || {}, cur = q.currency;
+  const sent = q.status === 'sent';
+  $('#main').innerHTML = `
+  <div class="card">
+    <div class="spread"><h3>${esc(q.number)}${q.rev ? ' rev ' + q.rev : ''} <span class="pill ${sent ? 'ok' : 'brand'}">${esc(q.status)}</span></h3><span class="muted">${esc(q.date)} · ${cur}${q.fx ? ` @ ${q.fx.inr_per_usd.toFixed(2)} ₹/$ +${q.fx.uplift_pct}%` : ''}</span></div>
+    ${sent ? `<div class="note ok">Sent to ${esc(q.sent_to)} on ${new Date(q.sent_at).toLocaleString('en-IN')}. Saving again creates no new mail; use the admin panel for a revision.</div>` : ''}
+    ${q.items.some(i => !i.rate) ? `<div class="note warn">Some lines have no price in the CSV database — enter a rate below before approving.</div>` : ''}
+    <table class="kv"><tr><td class="muted">Customer</td><td><b>${esc(c.company || c.name)}</b> · ${esc(c.contact || '')}<br>${esc(c.email || '')} · ${esc(c.phone || '')}<br>${esc([c.city, c.state_name, c.country].filter(Boolean).join(', '))}${c.gstin ? ' · GSTIN ' + esc(c.gstin) : ''}</td></tr>
+    <tr><td class="muted">Project</td><td>${esc((q.project || {}).name || '')} ${(q.project || {}).equipment ? '· ' + esc(q.project.equipment) : ''} · RFQ ${esc(q.rfq_number)}${q.raised_by ? ' · raised by ' + esc(q.raised_by.email) : ''}</td></tr>
+    ${D.rfq && D.rfq.selection && D.rfq.selection.summary ? `<tr><td class="muted">Calculation</td><td>${Object.entries(D.rfq.selection.summary).map(([k, v]) => `<span class="pill">${esc(k)}: ${esc(v)}</span>`).join(' ')}</td></tr>` : ''}
+    ${D.rfq && D.rfq.message ? `<tr><td class="muted">Message</td><td>${esc(D.rfq.message)}</td></tr>` : ''}</table>
+  </div>
+  <div class="card"><h3>Lines</h3><div id="lines">${q.items.map((i, k) => `<div class="line" data-k="${k}"><b>${esc(i.model)}</b> <span class="muted">${esc(i.description)}</span>
+      <div class="g"><div><label>Qty</label><input data-f="qty" type="number" step="any" value="${i.qty}"></div><div><label>Rate ${cur}</label><input data-f="rate" type="number" step="any" value="${i.rate}"></div><div><label>Disc %</label><input data-f="discount_pct" type="number" step="any" value="${i.discount_pct}"></div><div><label>GST %</label><input data-f="gst_rate" type="number" value="${i.gst_rate}"></div><div><label>Lead time d</label><input data-f="lead_time_days" type="number" value="${i.lead_time_days ?? ''}"></div><div><label>HSN</label><input data-f="hsn" value="${esc(i.hsn)}"></div></div></div>`).join('')}</div>
+    <div class="grid" style="margin-top:8px"><div><label>Freight ${cur}</label><input id="freight" type="number" step="any" value="${q.freight || 0}"></div><div><label>Packing ${cur}</label><input id="packing" type="number" step="any" value="${q.packing || 0}"></div><div><label>Valid days</label><input id="valid" type="number" value="${q.valid_days}"></div>
+      ${cur === 'INR' ? `<div><label>Place of supply</label><select id="pos">${Object.entries(D.company ? STATES() : {}).map(([k, v]) => `<option value="${k}" ${k === q.place_of_supply_code ? 'selected' : ''}>${k} ${esc(v)}</option>`).join('')}</select></div>` : ''}</div>
+    <div style="margin-top:8px"><label>Notes to customer (printed on the quotation)</label><textarea id="notes" rows="2">${esc(q.notes || '')}</textarea></div>
+    <div class="grid" style="margin-top:8px"><div><label>Payment terms</label><textarea id="t_payment" rows="2">${esc(q.terms.payment || '')}</textarea></div><div><label>Delivery terms</label><textarea id="t_delivery" rows="2">${esc(q.terms.delivery || '')}</textarea></div><div><label>Warranty</label><textarea id="t_warranty" rows="2">${esc(q.terms.warranty || '')}</textarea></div><div><label>Other</label><textarea id="t_other" rows="2">${esc(q.terms.other || '')}</textarea></div></div>
+    <table class="tot" style="margin-top:12px;width:auto;margin-left:auto"><tr><td>Sub total</td><td class="n">${cur} ${n2(q.totals.sub_total)}</td></tr>${q.totals.discount_total ? `<tr><td>Discount</td><td class="n">- ${n2(q.totals.discount_total)}</td></tr>` : ''}<tr><td>Taxable</td><td class="n">${n2(q.totals.taxable)}</td></tr>
+      ${q.supply_type === 'intra' ? `<tr><td>CGST</td><td class="n">${n2(q.totals.cgst)}</td></tr><tr><td>SGST</td><td class="n">${n2(q.totals.sgst)}</td></tr>` : q.supply_type === 'inter' ? `<tr><td>IGST</td><td class="n">${n2(q.totals.igst)}</td></tr>` : '<tr><td>Export</td><td class="n">zero-rated</td></tr>'}
+      <tr><td>Grand total</td><td class="n">${cur} ${n2(q.totals.grand_total)}</td></tr></table>
+    <p class="muted" style="font-size:12px">${esc(q.totals.amount_in_words)} · overall lead time ${q.lead_time_days || '—'} days</p>
+  </div>
+  <div class="card"><h3>Drawings to send</h3>
+    <p class="hint">GA drawings from the library that match the quoted models. Ticked PDFs are ${D.drawings_mode === 'attach' ? 'attached to the offer mail' : 'sent as expiring download links'}. Greyed ones are indexed but not yet uploaded to the app (run Drive sync in the admin panel).</p>
+    ${D.drawings.length ? D.drawings.map(d => `<label class="dw"><input type="checkbox" data-path="${esc(d.path)}" ${(q.drawings || []).some(x => x.path === d.path) ? 'checked' : ''} ${d.available ? '' : 'disabled'}><span style="flex:1;${d.available ? '' : 'opacity:.5'}"><b>${esc(d.filename)}</b> <small class="muted">${esc([d.mounting, d.accessory, d.status].filter(Boolean).join(' · '))}</small></span></label>`).join('') : '<div class="muted">No GA drawing indexed for these models.</div>'}
+    <div class="row" style="margin-top:10px"><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="radio" name="dm" value="attach" ${D.drawings_mode !== 'link' ? 'checked' : ''} style="width:auto">Attach PDFs</label><label style="display:flex;gap:6px;align-items:center;margin:0"><input type="radio" name="dm" value="link" ${D.drawings_mode === 'link' ? 'checked' : ''} style="width:auto">Send expiring links</label></div>
+  </div>
+  <div class="card"><h3>Bank details on this quotation (${cur})</h3>${Object.keys(D.bank).filter(k => D.bank[k]).length ? `<table class="kv">${Object.entries(D.bank).filter(([, v]) => v).map(([k, v]) => `<tr><td class="muted">${esc(k)}</td><td>${esc(v)}</td></tr>`).join('')}</table>` : '<div class="note warn">Bank details are empty — fill them in the admin panel (Settings) before sending.</div>'}
+    <div style="margin-top:10px"><label>Approved by</label><input id="by" value="Paresh Adavani"></div></div>
+  <div id="out"></div>`;
+  $('#bar').hidden = false;
+  $('#pdf').href = `/api/approve/${encodeURIComponent(ID)}/pdf?t=${encodeURIComponent(T || '')}`;
+}
+function STATES() { return window.__ST || (window.__ST = { '27': 'Maharashtra', '24': 'Gujarat', '29': 'Karnataka', '33': 'Tamil Nadu', '07': 'Delhi', '06': 'Haryana', '09': 'Uttar Pradesh', '19': 'West Bengal', '36': 'Telangana', '37': 'Andhra Pradesh', '32': 'Kerala', '23': 'Madhya Pradesh', '08': 'Rajasthan', '03': 'Punjab', '05': 'Uttarakhand', '21': 'Odisha', '22': 'Chhattisgarh', '20': 'Jharkhand', '10': 'Bihar', '18': 'Assam', '30': 'Goa', '04': 'Chandigarh', '02': 'Himachal Pradesh', '01': 'Jammu and Kashmir', '26': 'Dadra and Nagar Haveli and Daman and Diu', '34': 'Puducherry' }); }
+function collect() {
+  const q = D.quotation;
+  const items = $$('#lines .line').map(el => { const k = Number(el.dataset.k), o = { ...q.items[k] }; el.querySelectorAll('input[data-f]').forEach(i => { o[i.dataset.f] = i.value; }); return o; });
+  const body = { items, freight: Number($('#freight').value) || 0, packing: Number($('#packing').value) || 0, valid_days: Number($('#valid').value) || 30, notes: $('#notes').value,
+    terms: { payment: $('#t_payment').value, delivery: $('#t_delivery').value, warranty: $('#t_warranty').value, other: $('#t_other').value },
+    drawings: $$('input[data-path]:checked').map(i => ({ path: i.dataset.path, filename: i.dataset.path.split('/').pop() })) };
+  if ($('#pos')) body.place_of_supply_code = $('#pos').value;
+  return body;
+}
+async function save(silent) { D.quotation = await api('approve/' + encodeURIComponent(ID), { method: 'PUT', headers: hdr(), body: collect() }); if (!silent) render(); return D.quotation; }
+$('#save').onclick = () => save().catch(e => alert(e.message));
+$('#send').onclick = async () => {
+  try {
+    const q = await save(true);
+    if (q.items.some(i => !i.rate)) { if (!confirm('Some lines have zero rate. Send anyway?')) { render(); return; } }
+    if (!confirm(`Approve ${q.number} for ${q.currency} ${n2(q.totals.grand_total)} and email it to ${q.customer.email}?`)) { render(); return; }
+    $('#send').disabled = true; $('#send').textContent = 'Sending…';
+    const r = await api('approve/' + encodeURIComponent(ID) + '/send', { method: 'POST', headers: hdr(), body: { approved_by: $('#by').value, drawings_mode: (document.querySelector('input[name=dm]:checked') || {}).value } });
+    await load();
+    $('#out').innerHTML = r.ok ? `<div class="note ok"><b>Sent to ${esc(r.sent_to)}.</b> Attached: ${r.attached.join(', ') || 'none'}${r.links.length ? ' · links: ' + r.links.length : ''}${r.missing.length ? ' · not available: ' + r.missing.join(', ') : ''}</div>` : `<div class="note bad">Approved, but the mail failed: ${esc(r.reason)}. Check SMTP settings and resend from the admin panel.</div>`;
+    window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
+  } catch (e) { alert(e.message); } finally { $('#send').disabled = false; $('#send').textContent = 'Approve & send to customer'; }
+};
+load().catch(e => $('#main').innerHTML = `<div class="card"><div class="note bad">${esc(e.message)}</div><p><a href="login.html?next=admin.html">Sign in as admin</a> to open it from the RFQ queue instead.</p></div>`);
+</script>
+</body></html>
