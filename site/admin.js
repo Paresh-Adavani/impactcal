@@ -94,18 +94,25 @@ async function drawings() {
     ${dr.configured ? say('ok', `Configured — service account <b>${esc(dr.service_account)}</b>, folder <span class="mono">${esc(dr.folder)}</span>. Runs nightly; pulls GA-LIBRARY PDFs into the app, pushes approved quotation PDFs, CSV uploads and RFQ/quotation exports to Drive.`) : say('warn', 'Not configured. Set <b>GOOGLE_SERVICE_ACCOUNT_B64</b> and <b>DRIVE_FOLDER_ID</b> in Netlify environment variables (see DEPLOY.md). Until then, upload GA PDFs below.')}
     ${dr.last ? `<div class="log">last run ${dt(dr.last.started)} → ${dr.last.ok ? 'ok' : 'FAILED'} · pulled ${dr.last.pulled} · unchanged ${dr.last.unchanged} · pushed ${dr.last.pushed}${dr.last.errors.length ? '\n' + dr.last.errors.map(esc).join('\n') : ''}</div>` : ''}<div id="syncOut"></div></div>
   <div class="card"><h3>Upload GA drawings directly</h3><p class="hint">Select PDFs from <span class="mono">GA-LIBRARY\\&lt;SERIES&gt;\\</span>. The file name must match the index (e.g. <span class="mono">AC-10-5.pdf</span>); the series folder is taken from the model prefix.</p>
-    <input type="file" id="gaFiles" accept="application/pdf" multiple><div id="gaOut" style="margin-top:8px"></div></div>
+    <div class="row" style="gap:18px;align-items:center;flex-wrap:wrap"><label><b>Whole folder</b> (pick <span class="mono">GA-LIBRARY</span> once — all series are uploaded, only changed files are re-sent):<br><input type="file" id="gaFolder" webkitdirectory directory multiple></label>
+    <label><b>Individual PDFs</b>:<br><input type="file" id="gaFiles" accept="application/pdf" multiple></label>
+    <label><input type="checkbox" id="gaForce"> re-upload files that are already in the app (after a drawing revision)</label></div><div id="gaOut" style="margin-top:8px"></div></div>
   <div class="card"><h3>Missing in the app (${ga.missing.length})</h3><div class="log">${ga.missing.slice(0, 400).map(esc).join('\n') || 'none'}</div></div>`;
   $('#sync').onclick = async () => { $('#syncOut').innerHTML = say('blue', 'Syncing… (up to 25 s per run; large libraries finish over several runs)'); try { const r = await api('admin/drive/sync', { method: 'POST' }); $('#syncOut').innerHTML = say(r.ok ? 'ok' : 'bad', `pulled ${r.pulled}, unchanged ${r.unchanged}, pushed ${r.pushed}${r.errors.length ? '<br>' + r.errors.map(esc).join('<br>') : ''}`); } catch (e) { $('#syncOut').innerHTML = say('bad', esc(e.message)); } };
-  $('#gaFiles').onchange = async () => {
-    const idx = {}; (await api('admin/csv/ga_index?token=' + encodeURIComponent(AUTH.token)).catch(() => null));
-    const out = []; for (const f of $('#gaFiles').files) {
-      const series = f.name.split(/[-\s]/)[0].toUpperCase(); const path = `${series}/${f.name}`;
+  const uploadGa = async (files, pathOf) => {
+    const have = new Set(ga.uploaded_paths || []); const force = $('#gaForce').checked;
+    const list = [...files].filter(f => /\.pdf$/i.test(f.name)); const out = []; let n = 0, skipped = 0;
+    for (const f of list) {
+      const path = pathOf(f); n++;
+      if (have.has(path) && !force) { skipped++; continue; }
       const b64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.readAsDataURL(f); });
-      try { const r = await api('admin/ga', { method: 'POST', body: { path, base64: b64 } }); out.push(`✓ ${r.path} (${(r.bytes / 1024).toFixed(0)} kB)`); } catch (e) { out.push(`✗ ${f.name}: ${e.message}`); }
-      $('#gaOut').innerHTML = `<div class="log">${out.map(esc).join('\n')}</div>`;
+      try { const r = await api('admin/ga', { method: 'POST', body: { path, base64: b64 } }); out.push(`✓ ${r.path} (${(r.bytes / 1024).toFixed(0)} kB)`); } catch (e) { out.push(`✗ ${path}: ${e.message}`); }
+      $('#gaOut').innerHTML = `<div class="log">${n}/${list.length} · skipped ${skipped} already uploaded\n${out.slice(-40).map(esc).join('\n')}</div>`;
     }
+    $('#gaOut').innerHTML = `<div class="log">Done: ${list.length} files, ${out.filter(x => x[0] === '✓').length} uploaded, ${skipped} already uploaded, ${out.filter(x => x[0] === '✗').length} failed\n${out.filter(x => x[0] === '✗').map(esc).join('\n')}</div>` + `<p><a href="#drawings" onclick="location.reload()">Refresh counts</a></p>`;
   };
+  $('#gaFiles').onchange = () => uploadGa($('#gaFiles').files, f => `${f.name.split(/[-\s]/)[0].toUpperCase()}/${f.name}`);
+  $('#gaFolder').onchange = () => uploadGa($('#gaFolder').files, f => { const parts = (f.webkitRelativePath || f.name).split('/'); return parts.length >= 2 ? parts.slice(-2).join('/') : `${f.name.split(/[-\s]/)[0].toUpperCase()}/${f.name}`; });
 }
 
 /* ---------------- users & activity ---------------- */
