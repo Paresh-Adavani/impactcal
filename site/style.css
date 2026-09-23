@@ -59,3 +59,5 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:24px 16px}
 .next-block{border-radius:12px;padding:4px 8px;margin:0 -8px;scroll-margin-top:84px;transition:box-shadow .3s,background .3s}
 .next-block.focus{background:#FFF7EF;box-shadow:0 0 0 3px #FFE3C8;animation:nb-pulse 1.3s ease-in-out 2}
 @keyframes nb-pulse{0%,100%{box-shadow:0 0 0 3px #FFE3C8}50%{box-shadow:0 0 0 6px #F57C00}}
+
+input.need{border-color:#D14343!important;box-shadow:0 0 0 3px #FBD9D9}

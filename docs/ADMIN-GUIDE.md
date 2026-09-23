@@ -65,3 +65,8 @@ Every RFQ is sent to UnitePro as a lead: client = customer company, brand = cont
 ## Customer copy of the RFQ
 
 The acknowledgement to the customer repeats everything they entered (inputs in MKS, calculated result, models, message) and attaches `Selection-<RFQ>.pdf`. The sales copy gets the same PDF.
+
+
+## Report leads (selection reports downloaded without an RFQ)
+
+A visitor who wants the PDF report must give name, e-mail and phone (company optional). The download creates AT/S/<FY>/<n>, mails the PDF to the visitor, sends a "Report downloaded" note to `mail.rfq_to`, and pushes a lead to UnitePro (source "ImpactCal Web (report)"). Junk entries (abcd, test@test.com, 9999999999, keyboard runs, disposable mail) are refused; doubtful ones are kept out of the CRM and shown with a red quality pill. Admin → Report leads → **Convert to RFQ** turns one into a normal request with draft quotation and approval alert. Logged-in staff are never filtered.

@@ -29,8 +29,8 @@
     <h3 data-t="rfq_title">Request drawings and quotation</h3>
     <div id="rfqLines"></div>
     <div class="grid" style="margin-top:12px">
-      <div><label data-t="f_pcust">Customer / company</label><input id="pcust"></div><div><label data-t="f_pcontact">Contact person</label><input id="pcontact"></div>
-      <div><label data-t="f_email">Email</label><input id="pemail" type="email"></div><div><label data-t="f_phone">Phone / WhatsApp</label><input id="pphone"></div>
+      <div><label data-t="f_pcust">Customer / company</label><input id="pcust"></div><div><label><span data-t="f_pcontact">Contact person</span> *</label><input id="pcontact" required></div>
+      <div><label><span data-t="f_email">Email</span> *</label><input id="pemail" type="email" required></div><div><label><span data-t="f_phone">Phone / WhatsApp</span> *</label><input id="pphone" required></div>
       <div><label data-t="f_country">Country</label><input id="pcountry" value="India" list="cl"><datalist id="cl"><option>India</option><option>Germany</option><option>United States</option><option>United Arab Emirates</option><option>Korea, Republic of</option><option>Egypt</option></datalist></div>
       <div><label data-t="f_gstin">GSTIN</label><input id="pgstin" maxlength="15" style="text-transform:uppercase"></div>
       <div><label data-t="f_pname">Project name</label><input id="pname"></div><div><label data-t="f_qty">Quantity</label><input id="rqty" type="number" min="1" value="4"></div>

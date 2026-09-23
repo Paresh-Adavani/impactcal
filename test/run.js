@@ -16,7 +16,7 @@ const near = (a, b, t = 0.01) => Math.abs(a - b) <= t * Math.abs(b);
 const server = app.listen(0, async () => {
   const base = 'http://127.0.0.1:' + server.address().port;
   let TOKEN = '';
-  const H = () => ({ 'content-type': 'application/json', ...(TOKEN ? { authorization: 'Bearer ' + TOKEN } : {}) });
+  const H = (withAuth = true) => ({ 'content-type': 'application/json', ...(withAuth && TOKEN ? { authorization: 'Bearer ' + TOKEN } : {}) });
   const post = (u, b, h) => fetch(base + u, { method: 'POST', headers: h || H(), body: typeof b === 'string' ? b : JSON.stringify(b) }).then(r => r.json());
   const get = u => fetch(base + u, { headers: H() }).then(r => r.json());
   const put = (u, b) => fetch(base + u, { method: 'PUT', headers: H(), body: JSON.stringify(b) }).then(r => r.json());
@@ -163,6 +163,30 @@ const server = app.listen(0, async () => {
     ok('mail verify reports cleanly when unconfigured', (await get('/admin/mail/verify')).ok === false);
     ok('drive status reports unconfigured cleanly', (await get('/admin/drive/status')).configured === false);
     ok('FY code is 4 digits', /^\d{4}$/.test(require('../lib/store').fyCode()));
+
+    /* ---- lead quality filter ---- */
+    const quality = require('../lib/quality');
+    ok('quality: real contact passes', quality.check({ contact: 'Nirmal S Kartha', company: 'Larsen & Toubro', email: 'nirmal.kartha@larsentoubro.com', phone: '022 67525656' }).level === 'ok');
+    ok('quality: plain name + gmail passes', quality.check({ contact: 'Ravi', email: 'ravi.k@gmail.com', phone: '9876543210' }).level === 'ok');
+    ok('quality: abcd/dddd/xxxx rejected', quality.check({ contact: 'abcd', company: 'dddd', email: 'xxxx@xxxx.com', phone: '1111111111' }).level === 'reject');
+    ok('quality: test@test.com rejected', quality.check({ contact: 'test', email: 'test@test.com', phone: '1234567890' }).level === 'reject');
+    ok('quality: keyboard run rejected', quality.check({ contact: 'asdfgh', email: 'asdfgh@gmail.com', phone: '9898989898' }).level === 'reject');
+    ok('quality: real name but zero phone rejected', quality.check({ contact: 'Suresh Patil', email: 'suresh@spengg.in', phone: '0000000000' }).level === 'reject');
+    ok('quality: disposable mail rejected', quality.check({ contact: 'Suresh Patil', email: 'suresh@mailinator.com', phone: '9822012345' }).level === 'reject');
+    ok('quality: missing name rejected', quality.check({ contact: '', email: 'suresh@spengg.in', phone: '9822012345' }).level === 'reject');
+    /* ---- gated report download + conversion ---- */
+    const junk = await fetch(base + '/selection', { method: 'POST', headers: H(false), body: JSON.stringify({ line: 'crane', customer: { contact: 'xxxx', email: 'xxxx@xxxx.com', phone: '9999999999' }, items: [{ model: 'AC-42-50', key: 'AC-42-50', qty: 1 }], selection: { case_id: 'C1', inputs: { m: 5000, v: 1 }, summary: { 'Energy per impact': '336 Nm' } } }) });
+    ok('selection: junk contact refused with 400', junk.status === 400, (await junk.json()).error);
+    const selr = await post('/selection', { line: 'crane', customer: { contact: 'Ravi Kumar', email: 'ravi.kumar@tatasteel.com', phone: '9876543210', country: 'India' }, project: { name: 'Coke oven crane' }, items: [{ model: 'AC-42-50', key: 'AC-42-50', qty: 2 }], selection: { case_id: 'C1', standard: 'IS3177', inputs: { m: 5000, v: 1, n: 2 }, summary: { 'Energy per impact': '336 Nm' } } }, H(false));
+    ok('selection: numbered AT/S and PDF returned', /^AT\/S\/\d{4}\/\d{4}$/.test(selr.number) && Buffer.from(selr.pdf_b64, 'base64').slice(0, 4).toString() === '%PDF', selr.number);
+    const sels = await get('/admin/selections');
+    ok('selection: listed in admin', sels.some(x => x.number === selr.number && x.quality === 'ok' && !x.rfq_number));
+    const conv = await post('/admin/selection/' + selr.id + '/to-rfq', {});
+    ok('selection: converted to RFQ with draft quotation', /^AT\/R\//.test(conv.number) && !!conv.quotation, conv.number + ' → ' + conv.quotation);
+    const conv2 = await fetch(base + '/admin/selection/' + selr.id + '/to-rfq', { method: 'POST', headers: H(), body: '{}' });
+    ok('selection: second conversion refused', conv2.status === 409);
+    const junkRfq = await fetch(base + '/rfq', { method: 'POST', headers: H(false), body: JSON.stringify({ line: 'crane', customer: { contact: 'abcd', email: 'abcd@abcd.com', phone: '1111111111' }, items: [{ model: 'AC-42-50', key: 'AC-42-50', qty: 1 }] }) });
+    ok('rfq: junk contact refused with 400', junkRfq.status === 400);
 
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);
   } catch (e) { console.error('\nERROR', e); fail++; }

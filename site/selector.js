@@ -94,7 +94,7 @@ async function calculate() {
   const body = { duty: duty(), case_id: CASE, standard: $('#standard').value, series: [...SERIES].filter(s => META.series.some(x => x.series === s && x.group === GROUP)), limit: 200, currency: $('#curSel').value };
   const ms = $('#d_max_stroke'); if (ms && ms.value) body.max_stroke_mm = Number(ms.value);
   RESULT = await api('select', { method: 'POST', body });
-  CHOSEN = null; EXPANDED = false; $('#toRfq').disabled = $('#printReport').disabled = true;
+  CHOSEN = null; EXPANDED = false; $('#toRfq').disabled = $('#dlReport').disabled = true;
   const d = RESULT.duty_applied;
   $('#dutyOut').innerHTML = !d ? `<div class="note bad">${t('no_result')}</div>`
     : `<div class="note ok"><b>${RESULT.count} ${t('models_pass')}</b> ${t('design_velocity')} <b>${d.v.toFixed(3)} m/s</b> · ${t('ke_per_buffer')} <b>${fmt(d.E_k)} Nm</b><br><span class="muted">${esc(RESULT.standard.name)} · ${esc(t(CASE_ART[CASE][1]))}. ${t('stroke_dep_note')}</span></div>`;
@@ -109,7 +109,7 @@ function renderRows() {
     <td class="n">${c.a.toFixed(2)}</td><td class="n">${(c.F_s / 1000).toFixed(1)}</td><td class="n">${fmt(c.m_e)}</td>
     ${META.prices ? `<td class="n price">${c.price != null ? money(c.price, cur) : '<span class="muted">—</span>'}</td><td class="n">${c.lead_time_days ? c.lead_time_days + ' d' : '—'}</td>` : ''}
     <td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`).join('');
-  $$('#resTbl tbody tr').forEach(tr => tr.onclick = () => { $$('#resTbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); tr.querySelector('input').checked = true; CHOSEN = rows[tr.dataset.i]; $('#toRfq').disabled = $('#printReport').disabled = false; });
+  $$('#resTbl tbody tr').forEach(tr => tr.onclick = () => { $$('#resTbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); tr.querySelector('input').checked = true; CHOSEN = rows[tr.dataset.i]; $('#toRfq').disabled = $('#dlReport').disabled = false; });
   const more = all.length - TOP, b = $('#showMore'); b.hidden = more <= 0; b.textContent = EXPANDED ? t('show_best', { n: TOP }) : t('show_more', { n: more });
 }
 $('#showMore').onclick = () => { EXPANDED = !EXPANDED; renderRows(); };
@@ -134,7 +134,38 @@ function buildReport() {
   $('#rNote').innerHTML = `Damping efficiency η = ${c.series === 'SB' ? '0.50 (spring)' : c.series === 'JHQC' ? '0.158 (polyurethane)' : '0.80 (hydraulic)'}. Effective mass from Me = 2·Et/v². Selection is subject to confirmation of the application data above. E &amp; O E.`;
   $('#report').hidden = false;
 }
-$('#printReport').onclick = () => { buildReport(); setTimeout(() => window.print(), 60); };
+/* Report download is gated: name, e-mail and phone (company optional). Creates a "selection" on the server,
+   mails the PDF to the customer, notifies sales and (for real-looking contacts) creates a CRM lead. */
+function contactOk() {
+  const miss = ['pcontact', 'pemail', 'pphone'].filter(id => !$('#' + id).value.trim());
+  if (!miss.length) return true;
+  step(1); miss.forEach(id => $('#' + id).classList.add('need'));
+  $('#gstinMsg').innerHTML = `<div class="note bad">${esc(t('need_contact'))}</div>`;
+  setTimeout(() => $('#' + miss[0]).focus(), 400);
+  return false;
+}
+['pcontact', 'pemail', 'pphone'].forEach(id => $('#' + id).addEventListener('input', () => $('#' + id).classList.remove('need')));
+async function downloadReport() {
+  if (!CHOSEN || !RESULT) return;
+  if (AUTH.user && !$('#pemail').value) { $('#pemail').value = AUTH.user.email; $('#pcontact').value = $('#pcontact').value || AUTH.user.name || ''; }
+  if (!contactOk()) return;
+  const d = RESULT.duty_applied, c = CHOSEN;
+  $('#dlReport').disabled = true; $('#dlOut').textContent = t('dl_preparing');
+  try {
+    const r = await api('selection', { method: 'POST', body: { line: GROUP, lang: I18N.lang,
+      customer: { company: $('#pcust').value, contact: $('#pcontact').value, email: $('#pemail').value, phone: $('#pphone').value, gstin: $('#pgstin').value, country: $('#pcountry').value || 'India' },
+      project: { name: $('#pname').value || 'Untitled', reference: $('#pref').value, equipment: $('#pequip').value, prepared_by: $('#pby').value },
+      selection: { case_id: CASE, standard: RESULT.standard.code, inputs: duty(), chosen_bk: c.bk,
+        summary: { 'Impact case': t(CASE_ART[CASE][1]), 'Standard': RESULT.standard.name, 'Design velocity': d.v.toFixed(3) + ' m/s', 'Energy per impact': fmt(c.E_t) + ' Nm', 'Energy per hour': fmt(c.E_tc) + ' Nm/h', 'Effective mass': fmt(c.m_e) + ' kg', 'Deceleration': c.a.toFixed(2) + ' m/s²', 'Utilisation': `${(c.u_stroke * 100).toFixed(0)}% per stroke, ${(c.u_hour * 100).toFixed(0)}% per hour` } },
+      items: [{ table: 'shock_absorbers', key: c.bk, model: c.model, qty: Number($('#d_n') && $('#d_n').value) || 1 }] } });
+    const bytes = Uint8Array.from(atob(r.pdf_b64), ch => ch.charCodeAt(0));
+    const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+    const a = document.createElement('a'); a.href = url; a.download = r.filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+    $('#dlOut').textContent = (r.mail && r.mail.ok) ? t('dl_done_mail', { n: r.number }) : t('dl_done', { n: r.number });
+  } catch (e) { $('#dlOut').textContent = ''; $('#rfqOut').innerHTML = ''; alert(e.message); if (/name|e-mail|phone|contact/i.test(e.message)) { step(1); ['pcontact', 'pemail', 'pphone'].forEach(id => $('#' + id).classList.add('need')); } }
+  finally { $('#dlReport').disabled = false; }
+}
+$('#dlReport').onclick = () => downloadReport();
 window.addEventListener('afterprint', () => { $('#report').hidden = true; });
 
 function overlay(state, title, msg, closable) { const o = $('#sentOverlay'); o.hidden = false; $('#sentIcon').textContent = state === 'sending' ? '✉️' : state === 'done' ? '✅' : '⚠️'; $('#sentTitle').textContent = title; $('#sentMsg').textContent = msg || ''; $('#sentClose').hidden = !closable; }
@@ -143,7 +174,7 @@ $('#sentClose').onclick = () => { $('#sentOverlay').hidden = true; };
 async function sendRfq() {
   if (!CHOSEN) return;
   const cust = { company: $('#pcust').value || $('#pname').value || 'Enquiry', contact: $('#pcontact').value, email: $('#pemail').value, phone: $('#pphone').value, gstin: $('#pgstin').value, country: $('#pcountry').value || 'India' };
-  if (!cust.email || !cust.phone) { $('#rfqOut').innerHTML = `<div class="note bad">${t('need_email_phone')}</div>`; return; }
+  if (!cust.email || !cust.phone || !cust.contact) { $('#rfqOut').innerHTML = `<div class="note bad">${t('need_contact')}</div>`; contactOk(); return; }
   overlay('sending', t('sending'), t('sending_sub'));
   const held = new Promise(r => setTimeout(r, 900));
   try {

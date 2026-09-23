@@ -18,16 +18,16 @@
 
   <section class="card" data-p="1">
     <h3 data-t="project_title">Project details</h3>
-    <p class="hint" data-t="project_hint">Saved in this browser. Email and phone are needed only when you send the request.</p>
+    <p class="hint" data-t="project_hint">Saved in this browser. Name, e-mail and phone are needed to download the report or send a request.</p>
     <div class="grid">
       <div><label data-t="f_pname">Project name</label><input id="pname" data-t-ph="ph_pname" placeholder="e.g. Bay 3 gantry — end stops"></div>
       <div><label data-t="f_pcust">Customer / company</label><input id="pcust"></div>
-      <div><label data-t="f_pcontact">Contact person</label><input id="pcontact"></div>
+      <div><label><span data-t="f_pcontact">Contact person</span> *</label><input id="pcontact" required></div>
       <div><label data-t="f_pref">Reference no.</label><input id="pref"></div>
       <div><label data-t="f_pequip">Equipment</label><input id="pequip" data-t-ph="ph_pequip" placeholder="e.g. 20 t EOT crane, 22 m span"></div>
       <div><label data-t="f_pby">Prepared by</label><input id="pby"></div>
-      <div><label data-t="f_email">Email</label><input id="pemail" type="email"></div>
-      <div><label data-t="f_phone">Phone / WhatsApp</label><input id="pphone"></div>
+      <div><label><span data-t="f_email">Email</span> *</label><input id="pemail" type="email" required></div>
+      <div><label><span data-t="f_phone">Phone / WhatsApp</span> *</label><input id="pphone" required></div>
       <div><label data-t="f_country">Country</label><select id="pcountry"></select></div>
       <div id="gstinBox"><label><span data-t="f_gstin">GSTIN</span> <span class="muted" data-t="f_gstin_sub">(for the quotation)</span></label><input id="pgstin" placeholder="27AAAAA0000A1Z5" maxlength="15" style="text-transform:uppercase"></div>
     </div>
@@ -60,7 +60,7 @@
     <div id="dutyOut"></div>
     <div class="tw"><table id="resTbl"><thead><tr><th></th><th data-t="th_model">Model</th><th data-t="th_series">Type</th><th class="n" data-t="th_stroke">Stroke mm</th><th class="n">Nm/cycle</th><th class="n">Nm/h</th><th class="n" data-t="th_use_stroke">Use /str</th><th class="n" data-t="th_use_hour">Use /h</th><th class="n" data-t="th_decel">Decel m/s²</th><th class="n" data-t="th_force">Force kN</th><th class="n" data-t="th_me">Eff. mass kg</th><th class="n price-col hidden" data-t="th_price">Price</th><th class="n price-col hidden" data-t="th_lead">Lead time</th><th data-t="th_notes">Notes</th></tr></thead><tbody></tbody></table></div>
     <div class="row" style="margin-top:12px"><button class="btn ghost" id="showMore"></button></div>
-    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="3" data-t="back">← Back</button><button class="btn" id="toRfq" disabled data-t="to_rfq">Request drawings &amp; quotation →</button><button class="btn ghost" id="printReport" disabled data-t="print_a4">Print this selection (A4)</button></div>
+    <div class="row" style="margin-top:14px"><button class="btn ghost" data-go="3" data-t="back">← Back</button><button class="btn" id="toRfq" disabled data-t="to_rfq">Request drawings &amp; quotation →</button><button class="btn ghost" id="dlReport" disabled data-t="dl_report">Download my selection report (PDF)</button><span id="dlOut" class="muted" style="align-self:center"></span></div>
   </section>
 
   <section class="card hidden" data-p="5">

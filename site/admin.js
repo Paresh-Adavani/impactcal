@@ -9,12 +9,13 @@ async function boot() {
   await bootCommon('nav_admin');
   const u = AUTH.user;
   if (!u || (u.role !== 'admin' && u.role !== 'sales')) { location.href = 'login.html?next=admin.html'; return; }
-  if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes'].includes(b.dataset.tab)) b.remove(); });
+  if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections'].includes(b.dataset.tab)) b.remove(); });
   $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show().catch(err); });
+  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
   await show();
 }
 const err = e => { V().insertAdjacentHTML('afterbegin', say('bad', esc(e.message))); };
-async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, db, settings, drawings, users, tools })[TAB](); }
+async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, db, settings, drawings, users, tools })[TAB](); }
 
 /* ---------------- RFQ queue ---------------- */
 async function rfq() {
@@ -30,6 +31,20 @@ async function rfq() {
   $$('[data-view]').forEach(b => b.onclick = async () => { const r = await api('admin/rfq/' + encodeURIComponent(b.dataset.view)); $('#detail').innerHTML = `<div class="card"><div class="spread"><h3>${esc(r.number)}</h3><div class="row">${AUTH.user.role === 'admin' ? `<button class="btn sm ghost" id="resend">Re-send approval alert</button><select id="st" style="width:auto"><option>new</option><option>draft</option><option>quoted</option><option>closed</option><option>lost</option></select><button class="btn sm ghost" id="setst">Set status</button>` : ''}</div></div><pre class="log">${esc(JSON.stringify({ customer: r.customer, project: r.project, items: r.items, selection: r.selection && r.selection.summary, message: r.message, formats: r.formats, raised_by: r.raised_by, status: r.status, quotation_id: r.quotation_id }, null, 2))}</pre></div>`;
     if ($('#resend')) $('#resend').onclick = async () => { const x = await api('admin/rfq/' + encodeURIComponent(r.id) + '/resend-alert', { method: 'POST' }); alert(x.mail && x.mail.ok ? 'Alert sent to ' + x.mail.to : 'Mail failed: ' + (x.mail && x.mail.reason)); };
     if ($('#setst')) { $('#st').value = r.status; $('#setst').onclick = async () => { await api('admin/rfq/' + encodeURIComponent(r.id), { method: 'PATCH', body: { status: $('#st').value } }); show(); }; } });
+}
+
+
+/* ---------------- report leads (selection reports downloaded without an RFQ) ---------------- */
+async function selections() {
+  const rows = await api('admin/selections');
+  V().innerHTML = `<div class="stat"><div><b>${rows.length}</b><span>reports downloaded</span></div><div><b>${rows.filter(r => !r.rfq_number).length}</b><span>not yet converted</span></div><div><b>${rows.filter(r => r.quality && r.quality !== 'ok').length}</b><span>doubtful contacts</span></div><div><b>${rows.filter(r => r.crm).length}</b><span>in CRM</span></div></div>
+  <p class="hint">Visitors who downloaded a selection report but did not send a request. Real-looking contacts were pushed to UnitePro; doubtful ones (dummy names, numbers, e-mails) were held back. "Convert to RFQ" creates the request, the draft quotation and the approval alert exactly as if the customer had pressed Send.</p>
+  <div class="card tbl-card"><div class="tw"><table><thead><tr><th>Number</th><th>Date</th><th>Contact</th><th>Company</th><th>Line</th><th>Model</th><th>Qty</th><th>Quality</th><th>CRM</th><th>RFQ</th><th></th></tr></thead><tbody>
+  ${rows.map(r => `<tr><td class="mono">${esc(r.number)}</td><td>${dt(r.created_at)}</td><td><b>${esc(r.contact || '')}</b><br><small class="muted">${esc(r.email || '')} · ${esc(r.phone || '')}</small></td><td>${esc(r.customer || '')}<br><small class="muted">${esc(r.country || '')}</small></td><td>${esc(r.line)}</td><td class="mono">${esc(r.model || '')}</td><td class="n">${r.qty || ''}</td><td><span class="pill ${r.quality === 'ok' ? 'ok' : 'bad'}">${esc(r.quality || '?')}</span></td><td>${r.crm ? '✓' : '—'}</td><td class="mono">${esc(r.rfq_number || '—')}</td>
+    <td class="row">${r.rfq_number ? '' : `<button class="btn sm navy" data-conv="${esc(r.id)}">Convert to RFQ</button>`}<button class="btn sm ghost" data-sview="${esc(r.id)}">Details</button></td></tr>`).join('') || '<tr><td colspan="11" class="muted">No report downloads yet.</td></tr>'}
+  </tbody></table></div></div><div id="detail"></div>`;
+  $$('[data-conv]').forEach(b => b.onclick = async () => { if (!confirm('Create an RFQ + draft quotation from this report and send the approval alert?')) return; b.disabled = true; try { const r = await api('admin/selection/' + encodeURIComponent(b.dataset.conv) + '/to-rfq', { method: 'POST', body: {} }); alert(`Created ${r.number}${r.quotation ? ' and draft ' + r.quotation : ''}. Approval alert ${r.alert ? 'sent' : 'NOT sent'}.`); show(); } catch (e) { alert(e.message); b.disabled = false; } });
+  $$('[data-sview]').forEach(b => b.onclick = async () => { const r = await api('admin/selection/' + encodeURIComponent(b.dataset.sview)); $('#detail').innerHTML = `<div class="card"><h3>${esc(r.number)}</h3><pre class="log">${esc(JSON.stringify({ customer: r.customer, project: r.project, items: r.items, selection: r.selection, raised_by: r.raised_by, status: r.status, rfq_number: r.rfq_number }, null, 2))}</pre></div>`; });
 }
 
 /* ---------------- quotations ---------------- */
