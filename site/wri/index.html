@@ -1118,6 +1118,13 @@ function flushMailQueue(){
     if(q.length-rest.length>0)toast('Queued report copies emailed to Adonitech ✓');
   })();
 }
+/* full-screen confirmation, then back to the first screen (project details are kept) */
+function flashSent(number,msg){
+  let o=document.getElementById('sentFlash');
+  if(!o){o=document.createElement('div');o.id='sentFlash';o.style.cssText='position:fixed;inset:0;background:rgba(27,49,96,.72);display:flex;align-items:center;justify-content:center;z-index:9999';o.innerHTML='<div style="background:#fff;border-radius:16px;padding:28px 34px;max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);font-family:inherit"><div style="font-size:44px">✅</div><h3 id="sentFlashT" style="margin:8px 0 6px;color:#1B3160"></h3><p id="sentFlashM" style="color:#5A6672;margin:0"></p></div>';document.body.appendChild(o);}
+  o.querySelector('#sentFlashT').textContent='Request '+number+' sent';o.querySelector('#sentFlashM').textContent=msg||'';o.style.display='flex';
+  setTimeout(()=>{o.style.display='none';try{S.results=null;}catch(e){}go(0);if(typeof toast==='function')toast('Request '+number+' sent — thank you. Ready for the next selection.');},4200);
+}
 async function postLead(payload){
   /* ImpactCal: create the RFQ in the approval workflow (server prices it and alerts the approver) */
   try{
@@ -1131,7 +1138,7 @@ async function postLead(payload){
       items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:(payload.RFQ||'').replace(/^.*?· /,'') }] };
     const r=await fetch('/api/rfq',{method:'POST',headers:Object.assign({'content-type':'application/json'},tok?{authorization:'Bearer '+tok}:{}),body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
-    if(r.ok){ if(typeof toast==='function') toast('Request '+j.number+' sent — quotation follows after approval ✓'); return true; }
+    if(r.ok){ flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. We normally reply within one working day.':'We have it. Our engineer will come back to you, normally within one working day.'); return true; }
     if(typeof toast==='function') toast('Could not send: '+(j.error||r.statusText)); return false;
   }catch(e){ return false; }
 }

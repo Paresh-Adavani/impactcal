@@ -166,6 +166,15 @@ async function downloadReport() {
   finally { $('#dlReport').disabled = false; }
 }
 $('#dlReport').onclick = () => downloadReport();
+/* after a request is sent: back to the first screen (contact details are kept), results cleared, message shown */
+function startOver(number) {
+  RESULT = null; CHOSEN = null; EXPANDED = false;
+  $('#toRfq').disabled = $('#dlReport').disabled = true; $('#dlOut').textContent = ''; $('#rfqOut').innerHTML = ''; $('#rmsg').value = '';
+  if ($('#resTbl')) $('#resTbl').innerHTML = ''; if ($('#resOut')) $('#resOut').innerHTML = ''; if ($('#rfqLines')) $('#rfqLines').innerHTML = '';
+  step(1);
+  $('#gstinMsg').innerHTML = `<div class="note ok"><b>${t('sent_title', { n: number })}</b> ${t('sent_back')}</div>`;
+  setTimeout(() => { if ($('#gstinMsg').innerText.includes(number)) $('#gstinMsg').innerHTML = ''; }, 15000);
+}
 window.addEventListener('afterprint', () => { $('#report').hidden = true; });
 
 function overlay(state, title, msg, closable) { const o = $('#sentOverlay'); o.hidden = false; $('#sentIcon').textContent = state === 'sending' ? '✉️' : state === 'done' ? '✅' : '⚠️'; $('#sentTitle').textContent = title; $('#sentMsg').textContent = msg || ''; $('#sentClose').hidden = !closable; }
@@ -188,7 +197,7 @@ async function sendRfq() {
     await held;
     overlay('done', t('sent_title', { n: r.number }), (r.ack && r.ack.ok) ? t('sent_ack') : t('sent_noack'), true);
     $('#rfqOut').innerHTML = `<div class="note ok"><b>${t('sent_title', { n: r.number })}</b> ${t('sent_note')}</div>`;
-    setTimeout(() => { $('#sentOverlay').hidden = true; }, 4200);
+    setTimeout(() => { $('#sentOverlay').hidden = true; startOver(r.number); }, 4200);
   } catch (e) { await held; overlay('failed', t('send_failed'), e.message, true); }
 }
 
