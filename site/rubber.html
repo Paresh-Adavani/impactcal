@@ -18,29 +18,42 @@
       <div><label data-t="f_iso">Isolation wanted <span class="muted">%</span></label><select id="iso"><option>80</option><option>85</option><option selected>90</option><option>95</option></select></div>
       <div><label data-t="f_cg">CG load factor <span class="muted">1.0 = central</span></label><input id="cg" type="number" step="0.05" value="1.0"></div>
     </div>
+    <h3 style="margin-top:18px" data-t="mount_type_title">Mount type</h3>
+    <p class="hint" data-t="mount_type_hint">Optional — tick the mount types you would accept. Leave all unticked to search every type. Hover a picture for the description.</p>
+    <div class="picker" id="mountTypes"></div>
     <div class="row" style="margin-top:14px"><button class="btn" id="calc" data-t="calc">Calculate and select →</button></div>
+  </section>
+  <section class="card" id="who">
+    <h3 data-t="who_title">Your details</h3>
+    <p class="hint" data-t="who_hint">Name, e-mail and phone are needed to download the selection report or request a quotation. Company is optional. Saved in this browser.</p>
+    <div class="grid">
+      <div><label><span data-t="f_pcontact">Contact person</span> *</label><input id="pcontact" required></div>
+      <div><label><span data-t="f_email">Email</span> *</label><input id="pemail" type="email" required></div>
+      <div><label><span data-t="f_phone">Phone / WhatsApp</span> *</label><input id="pphone" required></div>
+      <div><label data-t="f_pcust">Customer / company</label><input id="pcust"></div>
+      <div><label data-t="f_country">Country</label><input id="pcountry" value="India" list="cl"><datalist id="cl"><option>India</option><option>Germany</option><option>United States</option><option>United Arab Emirates</option><option>Korea, Republic of</option><option>Egypt</option></datalist></div>
+      <div><label data-t="f_gstin">GSTIN</label><input id="pgstin" maxlength="15" style="text-transform:uppercase"></div>
+      <div><label data-t="f_pname">Project name</label><input id="pname"></div>
+    </div>
+    <div id="whoMsg"></div>
   </section>
   <section class="card hidden" id="res">
     <div class="spread"><h3 data-t="results_title">Selection</h3><div id="reqOut"></div></div>
-    <div class="tw"><table id="tbl"><thead><tr><th></th><th data-t="th_model">Model</th><th>Family</th><th class="n">Load band kg</th><th class="n">fn at load Hz</th><th class="n">r = f/fn</th><th class="n">Isolation %</th><th class="n">Static defl. mm</th><th class="n">Util.</th><th class="n price-col hidden" data-t="th_price">Price</th><th class="n price-col hidden" data-t="th_lead">Lead time</th><th data-t="th_notes">Notes</th></tr></thead><tbody></tbody></table></div>
-    <div class="row" style="margin-top:14px"><button class="btn" id="toRfq" disabled data-t="to_rfq">Request drawings &amp; quotation →</button></div>
+    <div class="tw"><table id="tbl"><thead><tr><th></th><th data-t="th_model">Model</th><th data-t="th_type">Type</th><th class="n">Load band kg</th><th class="n">fn at load Hz</th><th class="n">r = f/fn</th><th class="n">Isolation %</th><th class="n">Static defl. mm</th><th class="n">Util.</th><th class="n price-col hidden" data-t="th_price">Price</th><th class="n price-col hidden" data-t="th_lead">Lead time</th><th data-t="th_notes">Notes</th></tr></thead><tbody></tbody></table></div>
+    <div class="row" style="margin-top:14px"><button class="btn" id="toRfq" disabled data-t="to_rfq">Request drawings &amp; quotation →</button><button class="btn ghost" id="dlReport" disabled data-t="dl_report">Download my selection report (PDF)</button><span id="dlOut" class="muted" style="align-self:center"></span></div>
   </section>
   <section class="card hidden" id="rfq">
     <h3 data-t="rfq_title">Request drawings and quotation</h3>
     <div id="rfqLines"></div>
     <div class="grid" style="margin-top:12px">
-      <div><label data-t="f_pcust">Customer / company</label><input id="pcust"></div><div><label><span data-t="f_pcontact">Contact person</span> *</label><input id="pcontact" required></div>
-      <div><label><span data-t="f_email">Email</span> *</label><input id="pemail" type="email" required></div><div><label><span data-t="f_phone">Phone / WhatsApp</span> *</label><input id="pphone" required></div>
-      <div><label data-t="f_country">Country</label><input id="pcountry" value="India" list="cl"><datalist id="cl"><option>India</option><option>Germany</option><option>United States</option><option>United Arab Emirates</option><option>Korea, Republic of</option><option>Egypt</option></datalist></div>
-      <div><label data-t="f_gstin">GSTIN</label><input id="pgstin" maxlength="15" style="text-transform:uppercase"></div>
-      <div><label data-t="f_pname">Project name</label><input id="pname"></div><div><label data-t="f_qty">Quantity</label><input id="rqty" type="number" min="1" value="4"></div>
+      <div><label data-t="f_qty">Quantity</label><input id="rqty" type="number" min="1" value="4"></div>
     </div>
     <div style="margin-top:12px"><label data-t="f_message">Message</label><textarea id="rmsg" rows="3"></textarea></div>
     <div class="row" style="margin-top:14px"><button class="btn" id="sendRfq" data-t="send_rfq">Send request</button></div><div id="rfqOut"></div>
   </section>
 </div>
 <footer>ADONI TECH PVT. LTD. · Satara MIDC, Maharashtra · GSTIN 27AHAPA3555B1Z1</footer>
-<script src="common.js?v=2"></script>
+<script src="common.js?v=3"></script>
 <script>
 const APPS = [
   ['genset', 'rub_genset', 'rub_genset_sub', '<rect x="30" y="50" width="130" height="60" rx="6" fill="#fff"/><circle cx="185" cy="80" r="22" fill="#fff"/><circle cx="185" cy="80" r="8" fill="#F57C00"/><rect x="40" y="110" width="12" height="14" fill="#F57C00"/><rect x="140" y="110" width="12" height="14" fill="#F57C00"/>', 1500],
@@ -50,35 +63,75 @@ const APPS = [
   ['press', 'rub_press', 'rub_press_sub', '<rect x="60" y="20" width="120" height="30" fill="#fff"/><rect x="110" y="50" width="20" height="30" fill="#F57C00"/><rect x="70" y="80" width="100" height="30" fill="#fff"/><rect x="60" y="110" width="12" height="14" fill="#F57C00"/><rect x="170" y="110" width="12" height="14" fill="#F57C00"/>', 300],
   ['panel', 'rub_panel', 'rub_panel_sub', '<rect x="70" y="20" width="100" height="100" rx="4" fill="#fff"/><circle cx="120" cy="60" r="10" stroke="#F57C00"/><rect x="90" y="85" width="60" height="6" fill="#F57C00"/><rect x="80" y="120" width="12" height="12" fill="#F57C00"/><rect x="150" y="120" width="12" height="12" fill="#F57C00"/>', 50],
 ];
-let RES = null, CHOSEN = null, PRICES = false, APP = 'genset';
+const nf = (v, d = 1) => v == null || !isFinite(v) ? '—' : Number(v).toFixed(d);
+let RES = null, CHOSEN = null, PRICES = false, APP = 'genset', FAMILIES = [], TYPES = new Set();
 const icon = b => `<svg viewBox="0 0 240 150" fill="none" stroke="#1B3160" stroke-width="3" stroke-linejoin="round" style="max-height:92px">${b}</svg>`;
 function drawApps() {
   $('#rubApps').innerHTML = APPS.map(a => `<button class="pick ${a[0] === APP ? 'on' : ''}" data-app="${a[0]}"><span class="thumb">${icon(a[3])}</span><b>${esc(t(a[1]))}</b><small>${esc(t(a[2]))}</small></button>`).join('');
   $$('#rubApps .pick').forEach(b => b.onclick = () => { APP = b.dataset.app; const a = APPS.find(x => x[0] === APP); $('#rpm').value = a[4]; drawApps(); });
 }
+function drawTypes() {
+  $('#mountTypes').innerHTML = FAMILIES.map(f => `<button class="pick ${TYPES.has(f.family) ? 'on' : ''}" data-fam="${esc(f.family)}" title="${esc(f.type)}"><span class="thumb"><img src="${esc(f.image)}" alt=""></span><b>${esc(f.family.replace(/ shock absorber| isolator/i, ''))}</b><small>${esc(f.type)} · ${f.n} ${t('models')}</small></button>`).join('');
+  $$('#mountTypes .pick').forEach(b => b.onclick = () => { const k = b.dataset.fam; TYPES.has(k) ? TYPES.delete(k) : TYPES.add(k); drawTypes(); });
+}
+async function loadTypes() {
+  try { const rows = await api('rubber/data'); const m = new Map();
+    for (const r of rows) { const f = m.get(r.family) || { family: r.family, type: r.type, image: r.image || 'img/series/RUBBER.svg', n: 0 }; f.n++; m.set(r.family, f); }
+    FAMILIES = [...m.values()]; drawTypes(); } catch (e) { console.warn('types', e.message); }
+}
 async function calc() {
   const body = { application: APP, mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), disturbing_hz: Number($('#rpm').value) / 60, isolation_pct: Number($('#iso').value), cg_factor: Number($('#cg').value) };
+  CHOSEN = null; $('#toRfq').disabled = $('#dlReport').disabled = true; $('#rfq').classList.add('hidden');
   RES = await api('rubber/select', { method: 'POST', body });
+  if (TYPES.size) RES.candidates = RES.candidates.filter(c => TYPES.has(c.product.family));
   const r = RES.required;
-  $('#reqOut').innerHTML = `<span class="pill">W = ${r.W_kg.toFixed(1)} kg / mount</span> <span class="pill">fn ≤ ${r.fn_req_hz.toFixed(2)} Hz</span> <span class="pill">δ ≥ ${r.d_req_mm.toFixed(1)} mm</span> <span class="pill">k ≤ ${r.k_req_n_mm.toFixed(0)} N/mm</span>`;
-  $('#tbl tbody').innerHTML = RES.candidates.length ? RES.candidates.map((c, i) => { const p = c.product; return `<tr data-i="${i}"><td><input type="radio" name="pick"></td><td><b>${esc(p.model)}</b><br><small class="muted">${esc(p.type || '')}</small></td><td>${esc(p.family)}</td><td class="n">${p.load_min_kg ?? '—'}–${p.load_max_kg ?? '—'}</td><td class="n">${c.fn_hz ? c.fn_hz.toFixed(1) : '—'}</td><td class="n">${c.r.toFixed(2)}</td><td class="n">${c.isolation_pct.toFixed(0)}</td><td class="n">${c.static_deflection_mm ? c.static_deflection_mm.toFixed(1) : '—'}</td><td class="n">${(c.util * 100).toFixed(0)}%</td>${PRICES ? `<td class="n price">${p.price_inr != null ? money(p.price_inr, 'INR') : '—'}</td><td class="n">${p.lead_time_days || '—'} d</td>` : ''}<td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`; }).join('')
+  $('#reqOut').innerHTML = `<span class="pill">W = ${nf(r.W_kg)} kg / mount</span> <span class="pill">fn ≤ ${nf(r.fn_req_hz, 2)} Hz</span> <span class="pill">δ ≥ ${nf(r.d_req_mm)} mm</span> <span class="pill">k ≤ ${nf(r.k_req_n_mm, 0)} N/mm</span>`;
+  $('#tbl tbody').innerHTML = RES.candidates.length ? RES.candidates.map((c, i) => { const p = c.product; return `<tr data-i="${i}"><td><input type="radio" name="pick"></td><td><b>${esc(p.model)}</b></td><td><div style="display:flex;gap:8px;align-items:center;min-width:180px"><img src="${esc(p.image || 'img/series/RUBBER.svg')}" alt="" style="height:44px;width:70px;object-fit:contain;background:#F7F9FC;border-radius:6px"><small>${esc(p.family)}<br><span class="muted">${esc(p.type || '')}</span></small></div></td><td class="n">${p.load_min_kg ?? '—'}–${p.load_max_kg ?? '—'}</td><td class="n">${c.fn_hz ? c.fn_hz.toFixed(1) : '—'}</td><td class="n">${nf(c.r, 2)}</td><td class="n">${nf(c.isolation_pct, 0)}</td><td class="n">${c.static_deflection_mm ? c.static_deflection_mm.toFixed(1) : '—'}</td><td class="n">${(c.util * 100).toFixed(0)}%</td>${PRICES ? `<td class="n price">${p.price_inr != null ? money(p.price_inr, 'INR') : '—'}</td><td class="n">${p.lead_time_days || '—'} d</td>` : ''}<td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`; }).join('')
     : `<tr><td colspan="12"><div class="note bad">${t('no_result')}</div></td></tr>`;
-  $$('#tbl tbody tr').forEach(tr => tr.onclick = () => { $$('#tbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); CHOSEN = RES.candidates[tr.dataset.i]; $('#toRfq').disabled = false; });
+  $$('#tbl tbody tr').forEach(tr => tr.onclick = () => { $$('#tbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); CHOSEN = RES.candidates[tr.dataset.i]; $('#toRfq').disabled = $('#dlReport').disabled = false; });
   $('#res').classList.remove('hidden'); $('#res').scrollIntoView({ behavior: 'smooth' });
 }
 $('#calc').onclick = () => calc().catch(e => alert(e.message));
-$('#toRfq').onclick = () => { const p = CHOSEN.product; $('#rfqLines').innerHTML = `<div class="note blue"><b>${esc(p.model)}</b> — ${p.load_min_kg ?? ''}–${p.load_max_kg} kg, fn ${CHOSEN.fn_hz.toFixed(1)} Hz at ${RES.required.W_kg.toFixed(0)} kg, ${CHOSEN.isolation_pct.toFixed(0)}% isolation</div>`; $('#rqty').value = $('#mounts').value; $('#rfq').classList.remove('hidden'); $('#rfq').scrollIntoView({ behavior: 'smooth' }); };
-$('#sendRfq').onclick = async () => {
-  const p = CHOSEN.product, r = RES.required;
+/* details persist in this browser; shared with the shock-absorber selector */
+const WHO = ['pcontact', 'pemail', 'pphone', 'pcust', 'pcountry', 'pgstin', 'pname'];
+(() => { let S = {}; try { S = JSON.parse(localStorage.getItem('impactcal') || '{}'); } catch {} WHO.forEach(id => { if (S[id] && !$('#' + id).value) $('#' + id).value = S[id]; });
+  WHO.forEach(id => $('#' + id).addEventListener('input', () => { try { const s = JSON.parse(localStorage.getItem('impactcal') || '{}'); s[id] = $('#' + id).value; localStorage.setItem('impactcal', JSON.stringify(s)); } catch {} $('#' + id).classList.remove('need'); })); })();
+function customer() { return { company: $('#pcust').value, contact: $('#pcontact').value, email: $('#pemail').value, phone: $('#pphone').value, gstin: $('#pgstin').value, country: $('#pcountry').value || 'India' }; }
+function contactOk() {
+  if (AUTH.user && !$('#pemail').value) { $('#pemail').value = AUTH.user.email; $('#pcontact').value = $('#pcontact').value || AUTH.user.name || ''; }
+  const miss = ['pcontact', 'pemail', 'pphone'].filter(id => !$('#' + id).value.trim());
+  if (!miss.length) { $('#whoMsg').innerHTML = ''; return true; }
+  miss.forEach(id => $('#' + id).classList.add('need'));
+  $('#whoMsg').innerHTML = `<div class="note bad">${esc(t('need_contact'))}</div>`;
+  $('#who').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('#' + miss[0]).focus(), 400);
+  return false;
+}
+function selectionBlock() { const p = CHOSEN.product, r = RES.required; return { case_id: 'RUBBER', inputs: { mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), rpm: Number($('#rpm').value), isolation_pct: Number($('#iso').value) }, chosen: p.model,
+  summary: { 'Application': t(APPS.find(a => a[0] === APP)[1]), 'Mass': $('#mass').value + ' kg on ' + $('#mounts').value + ' mounts', 'Disturbing frequency': (Number($('#rpm').value) / 60).toFixed(1) + ' Hz', 'Load per mount': nf(r.W_kg) + ' kg', 'Required fn': '≤ ' + nf(r.fn_req_hz, 2) + ' Hz', 'Selected fn': nf(CHOSEN.fn_hz, 2) + ' Hz', 'Isolation': nf(CHOSEN.isolation_pct, 0) + ' %' } }; }
+$('#dlReport').onclick = async () => {
+  if (!CHOSEN || !contactOk()) return;
+  const p = CHOSEN.product;
+  $('#dlReport').disabled = true; $('#dlOut').textContent = t('dl_preparing');
   try {
-    const out = await api('rfq', { method: 'POST', body: { line: 'rubber', lang: I18N.lang, customer: { company: $('#pcust').value, contact: $('#pcontact').value, email: $('#pemail').value, phone: $('#pphone').value, gstin: $('#pgstin').value, country: $('#pcountry').value || 'India' },
+    const r = await api('selection', { method: 'POST', body: { line: 'rubber', lang: I18N.lang, customer: customer(), project: { name: $('#pname').value || 'Untitled', equipment: t(APPS.find(a => a[0] === APP)[1]) }, selection: selectionBlock(), items: [{ table: 'rubber_mounts', key: p.model, model: p.model, qty: Number($('#mounts').value) || 1 }] } });
+    const bytes = Uint8Array.from(atob(r.pdf_b64), ch => ch.charCodeAt(0)); const url = URL.createObjectURL(new Blob([bytes], { type: 'application/pdf' }));
+    const a = document.createElement('a'); a.href = url; a.download = r.filename; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
+    $('#dlOut').textContent = (r.mail && r.mail.ok) ? t('dl_done_mail', { n: r.number }) : t('dl_done', { n: r.number });
+  } catch (e) { $('#dlOut').textContent = ''; alert(e.message); if (/name|e-mail|phone|contact/i.test(e.message)) { ['pcontact', 'pemail', 'pphone'].forEach(id => $('#' + id).classList.add('need')); $('#who').scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
+  finally { $('#dlReport').disabled = false; }
+};
+$('#toRfq').onclick = () => { if (!contactOk()) return; const p = CHOSEN.product; $('#rfqLines').innerHTML = `<div class="note blue"><b>${esc(p.model)}</b> — ${p.load_min_kg ?? ''}–${p.load_max_kg} kg, fn ${nf(CHOSEN.fn_hz)} Hz at ${nf(RES.required.W_kg, 0)} kg, ${nf(CHOSEN.isolation_pct, 0)}% isolation</div>`; $('#rqty').value = $('#mounts').value; $('#rfq').classList.remove('hidden'); $('#rfq').scrollIntoView({ behavior: 'smooth' }); };
+$('#sendRfq').onclick = async () => {
+  const p = CHOSEN.product;
+  if (!contactOk()) return;
+  try {
+    const out = await api('rfq', { method: 'POST', body: { line: 'rubber', lang: I18N.lang, customer: customer(),
       project: { name: $('#pname').value, equipment: t(APPS.find(a => a[0] === APP)[1]) }, message: $('#rmsg').value, formats: ['PDF'],
-      selection: { case_id: 'RUBBER', inputs: { mass_kg: $('#mass').value, mounts: $('#mounts').value, rpm: $('#rpm').value, isolation_pct: $('#iso').value }, chosen: p.model,
-        summary: { 'Application': t(APPS.find(a => a[0] === APP)[1]), 'Mass': $('#mass').value + ' kg on ' + $('#mounts').value + ' mounts', 'Disturbing frequency': (Number($('#rpm').value) / 60).toFixed(1) + ' Hz', 'Load per mount': r.W_kg.toFixed(1) + ' kg', 'Required fn': '≤ ' + r.fn_req_hz.toFixed(2) + ' Hz', 'Selected fn': CHOSEN.fn_hz.toFixed(2) + ' Hz', 'Isolation': CHOSEN.isolation_pct.toFixed(0) + ' %' } },
+      selection: selectionBlock(),
       items: [{ table: 'rubber_mounts', key: p.model, model: p.model, qty: Number($('#rqty').value) || 1 }] } });
     $('#rfqOut').innerHTML = `<div class="note ok"><b>${t('sent_title', { n: out.number })}</b> ${t('sent_note')}</div>`;
   } catch (e) { $('#rfqOut').innerHTML = `<div class="note bad">${esc(e.message)}</div>`; }
 };
-bootCommon('nav_rubber').then(async () => { drawApps(); const me = AUTH.user; PRICES = !!me && (me.role === 'admin' || me.role === 'sales'); if (PRICES) $$('.price-col').forEach(e => e.classList.remove('hidden')); document.addEventListener('langchange', drawApps); });
+bootCommon('nav_rubber').then(async () => { drawApps(); loadTypes(); const me = AUTH.user; PRICES = !!me && (me.role === 'admin' || me.role === 'sales'); if (PRICES) $$('.price-col').forEach(e => e.classList.remove('hidden')); document.addEventListener('langchange', () => { drawApps(); drawTypes(); }); });
 </script>
 </body></html>
