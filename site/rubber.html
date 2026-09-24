@@ -143,9 +143,10 @@ $('#sendRfq').onclick = async () => {
       items: [{ table: 'rubber_mounts', key: p.model, model: p.model, qty: Number($('#rqty').value) || 1 }] } });
     await held;
     overlay('done', t('sent_title', { n: out.number }), (out.ack && out.ack.ok) ? t('sent_ack') : t('sent_noack'), true);
+    if (out.quotation_id && AUTH.user && ['dealer', 'sales'].includes(AUTH.user.role)) { setTimeout(() => { location.href = 'approve.html?id=' + encodeURIComponent(out.quotation_id); }, 1600); return; }
     setTimeout(() => { $('#sentOverlay').hidden = true; startOver(out.number); }, 4200);
   } catch (e) { await held; overlay('failed', t('send_failed'), e.message, true); $('#rfqOut').innerHTML = `<div class="note bad">${esc(e.message)}</div>`; }
 };
-bootCommon('nav_rubber').then(async () => { drawApps(); loadTypes(); const me = AUTH.user; PRICES = !!me && (me.role === 'admin' || me.role === 'sales'); if (PRICES) $$('.price-col').forEach(e => e.classList.remove('hidden')); document.addEventListener('langchange', () => { drawApps(); drawTypes(); }); });
+bootCommon('nav_rubber').then(async () => { drawApps(); loadTypes(); const me = AUTH.user; PRICES = !!me && ['admin', 'sales', 'dealer'].includes(me.role); if (PRICES) $$('.price-col').forEach(e => e.classList.remove('hidden')); document.addEventListener('langchange', () => { drawApps(); drawTypes(); }); });
 </script>
 </body></html>

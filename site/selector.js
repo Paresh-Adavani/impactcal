@@ -197,6 +197,7 @@ async function sendRfq() {
     await held;
     overlay('done', t('sent_title', { n: r.number }), (r.ack && r.ack.ok) ? t('sent_ack') : t('sent_noack'), true);
     $('#rfqOut').innerHTML = `<div class="note ok"><b>${t('sent_title', { n: r.number })}</b> ${t('sent_note')}</div>`;
+    if (r.quotation_id && AUTH.user && ['dealer', 'sales'].includes(AUTH.user.role)) { setTimeout(() => { location.href = 'approve.html?id=' + encodeURIComponent(r.quotation_id); }, 1600); return; }
     setTimeout(() => { $('#sentOverlay').hidden = true; startOver(r.number); }, 4200);
   } catch (e) { await held; overlay('failed', t('send_failed'), e.message, true); }
 }

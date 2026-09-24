@@ -11,11 +11,11 @@ async function boot() {
   if (!u || (u.role !== 'admin' && u.role !== 'sales')) { location.href = 'login.html?next=admin.html'; return; }
   if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections', 'pricing'].includes(b.dataset.tab)) b.remove(); });
   $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show().catch(err); });
-  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
+  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing', 'dealers'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
   await show();
 }
 const err = e => { V().insertAdjacentHTML('afterbegin', say('bad', esc(e.message))); };
-async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools })[TAB](); }
+async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools, dealers: dealersTab })[TAB](); }
 
 /* ---------------- RFQ queue ---------------- */
 async function rfq() {
@@ -47,6 +47,28 @@ async function selections() {
   $$('[data-sview]').forEach(b => b.onclick = async () => { const r = await api('admin/selection/' + encodeURIComponent(b.dataset.sview)); $('#detail').innerHTML = `<div class="card"><h3>${esc(r.number)}</h3><pre class="log">${esc(JSON.stringify({ customer: r.customer, project: r.project, items: r.items, selection: r.selection, raised_by: r.raised_by, status: r.status, rfq_number: r.rfq_number }, null, 2))}</pre></div>`; });
 }
 
+
+/* ---------------- dealers: approve once, then they quote in their own name ---------------- */
+async function dealersTab() {
+  const rows = await api('admin/dealers');
+  const pill = s => `<span class="pill ${s === 'approved' ? 'ok' : s === 'pending' ? 'brand' : 'bad'}">${esc(s)}</span>`;
+  V().innerHTML = `<div class="stat"><div><b>${rows.length}</b><span>dealers</span></div><div><b>${rows.filter(d => d.status === 'pending').length}</b><span>waiting for approval</span></div><div><b>${rows.filter(d => d.status === 'approved').length}</b><span>active</span></div></div>
+  <p class="hint">A dealer applies from the Quote portal after signing in (company, address, GSTIN, bank). Approve once: he then sees list prices, quotes his customers in his own name (cc you), may discount up to his limit or add markup, and you bill him at list − his dealer discount. Deeper discounts come to you as special-price requests. Each dealer gets his own terms at approval — e.g. a different structure for overseas dealers. Leave the % fields empty to use the standard values in Settings (dealer.discount_pct / dealer.max_discount_pct).</p>
+  <div class="card tbl-card"><div class="tw"><table><thead><tr><th>Dealer</th><th>Contact</th><th>GSTIN</th><th>Status</th><th>Code</th><th>Billing disc %</th><th>Max disc %</th><th></th></tr></thead><tbody>
+  ${rows.map(d => `<tr data-e="${esc(d.email)}"><td><b>${esc(d.company)}</b>${d.logo ? ' <span class="pill ok">logo</span>' : ''}${d.country && d.country !== 'India' ? ' <span class="pill brand">overseas</span>' : ''}<br><small class="muted">${esc([d.addr1, d.city, d.state_name, d.country].filter(Boolean).join(', '))}</small></td><td>${esc(d.contact || '')}<br><small class="muted">${esc(d.email)} · ${esc(d.phone || '')}</small></td>
+    <td class="mono">${esc(d.gstin || '—')}${d.gstin && d.gstin_ok !== '1' ? `<br><small class="lim" style="color:#c0392b">${esc(d.gstin_warning || 'check')}</small>` : ''}</td><td>${pill(d.status)}<br><small class="muted">${dt(d.approved_at || d.applied_at)}</small></td>
+    <td><input data-f="code" value="${esc(d.code || '')}" style="width:80px" placeholder="auto"></td><td><input data-f="discount_pct" type="number" step="any" value="${d.discount_pct ?? ''}" placeholder="${d.terms.discount_pct}" style="width:70px"></td><td><input data-f="max_discount_pct" type="number" step="any" value="${d.max_discount_pct ?? ''}" placeholder="${d.terms.max_discount_pct}" style="width:70px"></td>
+    <td class="row">${d.status !== 'approved' ? '<button class="btn sm" data-d="approve">Approve</button>' : '<button class="btn sm ghost" data-d="save">Save</button><button class="btn sm ghost" data-d="suspend">Suspend</button>'}${d.status === 'pending' ? '<button class="btn sm ghost" data-d="reject">Reject</button>' : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="muted">No dealer applications yet. Send dealers the link to the Quote portal (portal.html).</td></tr>'}
+  </tbody></table></div></div>`;
+  $$('[data-d]').forEach(b => b.onclick = async () => {
+    const tr = b.closest('tr'), email = tr.dataset.e, f = {}; tr.querySelectorAll('[data-f]').forEach(i => { f[i.dataset.f] = i.value; });
+    try {
+      if (b.dataset.d === 'save') await api('admin/dealers/' + encodeURIComponent(email), { method: 'PUT', body: f });
+      else { if (b.dataset.d !== 'approve' && !confirm(b.dataset.d + ' this dealer?')) return; const r = await api('admin/dealers/' + encodeURIComponent(email) + '/decide', { method: 'POST', body: { decision: b.dataset.d, ...f } }); if (b.dataset.d === 'approve') alert(`Approved as ${r.dealer.code}. ${r.mail ? 'The dealer has been e-mailed.' : 'The approval mail could not be sent — please tell him to sign in again.'}`); }
+      show();
+    } catch (e) { alert(e.message); }
+  });
+}
 
 /* ---------------- pricing & costing (admin + settings pricing.users) ---------------- */
 async function pricing() {
@@ -80,9 +102,9 @@ async function pricing() {
 /* ---------------- quotations ---------------- */
 async function quotes() {
   const rows = await api('admin/quotations');
-  V().innerHTML = `<div class="card tbl-card"><div class="spread"><h3>Quotations</h3><a class="btn sm ghost" href="/api/admin/export/quotations.csv?token=${encodeURIComponent(AUTH.token)}">Export CSV</a></div><div class="tw"><table><thead><tr><th>Number</th><th>Rev</th><th>Date</th><th>Customer</th><th>Cur</th><th class="n">Grand total</th><th>Status</th><th>Sent</th><th></th></tr></thead><tbody>
-  ${rows.map(q => `<tr><td class="mono">${esc(q.number)}</td><td>${q.rev}</td><td>${q.date}</td><td>${esc(q.customer || '')}</td><td>${q.currency}</td><td class="n">${money(q.grand_total, q.currency)}</td><td><span class="pill ${q.status === 'sent' ? 'ok' : 'brand'}">${q.status}</span></td><td>${dt(q.sent_at)}</td>
-    <td class="row"><button class="btn sm" data-open="${esc(q.id)}">Open</button><a class="btn sm ghost" href="/api/admin/quotation/${encodeURIComponent(q.id)}/pdf?token=${encodeURIComponent(AUTH.token)}" target="_blank">PDF</a></td></tr>`).join('') || '<tr><td colspan="9" class="muted">None yet.</td></tr>'}</tbody></table></div></div>`;
+  V().innerHTML = `<div class="card tbl-card"><div class="spread"><h3>Quotations</h3><a class="btn sm ghost" href="/api/admin/export/quotations.csv?token=${encodeURIComponent(AUTH.token)}">Export CSV</a></div><div class="tw"><table><thead><tr><th>Number</th><th>Rev</th><th>Date</th><th>Customer</th><th>Issued by</th><th>Cur</th><th class="n">Grand total</th><th>Status</th><th>Sent</th><th></th></tr></thead><tbody>
+  ${rows.map(q => `<tr><td class="mono">${esc(q.number)}</td><td>${q.rev}</td><td>${q.date}</td><td>${esc(q.customer || '')}</td><td><small>${esc(String(q.issuer || 'adoni').replace(/^adoni:?/, 'ADONI TECH ').replace(/^dealer:/, 'Dealer: '))}</small>${q.special ? ` <span class="pill ${q.special === 'approved' ? 'ok' : q.special === 'pending' ? 'brand' : 'bad'}">special ${esc(q.special)}</span>` : ''}</td><td>${q.currency}</td><td class="n">${money(q.grand_total, q.currency)}</td><td><span class="pill ${q.status === 'sent' ? 'ok' : 'brand'}">${q.status}</span></td><td>${dt(q.sent_at)}</td>
+    <td class="row"><button class="btn sm" data-open="${esc(q.id)}">Open</button><a class="btn sm ghost" href="/api/admin/quotation/${encodeURIComponent(q.id)}/pdf?token=${encodeURIComponent(AUTH.token)}" target="_blank">PDF</a></td></tr>`).join('') || '<tr><td colspan="10" class="muted">None yet.</td></tr>'}</tbody></table></div></div>`;
   $$('[data-open]').forEach(b => b.onclick = async () => { const q = await api('admin/quotation/' + encodeURIComponent(b.dataset.open)); location.href = q.approve_url; });
 }
 

@@ -6,8 +6,8 @@ company.state_name,Maharashtra,
 company.addr1,"Sharda, 1st Floor, Jeevan Chaya Hsg. Soc.",
 company.addr2,Opp. Civil Hospital,
 company.city,Satara,
-company.pincode,415004,
-company.works,"SLU/39, Addl. MIDC, Satara - 415004",
+company.pincode,415001,
+company.works,"SLU-W-39, Suvarna Laghu Udyog, Addl. MIDC, Kodoli, Satara 415004",
 company.phone,+91 98908 52663,
 company.phone2,+91 93074 46007,
 company.tel,(02162) 232169,
@@ -57,3 +57,25 @@ sales.people,adonitechpune@gmail.com=Krishnakant Harpale; adonisatara@gmail.com=
 crm.enabled,1,Push every RFQ as a lead to UnitePro CRM (needs env UNITEPRO_TOKEN on Netlify). 0 = off
 crm.source,ImpactCal Web,Lead source name shown in UnitePro
 pricing.users,adonitechpune@gmail.com,"E-mails (besides admin) allowed to download / upload the price & costing workbook, comma separated"
+company.iec,3106020261,"Importer-Exporter Code, printed on every export (non-INR) quotation"
+company.pan,AHAPA3555B,
+quote.max_discount_pct,25,Max discount below list a sales person may give without a special-price approval
+quote.sales_self_send,1,1 = sales may send their own quotations within the limit; 0 = every sales quotation needs Paresh approval
+quote.default_office,satara,Office for web RFQs and sales persons not listed in sales.office
+quote.approver_name,Paresh Adavani,Name printed when a quotation is approved from the signed link
+sales.office,adonitechpune@gmail.com=pune; adonisatara@gmail.com=satara; vidyaadavani1@gmail.com=satara; adonitech@gmail.com=satara,email=office id; the office address goes on that person's quotations
+office.satara.label,Satara office,
+office.satara.addr1,"Sharada, 1st Floor, Jeevan Chaya Hsg. Soc.",GST certificate: additional place of business
+office.satara.addr2,Opp. Civil Hospital,
+office.satara.city,Satara,
+office.satara.pincode,415001,
+office.pune.label,Pune office,Fill the address as declared on GST / UnitePro; until then Pune quotations print the Satara address
+office.pune.addr1,,
+office.pune.addr2,,
+office.pune.city,Pune,
+office.pune.pincode,,
+office.pune.phone,,
+dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
+dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
+dealer.show_manufacturer,1,"1 = dealer quotations carry ""Products manufactured by ADONI TECH, India"" in the footer"
+mail.dealer_cc,adonitech@gmail.com,Copied on every dealer quotation sent to a customer

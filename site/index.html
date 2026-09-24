@@ -25,6 +25,11 @@
       <div><h3 data-t="how_3">3 · Request</h3><p class="muted" data-t="how_3_sub">Send the selection as an RFQ. ADONI TECH reviews it, approves the quotation and emails it with the GA drawings — normally within one working day.</p></div>
     </div>
   </section>
+  <section class="card" id="dealerBox">
+    <div class="spread"><div><h3 data-t="dealer_title">Dealers &amp; sales partners</h3>
+    <p class="muted" data-t="dealer_sub">Approved ADONI TECH dealers sign in to see list prices in every selector and to make quotations to their own customers, in their own name, straight from the catalogue.</p></div>
+    <a class="btn navy" href="portal.html" data-t="dealer_btn">Dealer portal</a></div>
+  </section>
   <section class="card" id="salesBox" hidden>
     <h3 data-t="sales_title">Sales team</h3>
     <p class="muted" data-t="sales_sub">Logged-in sales users see list prices, USD export prices and lead times inside every selector, and can raise requests on behalf of customers.</p>
@@ -33,6 +38,6 @@
 <footer>ADONI TECH · Satara MIDC, Maharashtra, India · GSTIN 27AHAPA3555B1Z1 · <a href="wri/knowledge.html">Knowledge base</a></footer>
 <script src="common.js?v=2"></script>
 <script>
-bootCommon('nav_home').then(() => { const u = AUTH.user; if (u && (u.role === 'admin' || u.role === 'sales')) $('#salesBox').hidden = false; });
+bootCommon('nav_home').then(() => { const u = AUTH.user; if (u && (u.role === 'admin' || u.role === 'sales' || u.role === 'dealer')) $('#salesBox').hidden = false; });
 </script>
 </body></html>

@@ -1,0 +1,169 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Quote portal — ImpactCal | ADONI TECH</title><link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono&display=swap"><link rel="stylesheet" href="style.css?v=2">
+<style>
+.cat{max-height:420px;overflow:auto;border:1px solid var(--line);border-radius:10px;background:#fff}
+.cat .it{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;padding:8px 10px;border-bottom:1px solid var(--line)}
+.cat .it:last-child{border-bottom:0}.cat .it small{display:block;color:var(--muted)}
+.lines td input{width:80px}.lines td.rm input{width:100%}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chips button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:5px 12px;cursor:pointer;font:inherit;font-size:13px}.chips button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+.ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:8px}.ways a{display:block;border:1px solid var(--line);border-radius:10px;padding:12px;text-decoration:none;color:inherit;background:#fff}.ways a b{color:var(--navy)}
+.req::after{content:" *";color:#c0392b}
+</style>
+</head><body>
+<header><div class="wrap"></div></header>
+<div class="wrap">
+  <div class="tabs" id="tabs" hidden><button data-tab="newq" class="on">New quotation</button><button data-tab="mine">My quotations</button><button data-tab="profile" id="tabProfile" hidden>My dealer profile</button></div>
+  <div id="view"><div class="card">Loading…</div></div>
+</div>
+<script src="common.js?v=4"></script>
+<script>
+'use strict';
+const V = () => $('#view');
+const note = (cls, m) => `<div class="note ${cls}">${m}</div>`;
+let TAB = 'newq', CAT = null, LINES = [], GROUP = '', ME = null;
+const PROFILE = [
+  ['company', 'Company / firm name', 1], ['contact', 'Contact person', 1], ['phone', 'Phone', 1], ['gstin', 'GSTIN (India)', 0],
+  ['addr1', 'Address line 1', 1], ['addr2', 'Address line 2', 0], ['city', 'City', 1], ['pincode', 'PIN code', 0], ['country', 'Country', 0],
+  ['pan', 'PAN', 0], ['iec', 'IEC (if you export)', 0], ['web', 'Website', 0],
+  ['bank_beneficiary', 'Bank: account name', 0], ['bank_name', 'Bank name', 0], ['bank_branch', 'Branch', 0], ['bank_account', 'Account number', 0], ['bank_ifsc', 'IFSC', 0], ['bank_swift', 'SWIFT (export)', 0],
+  ['quote_footer', 'Footer line on your quotations (optional)', 0],
+];
+
+async function boot() {
+  await bootCommon('nav_portal');
+  const u = AUTH.user;
+  if (!u) {
+    V().innerHTML = `<div class="card"><h3>Quote portal</h3><p>For ADONI TECH dealers and the ADONI TECH sales team. Sign in with your e-mail — we send a 6-digit code.</p>
+      <div class="row"><a class="btn" href="login.html?next=portal.html">Sign in</a></div>
+      <p class="hint" style="margin-top:14px"><b>Want to become a dealer?</b> Sign in with your business e-mail, fill in your company details and GSTIN once, and ADONI TECH approves your account. Then you see list prices in every selector and send quotations to your customers in your own name.</p></div>`;
+    return;
+  }
+  if (u.role === 'customer') return dealerOnboarding();
+  $('#tabs').hidden = false;
+  if (u.role === 'dealer') $('#tabProfile').hidden = false;
+  $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show(); });
+  const h = (location.hash || '').slice(1); if (['newq', 'mine', 'profile'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
+  show();
+}
+function show() { ({ newq, mine, profile })[TAB]().catch(e => V().innerHTML = note('bad', esc(e.message))); }
+
+/* ---------------- a customer login: apply to become a dealer ---------------- */
+async function dealerOnboarding() {
+  const me = await api('dealer/me');
+  const d = me.dealer;
+  if (d && me.relogin) {
+    V().innerHTML = `<div class="card"><h3>Your dealer account is approved 🎉</h3><p>Please sign out and sign in again to open the dealer portal.</p><button class="btn" id="relog">Sign out &amp; sign in again</button></div>`;
+    $('#relog').onclick = () => { AUTH.token = ''; AUTH.user = null; location.href = 'login.html?next=portal.html'; };
+    return;
+  }
+  const status = !d ? '' : d.status === 'pending' ? note('warn', '<b>Application received.</b> ADONI TECH will review it and e-mail you when it is approved. You can correct the details below meanwhile.')
+    : d.status === 'suspended' ? note('bad', 'Your dealer account is suspended. Please contact ADONI TECH.') : d.status === 'rejected' ? note('bad', 'Your application was not approved. Please contact ADONI TECH.') : '';
+  V().innerHTML = `<div class="card"><h3>${d ? 'Your dealer application' : 'Become an ADONI TECH dealer'}</h3>${status}
+    <p class="hint">Your quotations will carry this name, address, GSTIN and bank. ADONI TECH bills you at list price less the standard dealer discount; you decide your own discount (up to the limit) or markup to your customer.</p>
+    ${profileForm(d || { country: 'India' })}
+    <div class="row" style="margin-top:12px"><button class="btn" id="apply">${d ? 'Save changes' : 'Apply as dealer'}</button></div><div id="out"></div>
+    ${d ? logoBlock() : '<p class="hint">You can add your logo right after applying.</p>'}</div>`;
+  if (d) wireLogo();
+  $('#apply').onclick = async () => {
+    try { const r = await api('dealer/apply', { method: 'POST', body: readProfile() }); $('#out').innerHTML = note('ok', `Saved. Status: <b>${esc(r.dealer.status)}</b>.${r.dealer.gstin_warning ? ' GSTIN check: ' + esc(r.dealer.gstin_warning) : ''}`); setTimeout(dealerOnboarding, 1500); }
+    catch (e) { $('#out').innerHTML = note('bad', esc(e.message)); }
+  };
+}
+function profileForm(d) {
+  return `<div class="grid">${PROFILE.map(([k, l, req]) => `<div ${k === 'quote_footer' ? 'style="grid-column:1/-1"' : ''}><label class="${req ? 'req' : ''}">${l}</label><input data-p="${k}" value="${esc(d[k] || '')}"></div>`).join('')}</div>`;
+}
+/* logo printed on the dealer's quotations */
+function logoBlock() {
+  return `<div class="card" style="background:#F7F9FC;margin-top:12px"><h4 style="margin:0 0 6px">Your logo on quotations</h4>
+    <div class="row" style="align-items:center;gap:14px;flex-wrap:wrap"><div id="logoPrev" style="min-width:170px;height:48px;border:1px dashed var(--line);border-radius:8px;display:flex;align-items:center;justify-content:center;background:#fff"><small class="muted">no logo</small></div>
+    <input type="file" id="logoFile" accept="image/png,image/jpeg" style="max-width:260px"><button class="btn sm ghost" id="logoDel">Remove</button></div>
+    <p class="hint" style="margin:6px 0 0">PNG or JPEG, under 400 kB; a wide logo on a white background prints best. Without a logo your company name prints in bold.</p><div id="logoOut"></div></div>`;
+}
+async function wireLogo() {
+  const prev = async () => { try { const r = await fetch('/api/dealer/me/logo', { headers: { authorization: 'Bearer ' + AUTH.token } }); if (r.ok) $('#logoPrev').innerHTML = `<img src="${URL.createObjectURL(await r.blob())}" style="max-height:44px;max-width:168px">`; else $('#logoPrev').innerHTML = '<small class="muted">no logo</small>'; } catch {} };
+  prev();
+  $('#logoFile').onchange = e => { const f = e.target.files[0]; if (!f) return; if (f.size > 400 * 1024) { $('#logoOut').innerHTML = note('bad', 'Logo too large — keep it under 400 kB.'); return; }
+    const rd = new FileReader(); rd.onload = async () => { try { await api('dealer/me/logo', { method: 'PUT', body: { base64: rd.result } }); $('#logoOut').innerHTML = note('ok', 'Logo saved — it prints on your next quotation PDF.'); prev(); } catch (x) { $('#logoOut').innerHTML = note('bad', esc(x.message)); } }; rd.readAsDataURL(f); };
+  $('#logoDel').onclick = async () => { try { await api('dealer/me/logo', { method: 'PUT', body: { base64: '' } }); prev(); } catch (x) { $('#logoOut').innerHTML = note('bad', esc(x.message)); } };
+}
+function readProfile() { const o = {}; $$('[data-p]').forEach(i => { o[i.dataset.p] = i.value.trim(); }); return o; }
+
+/* ---------------- new quotation from the catalogue ---------------- */
+async function newq() {
+  if (!CAT) CAT = await api('portal/catalogue');
+  const groups = [...new Set(CAT.map(c => c.group))];
+  const u = AUTH.user;
+  V().innerHTML = `
+  <div class="card"><h3>Quote from the catalogue</h3>
+    <p class="hint">Pick products and quantities, enter your customer, and a draft quotation opens in ${u.role === 'dealer' ? 'your name' : 'ADONI TECH\'s name'} at list price. You set the discount${u.role === 'dealer' ? ' or your markup' : ''} on the next screen, check the PDF and send it. Need an engineering selection first? Use a selector instead — when you are signed in, a request from a selector also becomes your draft quotation:</p>
+    <div class="ways"><a href="selector.html"><b>Shock absorbers &amp; crane buffers</b><br><small class="muted">impact calculation</small></a><a href="wri/"><b>Wire rope isolators</b><br><small class="muted">shock &amp; vibration</small></a><a href="rubber.html"><b>Anti-vibration mounts</b><br><small class="muted">machine isolation</small></a></div>
+  </div>
+  <div class="card"><div class="spread"><h3>1 · Products</h3><input id="q" placeholder="Search model, series or size — e.g. AC-42, AKHG 100, AWRI-127" style="max-width:360px"></div>
+    <div class="chips" id="chips"><button data-g="" class="on">All</button>${groups.map(g => `<button data-g="${esc(g)}">${esc(g)}</button>`).join('')}</div>
+    <div class="cat" id="cat"></div>
+    <h4 style="margin:14px 0 6px">In this quotation</h4><div class="tw"><table class="lines"><thead><tr><th>Model</th><th>Qty</th><th class="n">List ₹ each</th><th class="n">Line ₹</th><th>Remark</th><th></th></tr></thead><tbody id="lines"></tbody></table></div>
+    <p class="hint">List prices in INR. Customers outside India are quoted in USD at the day's rate with the export uplift; GST is worked out from the customer's GSTIN.</p></div>
+  <div class="card"><h3>2 · Customer</h3>
+    <div class="grid"><div><label>Company</label><input id="c_company"></div><div><label class="req">Contact person</label><input id="c_contact"></div><div><label class="req">E-mail</label><input id="c_email" type="email"></div><div><label class="req">Phone</label><input id="c_phone"></div>
+      <div><label>Country</label><input id="c_country" value="India"></div><div><label>GSTIN</label><input id="c_gstin" placeholder="for GST / place of supply"></div><div><label>City</label><input id="c_city"></div>
+      <div><label>Project / enquiry name</label><input id="p_name"></div><div><label>Customer reference</label><input id="p_ref"></div></div>
+    <div style="margin-top:8px"><label>Internal note (not printed)</label><textarea id="msg" rows="2"></textarea></div>
+    <div class="row" style="margin-top:12px"><button class="btn" id="make">Create draft quotation →</button></div><div id="out"></div></div>`;
+  $$('#chips button').forEach(b => b.onclick = () => { GROUP = b.dataset.g; $$('#chips button').forEach(x => x.classList.toggle('on', x === b)); drawCat(); });
+  $('#q').oninput = drawCat;
+  drawCat(); drawLines();
+  $('#make').onclick = make;
+}
+function drawCat() {
+  const q = ($('#q').value || '').toLowerCase().replace(/[\s-]+/g, '');
+  const hits = CAT.filter(c => (!GROUP || c.group === GROUP) && (!q || (c.model + c.series + c.desc + c.key).toLowerCase().replace(/[\s-]+/g, '').includes(q))).slice(0, 80);
+  $('#cat').innerHTML = hits.map(c => `<div class="it"><div><b>${esc(c.model)}</b> <span class="pill">${esc(c.series || '')}</span><small>${esc(c.desc || '')}${c.lead_time_days ? ' · ' + c.lead_time_days + ' days' : ''}</small></div>
+    <div class="n">${c.price_inr ? '₹ ' + fmt(c.price_inr) : '<span class="muted">on request</span>'}</div><button class="btn sm" data-add="${esc(c.table + '|' + c.key)}">Add</button></div>`).join('') || '<div class="it muted">Nothing matches.</div>';
+  $$('[data-add]').forEach(b => b.onclick = () => { const [table, key] = b.dataset.add.split('|'); const c = CAT.find(x => x.table === table && x.key === key); const ex = LINES.find(l => l.table === table && l.key === key); if (ex) ex.qty++; else LINES.push({ table, key, model: c.model, price: c.price_inr, qty: 1, remark: '' }); drawLines(); });
+}
+function drawLines() {
+  const tot = LINES.reduce((s, l) => s + (l.price || 0) * l.qty, 0);
+  $('#lines').innerHTML = LINES.map((l, k) => `<tr><td><b>${esc(l.model)}</b></td><td><input type="number" min="1" data-q="${k}" value="${l.qty}"></td><td class="n">${l.price ? fmt(l.price) : '—'}</td><td class="n">${l.price ? fmt(l.price * l.qty) : '—'}</td><td class="rm"><input data-r="${k}" value="${esc(l.remark)}" placeholder="optional"></td><td><button class="btn sm ghost" data-x="${k}">✕</button></td></tr>`).join('')
+    + (LINES.length ? `<tr><td colspan="3"><b>List value</b></td><td class="n"><b>₹ ${fmt(tot)}</b></td><td colspan="2"></td></tr>` : '<tr><td colspan="6" class="muted">No products yet — use Add above.</td></tr>');
+  $$('[data-q]').forEach(i => i.onchange = () => { LINES[i.dataset.q].qty = Math.max(1, Number(i.value) || 1); drawLines(); });
+  $$('[data-r]').forEach(i => i.oninput = () => { LINES[i.dataset.r].remark = i.value; });
+  $$('[data-x]').forEach(b => b.onclick = () => { LINES.splice(Number(b.dataset.x), 1); drawLines(); });
+}
+async function make() {
+  const out = $('#out');
+  if (!LINES.length) { out.innerHTML = note('bad', 'Add at least one product.'); return; }
+  const customer = { company: $('#c_company').value.trim(), contact: $('#c_contact').value.trim(), email: $('#c_email').value.trim(), phone: $('#c_phone').value.trim(), country: $('#c_country').value.trim() || 'India', gstin: $('#c_gstin').value.trim(), city: $('#c_city').value.trim() };
+  if (!customer.contact || !customer.email || !customer.phone) { out.innerHTML = note('bad', 'Customer contact person, e-mail and phone are required.'); return; }
+  $('#make').disabled = true; $('#make').textContent = 'Creating…';
+  try {
+    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark })) } });
+    if (!r.quotation_id) throw new Error('The request was saved as ' + r.number + ' but the draft could not be made. ADONI TECH has been alerted.');
+    LINES = [];
+    out.innerHTML = note('ok', `Draft <b>${esc(r.quotation)}</b> created — opening it…`);
+    setTimeout(() => { location.href = 'approve.html?id=' + encodeURIComponent(r.quotation_id); }, 900);
+  } catch (e) { out.innerHTML = note('bad', esc(e.message)); $('#make').disabled = false; $('#make').textContent = 'Create draft quotation →'; }
+}
+
+/* ---------------- my quotations ---------------- */
+async function mine() {
+  const rows = await api('portal/quotations');
+  V().innerHTML = `<div class="card tbl-card"><div class="tw"><table><thead><tr><th>Number</th><th>Date</th><th>Customer</th><th>Status</th><th class="n">Total</th><th>Special price</th><th></th></tr></thead><tbody>
+  ${rows.map(q => `<tr><td class="mono">${esc(q.number)}${q.rev ? ' R' + q.rev : ''}</td><td>${esc(q.date)}</td><td>${esc(q.customer || '')}</td><td><span class="pill ${q.status === 'sent' ? 'ok' : 'brand'}">${esc(q.status)}</span></td><td class="n">${money(q.grand_total, q.currency)}</td><td>${q.special ? `<span class="pill ${q.special === 'approved' ? 'ok' : q.special === 'declined' ? 'bad' : 'brand'}">${esc(q.special)}</span>` : ''}</td>
+    <td><a class="btn sm" href="approve.html?id=${encodeURIComponent(q.id)}">Open</a></td></tr>`).join('') || '<tr><td colspan="7" class="muted">No quotations yet.</td></tr>'}</tbody></table></div></div>`;
+}
+
+/* ---------------- dealer profile ---------------- */
+async function profile() {
+  const me = await api('dealer/me'); const d = me.dealer || {};
+  V().innerHTML = `<div class="card"><div class="spread"><h3>${esc(d.company || 'Dealer profile')}</h3><span class="pill ok">code ${esc(d.code || '')}</span></div>
+    ${me.terms ? `<table class="kv"><tr><td class="muted">Your purchase price</td><td>list − ${me.terms.discount_pct} %</td></tr><tr><td class="muted">Discount you may give</td><td>up to ${me.terms.max_discount_pct} % below list; deeper needs a special price from ADONI TECH</td></tr><tr><td class="muted">Markup</td><td>free, as per your costs</td></tr></table>` : ''}
+    <p class="hint">These details print on your quotations (letterhead, GSTIN, bank). Changes apply to new quotations.</p>
+    ${profileForm(d)}<div class="row" style="margin-top:12px"><button class="btn" id="psave">Save</button></div><div id="out"></div>${logoBlock()}</div>`;
+  wireLogo();
+  $('#psave').onclick = async () => { try { await api('dealer/me', { method: 'PUT', body: readProfile() }); $('#out').innerHTML = note('ok', 'Saved.'); } catch (e) { $('#out').innerHTML = note('bad', esc(e.message)); } };
+}
+boot();
+</script>
+</body></html>

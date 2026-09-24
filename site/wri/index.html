@@ -1138,7 +1138,9 @@ async function postLead(payload){
       items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:(payload.RFQ||'').replace(/^.*?· /,'') }] };
     const r=await fetch('/api/rfq',{method:'POST',headers:Object.assign({'content-type':'application/json'},tok?{authorization:'Bearer '+tok}:{}),body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
-    if(r.ok){ flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. We normally reply within one working day.':'We have it. Our engineer will come back to you, normally within one working day.'); return true; }
+    if(r.ok){ const me=(function(){try{return JSON.parse(localStorage.getItem('ic_user')||'null');}catch(e){return null;}})();
+      if(j.quotation_id&&me&&(me.role==='dealer'||me.role==='sales')){ flashSent(j.number,'Draft quotation '+j.quotation+' is ready — opening it now.'); setTimeout(()=>{location.href='/approve.html?id='+encodeURIComponent(j.quotation_id);},1500); return true; }
+      flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. We normally reply within one working day.':'We have it. Our engineer will come back to you, normally within one working day.'); return true; }
     if(typeof toast==='function') toast('Could not send: '+(j.error||r.statusText)); return false;
   }catch(e){ return false; }
 }
