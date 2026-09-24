@@ -298,6 +298,28 @@ const server = app.listen(0, async () => {
     ok('overseas dealer: USD quotation, billed at list − 35 %, limit 30 %', osv.quotation.currency === 'USD' && osv.billing.billing_discount_pct === 35 && osv.limit.max_pct === 30);
     const ospdf = await fetch(base + '/approve/' + osq.quotation_id + '/pdf', { headers: asT(os2.token) });
     ok('dealer logo: quotation PDF renders with the logo', ospdf.status === 200 && Buffer.from(await ospdf.arrayBuffer()).toString('latin1').includes('/Subtype /Image'));
+
+    // sales: price above list needs approval; dealer: markup free, no manufacturer line, self-send
+    const sq2 = await rq('POST', '/portal/quote', { customer: { company: 'Mehta Cranes', contact: 'Amit Mehta', email: 'amit@mehtacranes.in', phone: '+91 98200 45678' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 1 }] }, slp.token);
+    const sd2 = await rq('GET', '/approve/' + sq2.quotation_id, null, slp.token);
+    await rq('PUT', '/approve/' + sq2.quotation_id, { items: sd2.quotation.items.map(i => ({ ...i, rate: i.rate * 1.1 })) }, slp.token);
+    const mkb = await rq('POST', '/approve/' + sq2.quotation_id + '/send', {}, slp.token);
+    ok('sales: price above list blocked without approval', mkb.status === 403 && mkb.limit.violations[0].kind === 'markup', mkb.error);
+    const mkr = await rq('POST', '/approve/' + sq2.quotation_id + '/special', { reason: 'urgent delivery' }, slp.token);
+    ok('sales: markup approval request stored', mkr.ok && mkr.special.markup === true);
+    await post('/approve/' + sq2.quotation_id + '/special/decide', { decision: 'approve' });
+    ok('sales: sends after markup approval', (await rq('POST', '/approve/' + sq2.quotation_id + '/send', {}, slp.token)).status === 200);
+    ok('dealer: no manufacturer line on his quotation', docParties(await get('/admin/quotation/' + pq.quotation_id), Object.fromEntries((await get('/admin/settings')).map(r => [r.key, r.value]))).company.footer === '');
+    const dq2 = await rq('POST', '/portal/quote', { customer: { company: 'Sai Cranes Pvt Ltd', contact: 'Sunil Patil', email: 'sunil.patil@saicranes.in', phone: '+91 98500 12345' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 1 }] }, dlr.token);
+    const dq2v = await rq('GET', '/approve/' + dq2.quotation_id, null, dlr.token);
+    await rq('PUT', '/approve/' + dq2.quotation_id, { items: dq2v.quotation.items.map(i => ({ ...i, rate: i.rate * 1.3 })) }, dlr.token);
+    const self = await rq('POST', '/approve/' + dq2.quotation_id + '/send', { self_send: true }, dlr.token);
+    ok('dealer: 30 % markup free, self-send recorded as sent', self.status === 200 && self.ok && /dealer/.test(self.sent_to) && self.billing.dealer_margin > 0, self.sent_to);
+    const prog = await get('/dealer/program'); const pc = await get('/public/config');
+    ok('dealer page: program + public config endpoints', Array.isArray(prog.cities) && 'ga_id' in pc);
+    const nd = await loginAs('sales@newtrade.co.in');
+    const nda = await rq('POST', '/dealer/apply', { company: 'New Trade Links', contact: 'Priya Rao', addr1: 'MIDC Satpur', city: 'Nashik', phone: '+91 97654 32109', gstin: '27AAAPL1234C1Z5', territory: 'Nashik, Dhule', products: ['Crane buffers', 'Wire rope isolators'], source: 'dealer sign-up page' }, nd.token);
+    ok('dealer page: application keeps territory and products', nda.ok && nda.dealer.territory === 'Nashik, Dhule' && nda.dealer.products === 'Crane buffers, Wire rope isolators');
     const susp = await post('/admin/dealers/ravi@kumarengg.in/decide', { decision: 'suspend' });
     ok('dealer: suspended dealer loses the portal', susp.ok && (await rq('GET', '/portal/catalogue', null, dlr.token)).status === 403);
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);

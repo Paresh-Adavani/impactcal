@@ -77,5 +77,8 @@ office.pune.pincode,,
 office.pune.phone,,
 dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
 dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
-dealer.show_manufacturer,1,"1 = dealer quotations carry ""Products manufactured by ADONI TECH, India"" in the footer"
 mail.dealer_cc,adonitech@gmail.com,Copied on every dealer quotation sent to a customer
+mail.dealer_from,,"Optional neutral sender address for dealer quotations (must be a verified ""Send mail as"" alias of SMTP_USER); blank = SMTP address. Dealers can also download the PDF and send it themselves."
+dealer.cities,,Cities where ADONI TECH is appointing dealers - shown on the dealer sign-up page (separate with ;)
+dealer.cities_note,Not in the list? We still want to hear from you - strong partners anywhere in India and abroad are welcome.,Line under the city list on the dealer page
+analytics.ga_id,,"Google Analytics 4 measurement ID (G-XXXXXXX) - when set, every page loads Google tag and dealer sign-ups are tracked as a conversion"

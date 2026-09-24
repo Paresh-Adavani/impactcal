@@ -9,9 +9,9 @@
 <div class="sticky noprint" id="bar" hidden>
   <button class="btn ghost" id="save">Save changes</button>
   <a class="btn ghost" id="pdf" target="_blank" style="text-decoration:none">Preview PDF</a>
-  <button class="btn" id="send" style="margin-left:auto">Send to customer</button>
+  <button class="btn ghost" id="self" hidden style="margin-left:auto">Download PDF &amp; send it myself</button><button class="btn" id="send">Send to customer</button>
 </div>
-<script src="common.js?v=2"></script>
+<script src="common.js?v=5"></script>
 <script>
 const P = new URLSearchParams(location.search), ID = P.get('id'), T = P.get('t');
 const hdr = () => T ? { 'x-approve-token': T } : {};
@@ -38,9 +38,10 @@ function render() {
   const specialBox = !sp ? '' : `<div class="note ${sp.status === 'approved' ? 'ok' : sp.status === 'declined' ? 'bad' : 'warn'}"><b>Special price ${esc(sp.status)}</b>${sp.requested_by ? ' · asked by ' + esc(sp.requested_by) : ''}${sp.reason ? ' — “' + esc(sp.reason) + '”' : ''}${sp.decided_by ? `<br>Decided by ${esc(sp.decided_by)}${sp.decision_note ? ': ' + esc(sp.decision_note) : ''}${sp.billing_discount_pct != null ? ` · dealer billed at list − ${sp.billing_discount_pct} % on this quotation` : ''}` : ''}
       ${admin && sp.status === 'pending' ? `<div class="grid" style="margin-top:8px"><div><label>Note to ${esc(sp.requested_by || 'requester')}</label><input id="sp_note"></div>${is.type === 'dealer' ? `<div><label>Bill dealer at list − % (this quotation)</label><input id="sp_bill" type="number" step="any" value="${Math.max(is.billing_discount_pct || 25, Math.ceil(Math.max(0, ...L.violations.map(v => v.discount_pct)) + 5))}"></div>` : ''}</div>
       <div class="row" style="margin-top:8px"><button class="btn sm" id="sp_ok">Approve special price</button><button class="btn sm ghost" id="sp_no">Decline</button></div>` : ''}</div>`;
-  const limitBox = !L.violations.length || L.special_approved ? '' : `<div class="note ${admin ? 'blue' : 'bad'}"><b>${L.violations.length} line(s) beyond the ${max} % discount limit</b>: ${L.violations.map(v => `${esc(v.model)} ${v.discount_pct} %`).join(', ')}.
-      ${admin ? ' As admin you can still send it.' : (sp && sp.status === 'pending' ? ' Waiting for ADONI TECH to decide the special price.' : ` Raise the price to the floor, or ask ADONI TECH for a special price (good OEM volume etc.):
-      <div style="margin-top:8px"><textarea id="sp_reason" rows="2" placeholder="Why a special price? e.g. OEM, 40 nos per year, competitor price …"></textarea><button class="btn sm" id="sp_req" style="margin-top:6px">Request special price</button></div>`)}</div>`;
+  const mk = L.violations.filter(v => v.kind === 'markup'), dc = L.violations.filter(v => v.kind !== 'markup');
+  const limitBox = !L.violations.length || L.special_approved ? '' : `<div class="note ${admin ? 'blue' : 'bad'}">${dc.length ? `<b>${dc.length} line(s) beyond the ${max} % discount limit</b>: ${dc.map(v => `${esc(v.model)} ${v.discount_pct} %`).join(', ')}. ` : ''}${mk.length ? `<b>${mk.length} line(s) above list price</b> (${mk.map(v => esc(v.model)).join(', ')}) — a markup on an ADONI TECH quotation needs approval. ` : ''}
+      ${admin ? ' As admin you can still send it.' : (sp && sp.status === 'pending' ? ' Waiting for ADONI TECH to decide the special price.' : ` Change the price, or ask ADONI TECH for approval (e.g. OEM volume, project pricing):
+      <div style="margin-top:8px"><textarea id="sp_reason" rows="2" placeholder="Why a special price? e.g. OEM, 40 nos per year, competitor price …"></textarea><button class="btn sm" id="sp_req" style="margin-top:6px">Request approval</button></div>`)}</div>`;
   const b = D.billing;
   const billBox = !b ? '' : `<div class="card"><h3>${admin ? 'Billing to dealer' : 'Your margin'}</h3><div class="box2"><div><span>List value</span><b>${cur} ${n2(b.list_value)}</b></div><div><span>Price to customer (before GST)</span><b>${cur} ${n2(b.customer_value)}</b></div><div><span>ADONI TECH bills ${admin ? 'dealer' : 'you'} (list − ${b.billing_discount_pct} %${b.special_billing ? ', special' : ''})</span><b>${cur} ${n2(b.billing_value)}</b></div><div><span>${admin ? 'Dealer' : 'Your'} margin</span><b class="${b.dealer_margin < 0 ? 'lim' : 'okc'}">${cur} ${n2(b.dealer_margin)}</b></div></div><p class="hint">Billing excludes freight, packing and your own extra lines. GST as applicable on ADONI TECH's invoice.</p></div>`;
   const canSend = admin || D.access === 'dealer' || D.sales_self_send;
@@ -58,7 +59,7 @@ function render() {
     ${D.offices && D.offices.length && is.type !== 'dealer' ? `<tr><td class="muted">Billing office</td><td><select id="office" style="width:auto">${D.offices.map(o => `<option value="${esc(o.id)}" ${o.id === is.office ? 'selected' : ''}>${esc(o.label)}${o.ready ? '' : ' (address not set — prints Satara)'}</option>`).join('')}</select></td></tr>` : ''}</table>
   </div>
   <div class="card"><h3>Lines</h3>
-    ${admin ? '' : `<p class="hint">Rate = your price to the customer. Give a discount (up to ${max} % below list) or raise the rate for your markup. List prices, HSN and GST come from the ADONI TECH database.</p>`}
+    ${admin ? '' : is.type === 'dealer' ? `<p class="hint">Rate = your price to the customer. Give a discount (up to ${max} % below list) or raise the rate for your markup. List prices, HSN and GST come from the ADONI TECH database.</p>` : `<p class="hint">You may send on your own at list price or up to ${max} % below list. A deeper discount or a price above list goes to Paresh for approval.</p>`}
     <div id="lines">${q.items.map((i, k) => `<div class="line" data-k="${k}"><b>${esc(i.model)}</b> <span class="muted">${esc(i.description)}</span><br>${lineInfo(i, max)}
       <div class="g"><div><label>Qty</label><input data-f="qty" type="number" step="any" value="${i.qty}"></div><div><label>Rate ${cur}</label><input data-f="rate" type="number" step="any" value="${i.rate}"></div><div><label>Disc %</label><input data-f="discount_pct" type="number" step="any" value="${i.discount_pct}"></div><div><label>GST %</label><input data-f="gst_rate" type="number" value="${i.gst_rate}" ${admin ? '' : 'disabled'}></div><div><label>Lead time d</label><input data-f="lead_time_days" type="number" value="${i.lead_time_days ?? ''}"></div><div><label>HSN</label><input data-f="hsn" value="${esc(i.hsn)}" ${admin ? '' : 'disabled'}></div></div></div>`).join('')}</div>
     <div class="grid" style="margin-top:8px"><div><label>Freight ${cur}</label><input id="freight" type="number" step="any" value="${q.freight || 0}"></div><div><label>Packing ${cur}</label><input id="packing" type="number" step="any" value="${q.packing || 0}"></div><div><label>Valid days</label><input id="valid" type="number" value="${q.valid_days}"></div>
@@ -84,6 +85,8 @@ function render() {
   <div id="out"></div>`;
   $('#bar').hidden = false;
   $('#send').hidden = !canSend;
+  $('#self').hidden = D.access !== 'dealer';
+  if (D.access !== 'dealer') $('#send').style.marginLeft = 'auto';
   $('#send').textContent = admin ? 'Approve & send to customer' : 'Send to customer';
   $('#pdf').href = `/api/approve/${encodeURIComponent(ID)}/pdf?` + (T ? 't=' + encodeURIComponent(T) : 'token=' + encodeURIComponent(AUTH.token));
   if ($('#sp_req')) $('#sp_req').onclick = async () => { try { await save(true); const r = await api(`approve/${encodeURIComponent(ID)}/special`, { method: 'POST', headers: hdr(), body: { reason: $('#sp_reason').value } }); await load(); $('#out').innerHTML = `<div class="note ok">Special-price request sent to ADONI TECH${r.mail ? '' : ' (mail could not be sent — it is saved; please call)'}. You will get an e-mail with the decision.</div>`; } catch (e) { alert(e.message); } };
@@ -119,6 +122,17 @@ $('#send').onclick = async () => {
     $('#out').innerHTML = r.ok ? `<div class="note ok"><b>Sent to ${esc(r.sent_to)}.</b>${r.attached.length ? ' Attached: ' + r.attached.join(', ') : ''}${r.links.length ? ' · links: ' + r.links.length : ''}${r.missing.length ? ' · not available: ' + r.missing.join(', ') : ''}${D.access === 'dealer' ? ' ADONI TECH has a copy.' : ''}</div>` : `<div class="note bad">Saved as approved, but the mail failed: ${esc(r.reason)}.</div>`;
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   } catch (e) { alert(e.message); } finally { $('#send').disabled = false; $('#send').textContent = ADMIN() ? 'Approve & send to customer' : 'Send to customer'; }
+};
+$('#self').onclick = async () => {
+  try {
+    const q = await save(true);
+    if (D.limit && !D.limit.ok) { render(); alert(`Discount beyond your ${D.limit.max_pct} % limit — change the price or request approval first.`); return; }
+    if (!confirm(`Download ${q.number} as PDF to send from your own e-mail? It will be recorded as sent and ADONI TECH will be informed for billing.`)) return;
+    const r = await api('approve/' + encodeURIComponent(ID) + '/send', { method: 'POST', headers: hdr(), body: { self_send: true } });
+    const b = await fetch(`/api/approve/${encodeURIComponent(ID)}/pdf?token=${encodeURIComponent(AUTH.token)}`).then(x => x.blob());
+    const a = document.createElement('a'); a.href = URL.createObjectURL(b); a.download = q.number.replace(/\//g, '-') + '.pdf'; document.body.appendChild(a); a.click(); a.remove();
+    await load(); $('#out').innerHTML = `<div class="note ok"><b>${esc(q.number)} downloaded.</b> Attach it to your own e-mail to ${esc(q.customer.email || 'the customer')}. It is marked as sent.</div>`;
+  } catch (e) { alert(e.message); }
 };
 load().catch(e => {
   const next = 'approve.html' + location.search;

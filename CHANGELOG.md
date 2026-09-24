@@ -1,4 +1,11 @@
 # Changelog
+## 2.4.0 — 24 Sep 2026 (dealer sign-up page)
+- **Dealer sign-up page** at `/dealers` (also `/become-a-dealer`): programme pitch, product families, the dealer-protection promise, how it works, FAQ, and a two-part application form (business + market: territory, products, industries) with inline e-mail verification. Welcome screen on submit; application lands in Admin → Dealers with territory and interests.
+- Admin → Dealers: edit the **cities where dealers are sought** (shown on the sign-up page and the home banner) and the Google Analytics 4 ID.
+- Traffic: "Become a dealer" in every header for visitors, dealer banner on the home page, SEO/Open Graph/FAQ structured data, `sitemap.xml`, `robots.txt`; Google tag (GA4) on all pages when `analytics.ga_id` is set, with sign-up and CTA events.
+- Dealer quotations no longer name ADONI TECH anywhere (manufacturer footer removed). Dealers can also **download the PDF and send it from their own e-mail** (recorded as sent, ADONI TECH still gets the billing note); optional neutral sender `mail.dealer_from`.
+- Sales: send on their own at list or up to 25 % below; a deeper discount **or a price above list** needs Paresh's approval.
+- Settings keys added in a release now apply even after settings were saved in the admin panel.
 ## 2.3.0 — 24 Sep 2026 (dealers, sales offices, quote portal)
 - **Dealers**: sign in → apply once in the Quote portal (company, address, GSTIN, bank, logo) → admin approves once in Admin → **Dealers**, setting the dealer code and his own terms (billing discount, max discount — e.g. a different structure for overseas dealers; blank = settings `dealer.discount_pct` / `dealer.max_discount_pct`, 25 %).
 - Approved dealers see list prices in every selector and make quotations **in their own name** (letterhead, logo, GSTIN, bank, numbering `<CODE>/Q/<FY>/nnnn`), either from the **Quote portal** catalogue (no selection needed) or from any selector. The mail goes from the dealer's company name, reply-to and cc the dealer, cc ADONI TECH (`mail.dealer_cc`); ADONI TECH gets an internal note with the billing value (list − dealer discount) and the dealer's margin.

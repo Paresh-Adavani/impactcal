@@ -12,6 +12,16 @@
   schedule = "@daily"
 
 [[redirects]]
+  from   = "/dealers"
+  to     = "/dealer.html"
+  status = 200
+
+[[redirects]]
+  from   = "/become-a-dealer"
+  to     = "/dealer.html"
+  status = 301
+
+[[redirects]]
   from   = "/api/*"
   to     = "/.netlify/functions/api/:splat"
   status = 200
