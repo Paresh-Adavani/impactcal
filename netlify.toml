@@ -6,7 +6,7 @@
 [functions]
   node_bundler   = "zisi"
   # the CSV database and GA index travel with the function bundle
-  included_files = ["data/*.csv", "site/img/logo.png"]
+  included_files = ["data/*.csv", "site/img/logo.png", "node_modules/xlsx/**"]
 
 [functions."drive-sync"]
   schedule = "@daily"

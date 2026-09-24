@@ -1,4 +1,9 @@
 # Changelog
+## 2.2.0 — 24 Sep 2026 (global price list)
+- Prices for every product: 8 price lists merged (highest price wins), cost model per series for the rest (+25 % negotiation margin), rubber mounts costed as moulding + hardware + mould amortisation (+50 %). `data/costing.csv` records basis, file price, estimate, margin, list, dealer price and the cost build-up per product.
+- New tables: `other_products.csv` (TSC feed-rate controllers etc.), `costing.csv`; 12 models added to the catalogue from the price lists (AKHG 85-300/400/500, 130-100/150/200/1000, AC-20-15, AC-27-25, AD 20-15, AD 27-25, AD 45-50) with interpolated ratings flagged `estimated`.
+- Admin → **Pricing & costing**: download one Excel workbook (a sheet per table with list / dealer / USD / lead time / costing columns), edit, check, upload — applies live without a redeploy. Open to admin and the e-mails in settings `pricing.users`.
+- `pricing/ImpactCal_Pricelist_2026-09.xlsx`: the costing workbook with live formulas (policy parameters on the first sheet) and the scripts that generated it (`pricing/*.py`).
 ## 2.1.0 — 23 Sep 2026 (report leads)
 - "Print this selection" replaced by **Download my selection report (PDF)** — gated on name, e-mail and phone (company optional). Creates a numbered selection AT/S/…, e-mails the PDF to the customer, notifies sales (cc the sales person if logged in) and pushes a UnitePro lead with source "ImpactCal Web (report)".
 - Lead quality filter (lib/quality.js) on report downloads and RFQs: placeholder names (abcd, test, xxxx), keyboard runs, repeated/sequential phone numbers, disposable or fake e-mail domains are refused with a friendly message; borderline contacts are stored and mailed but held back from the CRM. Staff logins bypass the filter.

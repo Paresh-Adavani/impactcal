@@ -77,17 +77,17 @@ const server = app.listen(0, async () => {
 
     console.log('\n— CSV database (admin) —');
     const tables = await get('/admin/csv');
-    ok('seven tables listed', tables.length === 7, tables.map(t => t.table).join(','));
+    ok('nine tables listed', tables.length === 9, tables.map(t => t.table).join(','));
     const text = await fetch(base + '/admin/csv/shock_absorbers', { headers: H() }).then(r => r.text());
     const parsed = csv.parse(text);
-    ok('download parses, 299 rows, has lead_time_days & price_inr', parsed.rows.length === 299 && parsed.header.includes('lead_time_days') && parsed.header.includes('price_inr'));
+    ok('download parses, 311 rows, has lead_time_days & price_inr', parsed.rows.length === 311 && parsed.header.includes('lead_time_days') && parsed.header.includes('price_inr'));
     const edited = parsed.rows.map(r => r.bk === 'AC4250' ? { ...r, price_inr: '18500', lead_time_days: '35' } : r);
     const dry = await post('/admin/csv/shock_absorbers?dry_run=1', csv.stringify(edited, parsed.header), { 'content-type': 'text/csv', authorization: 'Bearer ' + TOKEN });
-    ok('dry run reports 299 rows, no errors', dry.applied === false && dry.count === 299 && dry.errors.length === 0);
+    ok('dry run reports 311 rows, no errors', dry.applied === false && dry.count === 311 && dry.errors.length === 0);
     const bad = await post('/admin/csv/shock_absorbers', csv.stringify([{ bk: 'AC4250', price_inr: 'abc' }, { bk: 'AC4250', price_inr: '1' }]), { 'content-type': 'text/csv', authorization: 'Bearer ' + TOKEN });
     ok('bad upload rejected (duplicate key, non-numeric price)', bad.applied === false && bad.errors.length >= 2, bad.errors.join('; '));
     const app1 = await post('/admin/csv/shock_absorbers', csv.stringify(edited, parsed.header), { 'content-type': 'text/csv', authorization: 'Bearer ' + TOKEN });
-    ok('good upload applied', app1.applied === true && app1.count === 299);
+    ok('good upload applied', app1.applied === true && app1.count === 311);
     const sel2 = await post('/select', { case_id: 'I2', standard: 'NONE', duty: { m: 300, v: 1.2, F: 2400, C: 300, n: 1 }, series: ['AC'] });
     const ac2 = sel2.candidates.find(c => c.model === 'AC-42-50');
     ok('uploaded price & lead time visible to admin immediately', ac2 && ac2.price === 18500 && ac2.lead_time_days === 35, ac2 && `${ac2.price} / ${ac2.lead_time_days} d`);
@@ -187,6 +187,33 @@ const server = app.listen(0, async () => {
     ok('selection: second conversion refused', conv2.status === 409);
     const junkRfq = await fetch(base + '/rfq', { method: 'POST', headers: H(false), body: JSON.stringify({ line: 'crane', customer: { contact: 'abcd', email: 'abcd@abcd.com', phone: '1111111111' }, items: [{ model: 'AC-42-50', key: 'AC-42-50', qty: 1 }] }) });
     ok('rfq: junk contact refused with 400', junkRfq.status === 400);
+
+    /* ---- pricing & costing panel ---- */
+    const XLSX = require('xlsx');
+    const sum = await get('/admin/pricing/summary');
+    ok('pricing: summary lists 5 tables, shock absorbers fully priced', sum.length === 5 && sum.find(t => t.table === 'shock_absorbers').priced === sum.find(t => t.table === 'shock_absorbers').rows, JSON.stringify(sum.map(t => [t.table, t.priced, t.rows])));
+    const xres = await fetch(base + '/admin/pricing/export.xlsx', { headers: H() }); const xbuf = Buffer.from(await xres.arrayBuffer());
+    ok('pricing: export is an xlsx', xres.status === 200 && xbuf.slice(0, 2).toString() === 'PK', xbuf.length + ' bytes');
+    const wb = XLSX.read(xbuf, { type: 'buffer' });
+    ok('pricing: workbook has Policy + 5 table sheets', wb.SheetNames.length === 6, wb.SheetNames.join(', '));
+    const shs = wb.Sheets['Shock absorbers']; const js = XLSX.utils.sheet_to_json(shs, { defval: '' });
+    const row = js.find(r => r.key === 'AC4250'); const oldP = Number(row.price_inr);
+    row.price_inr = oldP + 1000; row.lead_time_days = 30; js.find(r => r.key === 'AC4225').note = 'edited in test';
+    wb.Sheets['Shock absorbers'] = XLSX.utils.json_to_sheet(js);
+    const b64 = XLSX.write(wb, { type: 'buffer', bookType: 'xlsx' }).toString('base64');
+    const pdry = await post('/admin/pricing/import', { filename: 'edit.xlsx', base64: b64, dry: true });
+    ok('pricing: dry run reports 2 changes, saves nothing', pdry.ok && pdry.tables.shock_absorbers.changed === 2 && (await get('/products')).find(p => p.bk === 'AC4250').price_inr == oldP, JSON.stringify(pdry.tables.shock_absorbers));
+    const app2 = await post('/admin/pricing/import', { filename: 'edit.xlsx', base64: b64 });
+    const after = (await get('/products')).find(p => p.bk === 'AC4250');
+    ok('pricing: applied price + lead time live', app2.ok && Number(after.price_inr) === oldP + 1000 && Number(after.lead_time_days) === 30, `${after.price_inr} / ${after.lead_time_days}`);
+    const cst = (await get('/admin/pricing/table/shock_absorbers')).find(r => r.key === 'AC4225');
+    ok('pricing: costing note round-trips', cst.note === 'edited in test');
+    const pbad = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(pbad, XLSX.utils.json_to_sheet([{ key: 'AC4250', price_inr: 'abc' }]), 'Shock absorbers');
+    const badr = await post('/admin/pricing/import', { filename: 'bad.xlsx', base64: XLSX.write(pbad, { type: 'buffer', bookType: 'xlsx' }).toString('base64') });
+    ok('pricing: non-numeric price rejected', badr.ok === false && badr.tables.shock_absorbers.errors.length === 1);
+    ok('pricing: sales user blocked unless in pricing.users', (await fetch(base + '/admin/pricing/summary', { headers: { authorization: 'Bearer ' + v2.token } })).status === 403);
+    const psel = await post('/select', { duty: { m: 5000, v: 1, F: 0, n: 1, C: 20, H_M: 2.5 }, case_id: 'C1', standard: 'IS3177', series: [], limit: 3, currency: 'INR' });
+    ok('select: candidates now carry prices', psel.candidates.every(c => Number(c.price) > 0), psel.candidates.map(c => c.model + ' ' + c.price).join(', '));
 
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);
   } catch (e) { console.error('\nERROR', e); fail++; }

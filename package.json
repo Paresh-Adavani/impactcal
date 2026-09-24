@@ -15,7 +15,10 @@
     "express": "^4.21.2",
     "nodemailer": "^6.9.16",
     "pdfkit": "^0.15.1",
-    "serverless-http": "^3.2.0"
+    "serverless-http": "^3.2.0",
+    "xlsx": "^0.18.5"
   },
-  "engines": { "node": ">=20" }
+  "engines": {
+    "node": ">=20"
+  }
 }

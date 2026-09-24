@@ -9,13 +9,13 @@ async function boot() {
   await bootCommon('nav_admin');
   const u = AUTH.user;
   if (!u || (u.role !== 'admin' && u.role !== 'sales')) { location.href = 'login.html?next=admin.html'; return; }
-  if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections'].includes(b.dataset.tab)) b.remove(); });
+  if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections', 'pricing'].includes(b.dataset.tab)) b.remove(); });
   $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show().catch(err); });
-  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
+  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
   await show();
 }
 const err = e => { V().insertAdjacentHTML('afterbegin', say('bad', esc(e.message))); };
-async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, db, settings, drawings, users, tools })[TAB](); }
+async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools })[TAB](); }
 
 /* ---------------- RFQ queue ---------------- */
 async function rfq() {
@@ -45,6 +45,36 @@ async function selections() {
   </tbody></table></div></div><div id="detail"></div>`;
   $$('[data-conv]').forEach(b => b.onclick = async () => { if (!confirm('Create an RFQ + draft quotation from this report and send the approval alert?')) return; b.disabled = true; try { const r = await api('admin/selection/' + encodeURIComponent(b.dataset.conv) + '/to-rfq', { method: 'POST', body: {} }); alert(`Created ${r.number}${r.quotation ? ' and draft ' + r.quotation : ''}. Approval alert ${r.alert ? 'sent' : 'NOT sent'}.`); show(); } catch (e) { alert(e.message); b.disabled = false; } });
   $$('[data-sview]').forEach(b => b.onclick = async () => { const r = await api('admin/selection/' + encodeURIComponent(b.dataset.sview)); $('#detail').innerHTML = `<div class="card"><h3>${esc(r.number)}</h3><pre class="log">${esc(JSON.stringify({ customer: r.customer, project: r.project, items: r.items, selection: r.selection, raised_by: r.raised_by, status: r.status, rfq_number: r.rfq_number }, null, 2))}</pre></div>`; });
+}
+
+
+/* ---------------- pricing & costing (admin + settings pricing.users) ---------------- */
+async function pricing() {
+  let sum;
+  try { sum = await api('admin/pricing/summary'); }
+  catch (e) { V().innerHTML = say('warn', esc(e.message)); return; }
+  V().innerHTML = `<div class="stat">${sum.map(t => `<div><b>${t.priced}/${t.rows}</b><span>${esc(t.name)} priced</span></div>`).join('')}</div>
+  <div class="card"><div class="spread"><h3>Price &amp; costing workbook</h3><div class="row"><a class="btn" href="/api/admin/pricing/export.xlsx?token=${encodeURIComponent(AUTH.token)}">Download Excel (all tables)</a></div></div>
+    <p class="hint">One sheet per product table: <b>price_inr</b> (list), <b>dealer_inr</b>, indicative USD, lead time, status, and the costing columns (basis, file price, estimate, margin, and for rubber mounts the moulding / hardware / mould build-up). Edit in Excel — keep the <b>key</b> column — then upload the same file here. Only price, lead time, status and the costing columns are taken from the upload; engineering data is never changed. Check first shows what would change without saving.</p>
+    <div class="row" style="align-items:center;gap:12px;flex-wrap:wrap"><input type="file" id="prFile" accept=".xlsx,.xls,.csv"><button class="btn ghost" id="prCheck">Check (no save)</button><button class="btn navy" id="prApply">Upload &amp; apply</button></div><div id="prOut" style="margin-top:10px"></div></div>
+  <div class="card"><div class="spread"><h3>Browse</h3><select id="prTable" style="width:auto">${sum.map(t => `<option value="${t.table}">${esc(t.name)}</option>`).join('')}</select></div><div class="tw" id="prView"></div></div>`;
+  const put = r => `<div class="log">${esc(JSON.stringify(r, null, 1))}</div>`;
+  const send = async dry => {
+    const f = $('#prFile').files[0]; if (!f) { alert('Choose the Excel or CSV file first'); return; }
+    $('#prOut').innerHTML = say('blue', dry ? 'Checking…' : 'Uploading…');
+    const b64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.readAsDataURL(f); });
+    try { const r = await api('admin/pricing/import', { method: 'POST', body: { filename: f.name, base64: b64, dry } });
+      const lines = Object.entries(r.tables || {}).map(([t, x]) => `<b>${esc(t)}</b>: ${x.rows} rows read, ${x.changed} values ${dry ? 'would change' : 'changed'}${x.unknown.length ? ', ' + x.unknown.length + ' unknown keys ignored' : ''}${x.errors.length ? '<br><span style="color:#B42318">' + x.errors.map(esc).join('<br>') + '</span>' : ''}${x.warnings.length ? '<br><small class="muted">' + x.warnings.map(esc).join('<br>') + '</small>' : ''}`);
+      $('#prOut').innerHTML = say(r.ok ? (dry ? 'blue' : 'ok') : 'bad', (r.errors || []).map(esc).join('<br>') + lines.join('<br>') + (r.ok && !dry ? '<br><b>Applied.</b> Prices are live immediately; the shipped CSVs on the PC are unchanged until the next revision is committed.' : ''));
+      if (!dry && r.ok) show();
+    } catch (e) { $('#prOut').innerHTML = say('bad', esc(e.message)); }
+  };
+  $('#prCheck').onclick = () => send(true); $('#prApply').onclick = () => send(false);
+  const browse = async () => {
+    const rows = await api('admin/pricing/table/' + $('#prTable').value);
+    $('#prView').innerHTML = `<table><thead><tr><th>Key</th><th>Model</th><th>Series</th><th class="n">List ₹</th><th class="n">Dealer ₹</th><th class="n">Lead d</th><th>Basis</th><th class="n">File ₹</th><th class="n">Estimate ₹</th><th class="n">Margin %</th><th>Status</th><th>Note</th></tr></thead><tbody>${rows.map(r => `<tr><td class="mono">${esc(r.key)}</td><td>${esc(r.model)}</td><td><small>${esc(r.series)}</small></td><td class="n"><b>${fmt(Number(r.price_inr) || 0)}</b></td><td class="n">${r.dealer_inr ? fmt(Number(r.dealer_inr)) : '—'}</td><td class="n">${esc(r.lead_time_days)}</td><td><span class="pill ${r.basis === 'file' ? 'ok' : r.basis === 'cost' ? 'brand' : ''}">${esc(r.basis || '—')}</span></td><td class="n">${r.file_price ? fmt(Number(r.file_price)) : '—'}</td><td class="n">${r.estimate ? fmt(Number(r.estimate)) : '—'}</td><td class="n">${esc(r.margin_pct)}</td><td>${esc(r.status)}</td><td><small class="muted">${esc(String(r.note).slice(0, 90))}</small></td></tr>`).join('')}</tbody></table>`;
+  };
+  $('#prTable').onchange = browse; browse();
 }
 
 /* ---------------- quotations ---------------- */

@@ -1,18 +1,18 @@
 ﻿code,name,kind,applies_to,hsn,gst_rate,uom,price_inr,lead_time_days,status
-FF,Front flange,mounting,,84798999,18,NOS,,14,active
-RF,Rear flange,mounting,,84798999,18,NOS,,14,active
-FRF,Front and rear flange,mounting,,84798999,18,NOS,,14,active
-FM,Foot mount,mounting,,84798999,18,NOS,,14,active
-RFFF,"Rear flange, front foot mount",mounting,,84798999,18,NOS,,14,active
-CM,Clevis mount,mounting,,84798999,18,NOS,,14,active
-SC,Stop collar,option,,84798999,18,NOS,,14,active
-SLA,Side-load adapter,option,,84798999,18,NOS,,14,active
-BEL,Weather bellows,option,,84798999,18,NOS,,14,active
-LN,Lock nut (extra pair),option,,84798999,18,NOS,,14,active
+FF,Front flange,mounting,,84798999,18,NOS,1500,14,active
+RF,Rear flange,mounting,,84798999,18,NOS,1500,14,active
+FRF,Front and rear flange,mounting,,84798999,18,NOS,2750,14,active
+FM,Foot mount,mounting,,84798999,18,NOS,1900,14,active
+RFFF,"Rear flange, front foot mount",mounting,,84798999,18,NOS,3250,14,active
+CM,Clevis mount,mounting,,84798999,18,NOS,2250,14,active
+SC,Stop collar,option,,84798999,18,NOS,600,14,active
+SLA,Side-load adapter,option,,84798999,18,NOS,3000,14,active
+BEL,Weather bellows,option,,84798999,18,NOS,1150,14,active
+LN,Lock nut (extra pair),option,,84798999,18,NOS,350,14,active
 NC,No cap,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,,14,active
-PU,Polyurethane cap,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,,14,active
-MC,Metallic cap,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,,14,active
-MCPU,Metallic cap with PU button,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,,14,active
+PU,Polyurethane cap,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,450,14,active
+MC,Metallic cap,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,750,14,active
+MCPU,Metallic cap with PU button,cap,"AC,ACX,AD,ADX,YSRA",84798999,18,NOS,1150,14,active
 SS,Stainless steel construction,option,,84798999,18,NOS,,14,active
-SENS,Rod position sensor,option,"AKHG,AKHS,ED,EI",84798999,18,NOS,,14,active
+SENS,Rod position sensor,option,"AKHG,AKHS,ED,EI",84798999,18,NOS,8150,14,active
 RECON,Reconditioning / reseal service,service,,84798999,18,NOS,,14,active

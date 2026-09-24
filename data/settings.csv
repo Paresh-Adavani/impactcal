@@ -56,3 +56,4 @@ engine.share_drive_work,0,0 = ACE convention: propelling work F·s charged to ea
 sales.people,adonitechpune@gmail.com=Krishnakant Harpale; adonisatara@gmail.com=Shital Hirve; vidyaadavani1@gmail.com=Vidya Adavani; adonitech@gmail.com=Paresh Adavani,"email=Display name; used on the RFQ queue, approval page and the cc line of offers"
 crm.enabled,1,Push every RFQ as a lead to UnitePro CRM (needs env UNITEPRO_TOKEN on Netlify). 0 = off
 crm.source,ImpactCal Web,Lead source name shown in UnitePro
+pricing.users,adonitechpune@gmail.com,"E-mails (besides admin) allowed to download / upload the price & costing workbook, comma separated"

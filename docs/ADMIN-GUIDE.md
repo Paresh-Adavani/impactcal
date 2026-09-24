@@ -70,3 +70,8 @@ The acknowledgement to the customer repeats everything they entered (inputs in M
 ## Report leads (selection reports downloaded without an RFQ)
 
 A visitor who wants the PDF report must give name, e-mail and phone (company optional). The download creates AT/S/<FY>/<n>, mails the PDF to the visitor, sends a "Report downloaded" note to `mail.rfq_to`, and pushes a lead to UnitePro (source "ImpactCal Web (report)"). Junk entries (abcd, test@test.com, 9999999999, keyboard runs, disposable mail) are refused; doubtful ones are kept out of the CRM and shown with a red quality pill. Admin → Report leads → **Convert to RFQ** turns one into a normal request with draft quotation and approval alert. Logged-in staff are never filtered.
+
+
+## Pricing & costing
+
+Admin → Pricing & costing shows how many products are priced per table and their basis: **file** (from one of your price lists, highest value), **model** (estimated from bore/stroke/energy with the negotiation margin), **cost** (rubber mounts: moulding + hardware + mould amortised over 50 pcs, + 50 %). *Download Excel* gives one workbook, a sheet per table; edit `price_inr`, `dealer_inr`, `lead_time_days`, `status` or the costing columns, keep `key`, then *Check* (dry run) and *Upload & apply*. Prices are live at once; commit `data/*.csv` from the next CSV download when you want the repo to carry them. Users besides admin: settings `pricing.users`. The master costing workbook with live formulas is `pricing/ImpactCal_Pricelist_2026-09.xlsx`; `pricing/*.py` regenerate `costing.csv` from new price lists.
