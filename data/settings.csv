@@ -69,11 +69,11 @@ office.satara.addr1,"Sharada, 1st Floor, Jeevan Chaya Hsg. Soc.",GST certificate
 office.satara.addr2,Opp. Civil Hospital,
 office.satara.city,Satara,
 office.satara.pincode,415001,
-office.pune.label,Pune office,Fill the address as declared on GST / UnitePro; until then Pune quotations print the Satara address
-office.pune.addr1,,
-office.pune.addr2,,
+office.pune.label,Pune office,
+office.pune.addr1,"Flat No. 105, Raghukul Housing Society, JSPM College Road",
+office.pune.addr2,"Near Nakshatra Housing Society, Mokarwadi",
 office.pune.city,Pune,
-office.pune.pincode,,
+office.pune.pincode,411041,
 office.pune.phone,,
 dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
 dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
