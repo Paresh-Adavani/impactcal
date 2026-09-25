@@ -34,7 +34,7 @@ for r in add:
     extra.append(dict(table='shock_absorbers',key=r['bk'],series=r['series'],model=r['model'],basis='file' if fp else 'model',file_price=fp or '',file_source=best.loc[k,'source'] if fp else '',estimate=fp or '',margin_pct=0,list_inr=lst,dealer_inr=rnd(lst*(1-DEALER_DISC)) if lst else '',lead_time_days=r['lead_time_days'],note='model added from price list; '+r['note']))
 cost=pd.concat([cost,pd.DataFrame(extra)],ignore_index=True)
 # owner-confirmed prices (win over files and estimates)
-OVERRIDES={('wire_rope_isolators','AWRI-127-60'):(15500,'confirmed by Paresh 24-09-2026')}
+OVERRIDES={('wire_rope_isolators','AWRI-127-60'):(15500,'Paresh 25-09-2026, from WR costing sheets')}  # see tools/apply_pricelist_2019.py for the 2019 list
 for (t,k),(p,why) in OVERRIDES.items():
     m=(cost.table==t)&(cost.key.astype(str)==k)
     cost.loc[m,'list_inr']=p; cost.loc[m,'dealer_inr']=rnd(p*(1-DEALER_DISC)); cost.loc[m,'basis']='file'; cost.loc[m,'file_source']=why

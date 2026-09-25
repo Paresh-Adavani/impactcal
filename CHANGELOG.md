@@ -1,4 +1,8 @@
 # Changelog
+## 2.6.1 — 25 Sep 2026 (prices)
+- AWRI-127-60 list price confirmed by Paresh at Rs 15,500 (WR costing sheets); the costing row now shows 15,500 as the file price.
+- New price file "Price List India 2022-23.pdf" (list 2019 + additional models 2018) applied under the agreed policy (file price beats estimate, highest file price wins, M-variant price for the plain body): AD 14-10 1,400; AD 16-13 2,400; AC-14-10 1,100; YSR-8-8 2,500; YSR-12-12 2,200; AC-64-50 11,000; AC-64-100 12,500; AD 42-25/50/75 8,500 / 11,800 / 12,000; AD 64-50/100 15,000 / 17,500; AD 115-150/200/250 44,000 / 50,000 / 55,000. Script: `tools/apply_pricelist_2019.py`.
+- Held back: AD 85-150 (2018 price 30,550 is below AD 85-125 at 40,000), AC-8-6 / AC-10-5 / AC-12-10 (only flange-variant prices listed).
 ## 2.6.0 — 25 Sep 2026 (AT-RCM cylindrical rubber mounts)
 - New range **AT-RCM** — 206 cylindrical rubber mounts, D10–D100 mm, M3–M16, in five styles with their own icons in the rubber selector: SU stud / plain face, SS studs both ends, SF stud + tapped hole, FF tapped holes both ends, F0 tapped hole / plain face. Imported or moulded locally in India.
 - Data per size: rated compression load and deflection -> secant stiffness (N/mm), fn at rated load, load band (20–100 % of rating), shear rating in the note. Built by `tools/build_rcm.py` (re-runnable).
