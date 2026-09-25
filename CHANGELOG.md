@@ -1,4 +1,22 @@
 # Changelog
+## 2.7.0 — 25 Sep 2026 (dealer routes, commission, packing & freight)
+- **Two ways for a dealer to sell**, chosen when he creates a quotation in the Quote portal:
+  - **Resale** (as before): quotation in the dealer's name; ADONI TECH bills him list − his dealer discount (default 25 %, per dealer in Admin → Dealers). He decides the discount or markup to his customer.
+  - **Direct supply** (new): quotation on ADONI TECH letterhead and bank, numbered AT/Q/<dealer code>/…, with the dealer printed as channel partner. The customer orders and pays ADONI TECH. Commission per line = (dealer discount − discount passed on) × his quoted price (list or marked-up), on the basic value only. Examples: list 100, passes 10 % → 15; marks up to 125, passes 10 % → 18.75. Passing on more than his discount is blocked unless ADONI TECH approves a special price. The dealer cannot add his own lines or change ADONI TECH's terms or freight on a direct offer.
+- **Packing & freight, India only:** Rs 35 per kg of estimated product weight (settings `freight.rate_per_kg`, editable in Admin → Dealers → Dealer terms).
+  - Resale: added to ADONI TECH's billing to the dealer (to his godown), and pre-filled as a plain "Packing & freight" line on his own quotation, which he may change.
+  - Direct: printed as a line "to site — N kg × Rs 35/kg".
+  - Export quotations stay ex-works.
+- **Estimated unit weights** (`weight_kg`) for all 311 shock absorbers and crane buffers and all 309 rubber mounts (`tools/estimate_weights.py`):
+  - AKHG/AKHS from ADONI TECH's own assembly weights in the crane-buffer costing sheets.
+  - PU and spring buffers from a sizing rule.
+  - Other shock absorbers from a fit on 689 catalogue weights.
+  - Rubber mounts from their costing build-up.
+  - Every figure can be corrected in the CSV.
+- **Admin → Dealers:**
+  - Dealer terms card: standard discount, max discount, Rs/kg.
+  - **Commission register** for direct supply, with statuses quoted → ordered → customer paid → invoice received → commission paid (or lost). Commission can be marked paid only after the customer has paid. History and note (invoice number, UTR) are kept.
+- The dealer's quotation list shows the route and the commission. Mails to ADONI TECH on a direct offer show the commission and ADONI TECH's net.
 ## 2.6.1 — 25 Sep 2026 (prices)
 - AWRI-127-60 list price confirmed by Paresh at Rs 15,500 (WR costing sheets); the costing row now shows 15,500 as the file price.
 - New price file "Price List India 2022-23.pdf" (list 2019 + additional models 2018) applied under the agreed policy (file price beats estimate, highest file price wins, M-variant price for the plain body): AD 14-10 1,400; AD 16-13 2,400; AC-14-10 1,100; YSR-8-8 2,500; YSR-12-12 2,200; AC-64-50 11,000; AC-64-100 12,500; AD 42-25/50/75 8,500 / 11,800 / 12,000; AD 64-50/100 15,000 / 17,500; AD 115-150/200/250 44,000 / 50,000 / 55,000. Script: `tools/apply_pricelist_2019.py`.

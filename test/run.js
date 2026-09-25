@@ -329,6 +329,48 @@ const server = app.listen(0, async () => {
     const nd = await loginAs('sales@newtrade.co.in');
     const nda = await rq('POST', '/dealer/apply', { company: 'New Trade Links', contact: 'Priya Rao', addr1: 'MIDC Satpur', city: 'Nashik', phone: '+91 97654 32109', gstin: '27AAAPL1234C1Z5', territory: 'Nashik, Dhule', products: ['Crane buffers', 'Wire rope isolators'], source: 'dealer sign-up page' }, nd.token);
     ok('dealer page: application keeps territory and products', nda.ok && nda.dealer.territory === 'Nashik, Dhule' && nda.dealer.products === 'Crane buffers, Wire rope isolators');
+    // ---- resale: packing & freight Rs 35/kg to the dealer's godown
+    {
+      const fq = await rq('GET', '/approve/' + pq.quotation_id, null, dlr.token), q0 = fq.quotation, b0 = fq.billing;
+      const kg = Math.ceil(q0.items.filter(i => i.kind === 'product').reduce((s, i) => s + (Number(i.weight_kg) || 0) * i.qty, 0));
+      ok('resale: freight = Rs 35 x estimated weight, added to the dealer billing', kg > 0 && b0.route === 'resale' && b0.freight.amount === kg * 35 && Math.abs(b0.billing_total - (b0.billing_value + kg * 35)) < 0.01, `${kg} kg → Rs ${b0.freight.amount}`);
+      ok('resale: dealer quotation carries a plain "Packing & freight" line he can change', q0.freight === kg * 35 && q0.freight_label === 'Packing & freight');
+    }
+    // ---- direct supply: ADONI TECH letterhead, dealer commission = his discount - what he passes on, x quoted price
+    {
+      const dp = await rq('POST', '/portal/quote', { route: 'direct', customer: { company: 'Sai Cranes Pvt Ltd', contact: 'Sunil Patil', email: 'sunil.patil@saicranes.in', phone: '+91 98500 12345', gstin: '29AABCS1234F1Z2' }, project: { name: 'EOT 10 t direct' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 2 }] }, dlr.token);
+      ok('direct: numbered in the ADONI TECH series with the dealer code', dp.quotation && dp.quotation.startsWith('AT/Q/' + ddec.dealer.code + '/'), dp.quotation);
+      let g = await rq('GET', '/approve/' + dp.quotation_id, null, dlr.token);
+      ok('direct: ADONI TECH letterhead + bank, dealer shown as channel partner, GST from Maharashtra', g.quotation.route === 'direct' && !g.company.dealer && /ADONI TECH/.test(g.company.name) && g.company.channel_partner.company === 'Kumar Engineering Services' && g.bank.bank !== 'HDFC Bank' && g.quotation.supply_type === 'inter');
+      const L0 = g.quotation.items[0].list_rate, kg = Math.ceil(g.quotation.items[0].weight_kg * 2);
+      ok('direct: packing & freight line to site = Rs 35 x weight, basis printed', g.quotation.freight === kg * 35 && /kg × Rs 35\/kg/.test(g.quotation.freight_label), g.quotation.freight_label);
+      const put = async (rate, disc) => { await rq('PUT', '/approve/' + dp.quotation_id, { items: g.quotation.items.map(i => ({ ...i, rate, discount_pct: disc })), freight: 0 }, dlr.token); return rq('GET', '/approve/' + dp.quotation_id, null, dlr.token); };
+      g = await put(L0, 10);
+      ok('direct: list 100, passes 10 % -> commission 15 % of list, ADONI keeps 75 %', Math.abs(g.billing.commission_value - 0.15 * L0 * 2) < 0.02 && Math.abs(g.billing.adoni_net - 0.75 * L0 * 2) < 0.02 && g.limit.ok, `commission ${g.billing.commission_value} on list ${L0} x2`);
+      ok('direct: dealer cannot change the freight line', g.quotation.freight === kg * 35);
+      g = await put(L0 * 1.25, 10);
+      ok('direct: markup to 125 and passes 10 % -> commission 15 % of 125 (18.75 per 100)', Math.abs(g.billing.commission_value - 0.1875 * L0 * 2) < 0.02 && Math.abs(g.billing.adoni_net - 0.9375 * L0 * 2) < 0.02, `commission ${g.billing.commission_value}`);
+      g = await put(L0 * 1.25, 30);
+      ok('direct: passing on more than his 25 % is blocked (commission would go negative)', !g.limit.ok && g.limit.violations[0].kind === 'commission' && (await rq('POST', '/approve/' + dp.quotation_id + '/send', { self_send: true }, dlr.token)).status === 403);
+      const ex = await rq('PUT', '/approve/' + dp.quotation_id, { items: [...g.quotation.items, { seq: 99, model: 'Installation', qty: 1, rate: 500 }] }, dlr.token);
+      ok('direct: dealer cannot add his own lines to an ADONI TECH offer', ex.status === 400);
+      g = await put(L0 * 1.25, 10);
+      const dpdf = await fetch(base + '/approve/' + dp.quotation_id + '/pdf', { headers: asT(dlr.token) });
+      ok('direct: PDF renders', dpdf.status === 200 && (await dpdf.arrayBuffer()).byteLength > 5000);
+      const snd = await rq('POST', '/approve/' + dp.quotation_id + '/send', { self_send: true }, dlr.token);
+      ok('direct: sent, commission enters the register as "quoted"', snd.ok && snd.billing.route === 'direct');
+      const reg = await rq('GET', '/admin/commissions', null, TOKEN);
+      const rr = reg.rows && reg.rows.find(r => r.id === dp.quotation_id);
+      ok('direct: admin commission register shows it', rr && rr.status === 'quoted' && Math.abs(rr.commission - 0.1875 * L0 * 2) < 0.02, rr && rr.commission);
+      const early = await rq('PATCH', '/admin/commission/' + dp.quotation_id, { status: 'commission_paid' }, TOKEN);
+      ok('direct: commission cannot be marked paid before the customer pays', early.status === 400);
+      await rq('PATCH', '/admin/commission/' + dp.quotation_id, { status: 'customer_paid', note: 'UTR 1234' }, TOKEN);
+      const paid = await rq('PATCH', '/admin/commission/' + dp.quotation_id, { status: 'commission_paid' }, TOKEN);
+      ok('direct: then paid, with history', paid.ok && paid.commission.history.length === 3);
+      const mineQ = await rq('GET', '/portal/quotations', null, dlr.token);
+      ok('direct: dealer sees route and commission in his list', mineQ.some(x => x.id === dp.quotation_id && x.route === 'direct' && x.commission > 0));
+      ok('direct: dealer cannot read the register', (await rq('GET', '/admin/commissions', null, dlr.token)).status === 403);
+    }
     const susp = await post('/admin/dealers/ravi@kumarengg.in/decide', { decision: 'suspend' });
     ok('dealer: suspended dealer loses the portal', susp.ok && (await rq('GET', '/portal/catalogue', null, dlr.token)).status === 403);
 

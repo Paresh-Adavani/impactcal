@@ -10,6 +10,10 @@
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}.chips button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:5px 12px;cursor:pointer;font:inherit;font-size:13px}.chips button.on{background:var(--navy);color:#fff;border-color:var(--navy)}
 .ways{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px;margin-top:8px}.ways a{display:block;border:1px solid var(--line);border-radius:10px;padding:12px;text-decoration:none;color:inherit;background:#fff}.ways a b{color:var(--navy)}
 .req::after{content:" *";color:#c0392b}
+.routes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:10px;margin-top:8px}
+.route{display:block;border:1.5px solid var(--line);border-radius:10px;padding:12px 12px 12px 36px;position:relative;cursor:pointer;background:#fff}
+.route input{position:absolute;left:12px;top:15px;width:auto!important;margin:0}.route b{color:var(--navy)}.route small{display:block;color:var(--muted);margin-top:4px;line-height:1.45}
+.route.on{border-color:var(--orange,#F57C00);background:#FFF8F1}
 </style>
 </head><body>
 <header><div class="wrap"></div></header>
@@ -61,7 +65,7 @@ async function dealerOnboarding() {
   const status = !d ? '' : d.status === 'pending' ? note('warn', '<b>Application received.</b> ADONI TECH will review it and e-mail you when it is approved. You can correct the details below meanwhile.')
     : d.status === 'suspended' ? note('bad', 'Your dealer account is suspended. Please contact ADONI TECH.') : d.status === 'rejected' ? note('bad', 'Your application was not approved. Please contact ADONI TECH.') : '';
   V().innerHTML = `<div class="card"><h3>${d ? 'Your dealer application' : 'Become an ADONI TECH dealer'}</h3>${status}
-    <p class="hint">Your quotations will carry this name, address, GSTIN and bank. ADONI TECH bills you at list price less the standard dealer discount; you decide your own discount (up to the limit) or markup to your customer.</p>
+    <p class="hint">Two ways to sell: <b>resale</b> — your quotation carries this name, address, GSTIN and bank; ADONI TECH bills you at list price less your dealer discount (plus packing &amp; freight to your godown in India); or <b>direct supply</b> — ADONI TECH quotes your customer on its letterhead and pays you the discount you did not pass on as commission. You decide the discount or markup to your customer.</p>
     ${profileForm(d || { country: 'India' })}
     <div class="row" style="margin-top:12px"><button class="btn" id="apply">${d ? 'Save changes' : 'Apply as dealer'}</button></div><div id="out"></div>
     ${d ? logoBlock() : '<p class="hint">You can add your logo right after applying.</p>'}</div>`;
@@ -95,6 +99,7 @@ async function newq() {
   if (!CAT) CAT = await api('portal/catalogue');
   const groups = [...new Set(CAT.map(c => c.group))];
   const u = AUTH.user;
+  const TERMS = u.role === 'dealer' ? await api('dealer/me').then(m => m.terms || {}).catch(() => ({})) : {};
   V().innerHTML = `
   <div class="card"><h3>Quote from the catalogue</h3>
     <p class="hint">Pick products and quantities, enter your customer, and a draft quotation opens in ${u.role === 'dealer' ? 'your name' : 'ADONI TECH\'s name'} at list price. You set the discount${u.role === 'dealer' ? ' or your markup' : ''} on the next screen, check the PDF and send it. Need an engineering selection first? Use a selector instead — when you are signed in, a request from a selector also becomes your draft quotation:</p>
@@ -110,11 +115,17 @@ async function newq() {
       <div><label>Country</label><input id="c_country" value="India"></div><div><label>GSTIN</label><input id="c_gstin" placeholder="for GST / place of supply"></div><div><label>City</label><input id="c_city"></div>
       <div><label>Project / enquiry name</label><input id="p_name"></div><div><label>Customer reference</label><input id="p_ref"></div></div>
     <div style="margin-top:8px"><label>Internal note (not printed)</label><textarea id="msg" rows="2"></textarea></div>
+    ${u.role === 'dealer' ? `<h3 style="margin-top:16px">3 · How will the customer buy?</h3>
+    <div class="routes">
+      <label class="route on"><input type="radio" name="route" value="resale" checked><b>I buy and resell</b><small>Quotation in <b>your name</b> (your letterhead, GSTIN, bank). ADONI TECH bills you at list − your dealer discount, plus packing &amp; freight to your godown (India, Rs ${esc(String(TERMS.freight_rate || 35))}/kg of estimated weight). Your discount or markup to the customer is your margin.</small></label>
+      <label class="route"><input type="radio" name="route" value="direct"><b>Direct supply by ADONI TECH — I earn commission</b><small>Quotation on <b>ADONI TECH letterhead</b> with you as channel partner; the customer orders and pays ADONI TECH. Your commission = your dealer discount (${esc(String(TERMS.discount_pct || 25))} %) less the discount you pass on, on your quoted price. Example: list 100, you pass 10 % → 15 % commission; markup to 125 and pass 10 % → 15 % of 125. Paid after the customer pays in full, against your commission invoice.</small></label>
+    </div>` : ''}
     <div class="row" style="margin-top:12px"><button class="btn" id="make">Create draft quotation →</button></div><div id="out"></div></div>`;
   $$('#chips button').forEach(b => b.onclick = () => { GROUP = b.dataset.g; $$('#chips button').forEach(x => x.classList.toggle('on', x === b)); drawCat(); });
   $('#q').oninput = drawCat;
   drawCat(); drawLines();
   $('#make').onclick = make;
+  $$('.route input').forEach(r => r.onchange = () => $$('.route').forEach(l => l.classList.toggle('on', l.querySelector('input').checked)));
 }
 function drawCat() {
   const q = ($('#q').value || '').toLowerCase().replace(/[\s-]+/g, '');
@@ -138,7 +149,7 @@ async function make() {
   if (!customer.contact || !customer.email || !customer.phone) { out.innerHTML = note('bad', 'Customer contact person, e-mail and phone are required.'); return; }
   $('#make').disabled = true; $('#make').textContent = 'Creating…';
   try {
-    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark })) } });
+    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark })), route: ($('.route input:checked') || {}).value || 'resale' } });
     if (!r.quotation_id) throw new Error('The request was saved as ' + r.number + ' but the draft could not be made. ADONI TECH has been alerted.');
     LINES = [];
     out.innerHTML = note('ok', `Draft <b>${esc(r.quotation)}</b> created — opening it…`);
@@ -149,9 +160,9 @@ async function make() {
 /* ---------------- my quotations ---------------- */
 async function mine() {
   const rows = await api('portal/quotations');
-  V().innerHTML = `<div class="card tbl-card"><div class="tw"><table><thead><tr><th>Number</th><th>Date</th><th>Customer</th><th>Status</th><th class="n">Total</th><th>Special price</th><th></th></tr></thead><tbody>
-  ${rows.map(q => `<tr><td class="mono">${esc(q.number)}${q.rev ? ' R' + q.rev : ''}</td><td>${esc(q.date)}</td><td>${esc(q.customer || '')}</td><td><span class="pill ${q.status === 'sent' ? 'ok' : 'brand'}">${esc(q.status)}</span></td><td class="n">${money(q.grand_total, q.currency)}</td><td>${q.special ? `<span class="pill ${q.special === 'approved' ? 'ok' : q.special === 'declined' ? 'bad' : 'brand'}">${esc(q.special)}</span>` : ''}</td>
-    <td><a class="btn sm" href="approve.html?id=${encodeURIComponent(q.id)}">Open</a></td></tr>`).join('') || '<tr><td colspan="7" class="muted">No quotations yet.</td></tr>'}</tbody></table></div></div>`;
+  V().innerHTML = `<div class="card tbl-card"><div class="tw"><table><thead><tr><th>Number</th><th>Date</th><th>Customer</th><th>Status</th><th>Route</th><th class="n">Total</th><th class="n">Commission</th><th>Special price</th><th></th></tr></thead><tbody>
+  ${rows.map(q => `<tr><td class="mono">${esc(q.number)}${q.rev ? ' R' + q.rev : ''}</td><td>${esc(q.date)}</td><td>${esc(q.customer || '')}</td><td><span class="pill ${q.status === 'sent' ? 'ok' : 'brand'}">${esc(q.status)}</span></td><td>${q.route === 'direct' ? '<span class="pill blue">direct</span>' : q.route ? 'resale' : ''}</td><td class="n">${money(q.grand_total, q.currency)}</td><td class="n">${q.commission != null ? money(q.commission, q.currency) + (q.commission_status ? `<br><small class="muted">${esc(q.commission_status.replace(/_/g, ' '))}</small>` : '') : ''}</td><td>${q.special ? `<span class="pill ${q.special === 'approved' ? 'ok' : q.special === 'declined' ? 'bad' : 'brand'}">${esc(q.special)}</span>` : ''}</td>
+    <td><a class="btn sm" href="approve.html?id=${encodeURIComponent(q.id)}">Open</a></td></tr>`).join('') || '<tr><td colspan="9" class="muted">No quotations yet.</td></tr>'}</tbody></table></div></div>`;
 }
 
 /* ---------------- dealer profile ---------------- */

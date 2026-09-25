@@ -77,6 +77,8 @@ office.pune.pincode,411041,
 office.pune.phone,,
 dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
 dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
+freight.rate_per_kg,35,"Packing & freight to the dealer's godown (resale) or the customer's site (direct supply), Rs per kg of estimated product weight. India only - export stays ex-works"
+quote.terms_delivery_direct,"Door delivery to your site; packing & freight as per the quotation line. Lead time as stated per line, from receipt of technically & commercially clear PO",Delivery term printed on direct-supply quotations (ADONI TECH letterhead via a dealer)
 mail.dealer_cc,adonitech@gmail.com,Copied on every dealer quotation sent to a customer
 mail.dealer_from,,"Optional neutral sender address for dealer quotations (must be a verified ""Send mail as"" alias of SMTP_USER); blank = SMTP address. Dealers can also download the PDF and send it themselves."
 dealer.cities,,Cities where ADONI TECH is appointing dealers - shown on the dealer sign-up page (separate with ;)

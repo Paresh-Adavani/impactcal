@@ -178,7 +178,7 @@ def build():
                              natural_freq_hz=f'{fn:.1f}', stiffness_n_mm=f'{k:.0f}', static_deflection_mm=fmt(defl),
                              height_mm=fmt(h), dia_mm=fmt(D), length_mm='', width_mm='', thread=thread,
                              material='Natural rubber, galvanised steel plates', hardness_shore='', temp_min_c='-30', temp_max_c='70',
-                             hsn='40169990', gst_rate='18', uom='NOS', price_inr=str(lst), lead_time_days='21', status='active',
+                             weight_kg=f"{c['rubber_kg'] + c['metal_kg']:.2f}", hsn='40169990', gst_rate='18', uom='NOS', price_inr=str(lst), lead_time_days='21', status='active',
                              image=img, ga_pdf='', source='AT-RCM range (import / local moulding). Supplier ref ' + (part or 'n/a'),
                              note=note))
             cost_rows.append(dict(table='rubber_mounts', key=code, series=fam, model=code, basis='cost', file_price='', file_source='',
