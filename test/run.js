@@ -95,6 +95,23 @@ const server = app.listen(0, async () => {
     ok('customer role for others', v3.user.role === 'customer');
     ok('admin sees prices + fx in meta', (await get('/meta')).prices === true && (await get('/meta')).fx.rate > 0);
 
+    // ---- wire rope isolator lug options: EN8D + Arkor standard, aluminium +2 %, SS 304 +5 % (admin setting)
+    {
+      const anonW = await fetch(base + '/wri/data').then(r => r.json());
+      ok('wri: lug choices offered, EN8D + Arkor treated is the standard, no % shown to the public', anonW.lug_options[0].label === 'EN8D + Arkor treated' && anonW.lug_options[0].default && anonW.lug_options.map(o => o.label).join('|') === 'EN8D + Arkor treated|Aluminium alloy|SS 304' && anonW.lug_options.every(o => o.pct === undefined) && anonW.wire_options[0] === 'SS 304');
+      const admW = await get('/wri/data');
+      ok('wri: price viewers see the surcharge (Al +2 %, SS 304 +5 %)', admW.lug_options[1].pct === 2 && admW.lug_options[2].pct === 5);
+      const w127 = admW.prices['AWRI-127-60'].price;
+      const lq = await post('/portal/quote', { customer: { company: 'Lug Test Pvt Ltd', contact: 'Test Engineer', email: 'eng@lugtest.in', phone: '+91 98220 55443' }, items: [
+        { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1 }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Aluminium alloy' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'SS 304', wire: 'SS 302' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Gold plated' }] });
+      const lqq = (await get('/approve/' + lq.quotation_id)).quotation.items;
+      const up = (p, pct) => { const v = p * (1 + pct / 100), st = v < 10000 ? 50 : 100; return Math.ceil(v / st) * st; };
+      ok('wri: quotation priced by lug — standard list, Al +2 %, SS 304 +5 %, unknown -> standard', lqq[0].rate === w127 && lqq[1].rate === up(w127, 2) && lqq[2].rate === up(w127, 5) && lqq[3].rate === w127, lqq.map(i => i.rate).join(' / '));
+      ok('wri: lug and wire printed on the line', /Lugs: EN8D \+ Arkor treated · Wire rope: SS 304/.test(lqq[0].description) && /Lugs: SS 304 · Wire rope: SS 302/.test(lqq[2].description) && lqq[2].lug_pct === 5);
+      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; Aluminium alloy=3; SS 304=6' });
+      ok('wri: surcharges follow the admin setting', (await get('/wri/data')).lug_options[2].pct === 6);
+      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; Aluminium alloy=2; SS 304=5' });
+    }
     console.log('\n— CSV database (admin) —');
     const tables = await get('/admin/csv');
     ok('nine tables listed', tables.length === 9, tables.map(t => t.table).join(','));
@@ -177,7 +194,7 @@ const server = app.listen(0, async () => {
 
     console.log('\n— exports & audit —');
     const ex = await fetch(base + '/admin/export/rfqs.csv', { headers: H() }).then(r => r.text());
-    ok('RFQ export has both requests', csv.parse(ex).rows.length === 2);
+    ok('RFQ export lists every request', csv.parse(ex).rows.length === 3, csv.parse(ex).rows.length + ' rows (2 RFQs + the lug-price test quotation)');
     const au = await get('/admin/audit?days=1');
     ok('audit trail records the approval', au.some(a => a.what === 'quotation.send'));
     ok('mail verify reports cleanly when unconfigured', (await get('/admin/mail/verify')).ok === false);

@@ -102,3 +102,5 @@ assistant.model,claude-sonnet-5,"Claude model: claude-sonnet-5 (best), claude-ha
 assistant.daily_limit_visitor,25,Messages per day for a website visitor who is not signed in
 assistant.daily_limit_user,120,Messages per day for a signed-in user
 assistant.monthly_cap_usd,40,DAMPA stops for the month when API usage reaches this many US dollars
+wri.lug_options,EN8D + Arkor treated=0; Aluminium alloy=2; SS 304=5,Wire rope isolator lug materials: label=surcharge % on list price; the first is the standard build (Admin -> Pricing & costing)
+wri.wire_options,SS 304; SS 302; Galvanised steel,Wire rope materials offered; the first is the standard

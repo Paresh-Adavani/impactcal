@@ -177,15 +177,38 @@ async function dampaTab() {
 }
 
 /* ---------------- pricing & costing (admin + settings pricing.users) ---------------- */
+/* wire rope isolator build options: lug materials with surcharge %, wire rope materials (admin) */
+async function wriOptsCard() {
+  const box = $('#wriOpts'); if (!box || AUTH.user.role !== 'admin') return;
+  const st = await api('admin/settings'); const sv = k => ((st.find(r => r.key === k) || {}).value || '');
+  const lugs = (sv('wri.lug_options') || 'EN8D + Arkor treated=0; Aluminium alloy=2; SS 304=5').split(/[;\n]+/).map(x => x.trim()).filter(Boolean).map(x => { const m = x.match(/^(.*?)\s*=\s*(-?[\d.]+)\s*%?$/); return m ? [m[1].trim(), m[2]] : [x, '0']; });
+  const draw = () => {
+    box.innerHTML = `<div class="card"><h3>Wire rope isolator build options</h3><p class="hint">Lug materials offered in the wire rope selector, the Quote portal and on quotations. The <b>first line is the standard build</b> (no surcharge); the others add their % to the list price of the isolator (rounded up to Rs 50 / 100). Customers see the choices; only price viewers see the %.</p>
+      <table class="kv">${lugs.map((l, i) => `<tr><td style="width:60px"><span class="pill ${i ? '' : 'ok'}">${i ? 'option' : 'standard'}</span></td><td><input data-ll="${i}" value="${esc(l[0])}"></td><td style="width:150px"><input data-lp="${i}" type="number" step="any" value="${esc(l[1])}" ${i ? '' : 'disabled'} style="width:80px"> %</td><td style="width:170px">${i ? `<button class="btn sm ghost" data-up="${i}">↑ make standard</button> <button class="btn sm ghost" data-rm="${i}">✕</button>` : ''}</td></tr>`).join('')}</table>
+      <div class="row" style="margin-top:8px"><button class="btn sm ghost" id="lugAdd">+ Add lug material</button></div>
+      <label style="margin-top:12px">Wire rope materials (first = standard; separate with ;)</label><input id="wireOpts" value="${esc(sv('wri.wire_options') || 'SS 304; SS 302; Galvanised steel')}">
+      <div class="row" style="margin-top:10px"><button class="btn sm" id="lugSave">Save build options</button><span id="lugOut" class="muted"></span></div></div>`;
+    const read = () => { $$('[data-ll]').forEach(i => { lugs[i.dataset.ll][0] = i.value.trim(); }); $$('[data-lp]').forEach(i => { lugs[i.dataset.lp][1] = i.value; }); };
+    $('#lugAdd').onclick = () => { read(); lugs.push(['', '0']); draw(); };
+    $$('[data-rm]').forEach(b => b.onclick = () => { read(); lugs.splice(Number(b.dataset.rm), 1); draw(); });
+    $$('[data-up]').forEach(b => b.onclick = () => { read(); const [x] = lugs.splice(Number(b.dataset.up), 1); lugs.unshift([x[0], '0']); lugs.forEach((l, i) => { if (i && l[1] === '') l[1] = '0'; }); draw(); });
+    $('#lugSave').onclick = async () => { read(); const ok = lugs.filter(l => l[0]); if (!ok.length) { alert('Keep at least the standard lug.'); return; }
+      await api('admin/settings', { method: 'PUT', body: { 'wri.lug_options': ok.map((l, i) => `${l[0]}=${i ? Number(l[1]) || 0 : 0}`).join('; '), 'wri.wire_options': $('#wireOpts').value.split(';').map(x => x.trim()).filter(Boolean).join('; ') } });
+      $('#lugOut').textContent = 'Saved — live in the selector and on new quotations within a minute.'; };
+  };
+  draw();
+}
 async function pricing() {
   let sum;
   try { sum = await api('admin/pricing/summary'); }
   catch (e) { V().innerHTML = say('warn', esc(e.message)); return; }
   V().innerHTML = `<div class="stat">${sum.map(t => `<div><b>${t.priced}/${t.rows}</b><span>${esc(t.name)} priced</span></div>`).join('')}</div>
+  <div id="wriOpts"></div>
   <div class="card"><div class="spread"><h3>Price &amp; costing workbook</h3><div class="row"><a class="btn" href="/api/admin/pricing/export.xlsx?token=${encodeURIComponent(AUTH.token)}">Download Excel (all tables)</a></div></div>
     <p class="hint">One sheet per product table: <b>price_inr</b> (list), <b>dealer_inr</b>, indicative USD, lead time, status, and the costing columns (basis, file price, estimate, margin, and for rubber mounts the moulding / hardware / mould build-up). Edit in Excel — keep the <b>key</b> column — then upload the same file here. Only price, lead time, status and the costing columns are taken from the upload; engineering data is never changed. Check first shows what would change without saving.</p>
     <div class="row" style="align-items:center;gap:12px;flex-wrap:wrap"><input type="file" id="prFile" accept=".xlsx,.xls,.csv"><button class="btn ghost" id="prCheck">Check (no save)</button><button class="btn navy" id="prApply">Upload &amp; apply</button></div><div id="prOut" style="margin-top:10px"></div></div>
   <div class="card"><div class="spread"><h3>Browse</h3><select id="prTable" style="width:auto">${sum.map(t => `<option value="${t.table}">${esc(t.name)}</option>`).join('')}</select></div><div class="tw" id="prView"></div></div>`;
+  wriOptsCard().catch(() => {});
   const put = r => `<div class="log">${esc(JSON.stringify(r, null, 1))}</div>`;
   const send = async dry => {
     const f = $('#prFile').files[0]; if (!f) { alert('Choose the Excel or CSV file first'); return; }

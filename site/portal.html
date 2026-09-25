@@ -98,6 +98,7 @@ function readProfile() { const o = {}; $$('[data-p]').forEach(i => { o[i.dataset
 /* ---------------- new quotation from the catalogue ---------------- */
 async function newq() {
   if (!CAT) CAT = await api('portal/catalogue');
+  if (!LUGS) LUGS = await api('wri/data').then(d => d.lug_options && d.lug_options.length ? d.lug_options : null).catch(() => null);
   const groups = [...new Set(CAT.map(c => c.group))];
   const u = AUTH.user;
   const TERMS = u.role === 'dealer' ? await api('dealer/me').then(m => m.terms || {}).catch(() => ({})) : {};
@@ -138,11 +139,14 @@ function drawCat() {
     <div class="n">${c.price_inr ? '₹ ' + fmt(c.price_inr) : '<span class="muted">on request</span>'}</div><button class="btn sm" data-add="${esc(c.table + '|' + c.key)}">Add</button></div>`).join('') || '<div class="it muted">Nothing matches.</div>';
   $$('[data-add]').forEach(b => b.onclick = () => { const [table, key] = b.dataset.add.split('|'); const c = CAT.find(x => x.table === table && x.key === key); const ex = LINES.find(l => l.table === table && l.key === key); if (ex) ex.qty++; else LINES.push({ table, key, model: c.model, price: c.price_inr, qty: 1, remark: '' }); drawLines(); });
 }
+let LUGS = null;   // wire rope isolator lug options (standard first) with surcharge %
+const lugPrice = l => { if (l.table !== 'wire_rope_isolators' || !l.price || !LUGS) return l.price; const o = LUGS.find(x => x.label === l.lug) || LUGS[0]; if (!o.pct) return l.price; const p = l.price * (1 + o.pct / 100), st = p < 10000 ? 50 : 100; return Math.ceil(p / st) * st; };
 function drawLines() {
-  const tot = LINES.reduce((s, l) => s + (l.price || 0) * l.qty, 0);
-  $('#lines').innerHTML = LINES.map((l, k) => `<tr><td><b>${esc(l.model)}</b></td><td><input type="number" min="1" data-q="${k}" value="${l.qty}"></td><td class="n">${l.price ? fmt(l.price) : '—'}</td><td class="n">${l.price ? fmt(l.price * l.qty) : '—'}</td><td class="rm"><input data-r="${k}" value="${esc(l.remark)}" placeholder="optional"></td><td><button class="btn sm ghost" data-x="${k}">✕</button></td></tr>`).join('')
+  const tot = LINES.reduce((s, l) => s + (lugPrice(l) || 0) * l.qty, 0);
+  $('#lines').innerHTML = LINES.map((l, k) => `<tr><td><b>${esc(l.model)}</b>${l.table === 'wire_rope_isolators' && LUGS ? `<br><select data-lug="${k}" style="margin-top:4px;font-size:12.5px;padding:3px 6px;width:auto">${LUGS.map(o => `<option value="${esc(o.label)}" ${o.label === (l.lug || LUGS[0].label) ? 'selected' : ''}>Lugs: ${esc(o.label)}${o.default ? '' : o.pct ? ' (+' + o.pct + ' %)' : ''}</option>`).join('')}</select>` : ''}</td><td><input type="number" min="1" data-q="${k}" value="${l.qty}"></td><td class="n">${l.price ? fmt(lugPrice(l)) : '—'}</td><td class="n">${l.price ? fmt(lugPrice(l) * l.qty) : '—'}</td><td class="rm"><input data-r="${k}" value="${esc(l.remark)}" placeholder="optional"></td><td><button class="btn sm ghost" data-x="${k}">✕</button></td></tr>`).join('')
     + (LINES.length ? `<tr><td colspan="3"><b>List value</b></td><td class="n"><b>₹ ${fmt(tot)}</b></td><td colspan="2"></td></tr>` : '<tr><td colspan="6" class="muted">No products yet — use Add above.</td></tr>');
   $$('[data-q]').forEach(i => i.onchange = () => { LINES[i.dataset.q].qty = Math.max(1, Number(i.value) || 1); drawLines(); });
+  $$('[data-lug]').forEach(i => i.onchange = () => { LINES[i.dataset.lug].lug = i.value; drawLines(); });
   $$('[data-r]').forEach(i => i.oninput = () => { LINES[i.dataset.r].remark = i.value; });
   $$('[data-x]').forEach(b => b.onclick = () => { LINES.splice(Number(b.dataset.x), 1); drawLines(); });
 }
@@ -154,7 +158,7 @@ async function make() {
   if (!customer.contact || !customer.email || !customer.phone) { out.innerHTML = note('bad', 'Customer contact person, e-mail and phone are required.'); return; }
   $('#make').disabled = true; $('#make').textContent = 'Creating…';
   try {
-    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark })), route: ($('.route input:checked') || {}).value || 'resale',
+    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark, ...(l.table === 'wire_rope_isolators' && LUGS ? { lug: l.lug || LUGS[0].label } : {}) })), route: ($('.route input:checked') || {}).value || 'resale',
       customer_id: CUST ? CUST.id : undefined, save_customer: !CUST && $('#saveCust').checked } });
     CUST = null;
     if (!r.quotation_id) throw new Error('The request was saved as ' + r.number + ' but the draft could not be made. ADONI TECH has been alerted.');

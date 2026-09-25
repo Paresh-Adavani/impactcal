@@ -1,4 +1,16 @@
 # Changelog
+## 2.9.1 — 26 Sep 2026 (wire rope isolator lug material)
+- The standard build is now **EN8D lugs, Arkor treated**, with SS 304 wire rope and normal duty.
+- Choices:
+  - **Aluminium alloy lugs: +2 %** on the list price
+  - **SS 304 lugs: +5 %**
+  - Rounded up to Rs 50 below Rs 10,000, Rs 100 above.
+- The old options "SS 316" and "EN8 zinc plated" are gone. Saved projects that used them fall back to the nearest new option.
+- Surcharges and the list of lug and wire materials are editable in Admin → Pricing & costing → "Wire rope isolator build options". The first line is the standard, and you can add, remove or re-order materials (settings `wri.lug_options`, `wri.wire_options`).
+- Price viewers (sales, dealers, admin) see the % next to each choice; the public sees only the choices. The price shown in the selector includes the chosen lug.
+- The lug and wire go with the RFQ. The server prices the line with the surcharge — the page cannot set a price — and prints "Lugs: … · Wire rope: …" on the quotation line.
+- Quote portal: every wire rope isolator line has a lug choice, and the price updates with it.
+- Marine-duty hint updated: EN8D Arkor lugs for indoor / sheltered use, SS 304 lugs recommended for open deck and salt spray.
 ## 2.9.0 — 25 Sep 2026 (bump / shock check in the rubber selector)
 - The rubber mount page has an optional **Shock / bump check**. Enter:
   - peak g
