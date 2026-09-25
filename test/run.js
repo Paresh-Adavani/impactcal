@@ -98,9 +98,9 @@ const server = app.listen(0, async () => {
     // ---- wire rope isolator lug options: EN8D + Arkor standard, aluminium +2 %, SS 304 +5 % (admin setting)
     {
       const anonW = await fetch(base + '/wri/data').then(r => r.json());
-      ok('wri: lug choices offered, EN8D + Arkor treated is the standard, no % shown to the public', anonW.lug_options[0].label === 'EN8D + Arkor treated' && anonW.lug_options[0].default && anonW.lug_options.map(o => o.label).join('|') === 'EN8D + Arkor treated|Aluminium alloy|SS 304' && anonW.lug_options.every(o => o.pct === undefined) && anonW.wire_options[0] === 'SS 304');
+      ok('wri: lug choices offered, EN8D + Arkor treated is the standard, no % shown to the public', anonW.lug_options[0].label === 'EN8D + Arkor treated' && anonW.lug_options[0].default && anonW.lug_options.map(o => o.label).join('|') === 'EN8D + Arkor treated|EN8D + Zinc plated|Aluminium alloy|SS 304' && anonW.lug_options.every(o => o.pct === undefined) && anonW.wire_options[0] === 'SS 304');
       const admW = await get('/wri/data');
-      ok('wri: price viewers see the surcharge (Al +2 %, SS 304 +5 %)', admW.lug_options[1].pct === 2 && admW.lug_options[2].pct === 5);
+      ok('wri: price viewers see the surcharge (Al +2 %, SS 304 +5 %)', admW.lug_options[1].pct === 0 && admW.lug_options[2].pct === 2 && admW.lug_options[3].pct === 5);
       const w127 = admW.prices['AWRI-127-60'].price;
       const lq = await post('/portal/quote', { customer: { company: 'Lug Test Pvt Ltd', contact: 'Test Engineer', email: 'eng@lugtest.in', phone: '+91 98220 55443' }, items: [
         { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1 }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Aluminium alloy' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'SS 304', wire: 'SS 302' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Gold plated' }] });
@@ -110,7 +110,7 @@ const server = app.listen(0, async () => {
       ok('wri: lug and wire printed on the line', /Lugs: EN8D \+ Arkor treated · Wire rope: SS 304/.test(lqq[0].description) && /Lugs: SS 304 · Wire rope: SS 302/.test(lqq[2].description) && lqq[2].lug_pct === 5);
       await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; Aluminium alloy=3; SS 304=6' });
       ok('wri: surcharges follow the admin setting', (await get('/wri/data')).lug_options[2].pct === 6);
-      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; Aluminium alloy=2; SS 304=5' });
+      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5' });
     }
     console.log('\n— CSV database (admin) —');
     const tables = await get('/admin/csv');

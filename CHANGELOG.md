@@ -1,6 +1,6 @@
 # Changelog
 ## 2.9.1 — 26 Sep 2026 (wire rope isolator lug material)
-- The standard build is now **EN8D lugs, Arkor treated**, with SS 304 wire rope and normal duty.
+- The standard build is now **EN8D lugs, Arkor treated**, with SS 304 wire rope and normal duty. **EN8D + Zinc plated** lugs are also offered at list price.
 - Choices:
   - **Aluminium alloy lugs: +2 %** on the list price
   - **SS 304 lugs: +5 %**

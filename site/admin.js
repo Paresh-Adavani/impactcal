@@ -181,7 +181,7 @@ async function dampaTab() {
 async function wriOptsCard() {
   const box = $('#wriOpts'); if (!box || AUTH.user.role !== 'admin') return;
   const st = await api('admin/settings'); const sv = k => ((st.find(r => r.key === k) || {}).value || '');
-  const lugs = (sv('wri.lug_options') || 'EN8D + Arkor treated=0; Aluminium alloy=2; SS 304=5').split(/[;\n]+/).map(x => x.trim()).filter(Boolean).map(x => { const m = x.match(/^(.*?)\s*=\s*(-?[\d.]+)\s*%?$/); return m ? [m[1].trim(), m[2]] : [x, '0']; });
+  const lugs = (sv('wri.lug_options') || 'EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5').split(/[;\n]+/).map(x => x.trim()).filter(Boolean).map(x => { const m = x.match(/^(.*?)\s*=\s*(-?[\d.]+)\s*%?$/); return m ? [m[1].trim(), m[2]] : [x, '0']; });
   const draw = () => {
     box.innerHTML = `<div class="card"><h3>Wire rope isolator build options</h3><p class="hint">Lug materials offered in the wire rope selector, the Quote portal and on quotations. The <b>first line is the standard build</b> (no surcharge); the others add their % to the list price of the isolator (rounded up to Rs 50 / 100). Customers see the choices; only price viewers see the %.</p>
       <table class="kv">${lugs.map((l, i) => `<tr><td style="width:60px"><span class="pill ${i ? '' : 'ok'}">${i ? 'option' : 'standard'}</span></td><td><input data-ll="${i}" value="${esc(l[0])}"></td><td style="width:150px"><input data-lp="${i}" type="number" step="any" value="${esc(l[1])}" ${i ? '' : 'disabled'} style="width:80px"> %</td><td style="width:170px">${i ? `<button class="btn sm ghost" data-up="${i}">↑ make standard</button> <button class="btn sm ghost" data-rm="${i}">✕</button>` : ''}</td></tr>`).join('')}</table>
