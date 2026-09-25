@@ -329,6 +329,66 @@ const server = app.listen(0, async () => {
     const nd = await loginAs('sales@newtrade.co.in');
     const nda = await rq('POST', '/dealer/apply', { company: 'New Trade Links', contact: 'Priya Rao', addr1: 'MIDC Satpur', city: 'Nashik', phone: '+91 97654 32109', gstin: '27AAAPL1234C1Z5', territory: 'Nashik, Dhule', products: ['Crane buffers', 'Wire rope isolators'], source: 'dealer sign-up page' }, nd.token);
     ok('dealer page: application keeps territory and products', nda.ok && nda.dealer.territory === 'Nashik, Dhule' && nda.dealer.products === 'Crane buffers, Wire rope isolators');
+    {
+    // ---- dealer rules: standard policy at sign-up, every point confirmed, own rules per dealer, versioned
+    ok('policy: standard pricing policy e-mailed on first application (mail off -> attempted)', nda.policy_mail === false);
+    const pol0 = await get('/admin/dealers/sales@newtrade.co.in/policy');
+    ok('policy: 13 rules with standard values', pol0.rules.length === 13 && pol0.rules.find(r => r.k === 'discount_pct').value === 25 && pol0.rules.find(r => r.k === 'freight_rate').value === 35 && pol0.rules.find(r => r.k === 'territory').value === 'Nashik, Dhule');
+    const own = { discount_pct: 30, routes: 'resale', freight_rate: 40, special: 'Keeps 10 pcs AKHG 100-200 in stock at Nashik' };
+    const allRules = Object.fromEntries(pol0.rules.map(r => [r.k, own[r.k] !== undefined ? own[r.k] : r.value]));
+    const notAll = await fetch(base + '/admin/dealers/sales@newtrade.co.in/policy', { method: 'POST', headers: H(), body: JSON.stringify({ rules: allRules, confirmed: ['discount_pct'], approve: true }) });
+    ok('policy: refused until every point is ticked as agreed', notAll.status === 400);
+    const prev = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: allRules, preview: true });
+    ok('policy: preview shows his own values and the worked example', /30 %/.test(prev.html) && /Resale only/.test(prev.html) && /Keeps 10 pcs/.test(prev.html) && /Example/.test(prev.html) && !/Direct supply:/.test(prev.html));
+    const conf = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: allRules, confirmed: pol0.rules.map(r => r.k), approve: true, note: 'Welcome aboard' });
+    ok('policy: confirm + approve -> version 1, own rules stored, dealer approved', conf.ok && conf.dealer.status === 'approved' && conf.dealer.policy.version === 1 && JSON.stringify(Object.keys(conf.dealer.rules).sort()) === JSON.stringify(['discount_pct', 'freight_rate', 'routes', 'special']), Object.keys(conf.dealer.rules).join(','));
+    const nd2 = await loginAs('sales@newtrade.co.in');
+    const ndme = await rq('GET', '/dealer/me', null, nd2.token);
+    ok('policy: dealer sees his confirmed terms', ndme.policy.version === 1 && ndme.rules.find(r => r.k === 'discount_pct').value === 30);
+    const ndcat = await rq('GET', '/portal/catalogue', null, nd2.token), akhg = ndcat.find(c => c.model === 'AKHG 100-200');
+    const ndDirect = await rq('POST', '/portal/quote', { route: 'direct', customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, nd2.token);
+    ok('policy: "resale only" dealer cannot make a direct-supply quotation', ndDirect.status === 403);
+    const ndq = await rq('POST', '/portal/quote', { customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, nd2.token);
+    const ndg = await rq('GET', '/approve/' + ndq.quotation_id, null, nd2.token);
+    ok('policy: his own discount (30 %) and freight rate (Rs 40/kg) are used', ndg.billing.billing_discount_pct === 30 && ndg.billing.freight.rate === 40, `${ndg.billing.freight.kg_charged} kg x ${ndg.billing.freight.rate}`);
+    const rev = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: { ...allRules, discount_pct: 25 }, confirmed: pol0.rules.map(r => r.k) });
+    const polH = await get('/admin/dealers/sales@newtrade.co.in/policy');
+    ok('policy: revision -> version 2, back on the standard discount, history kept', rev.dealer.policy.version === 2 && !('discount_pct' in rev.dealer.rules) && polH.history.length === 2);
+
+    // ---- lead times: admin + settings leadtime.users update them; kept apart from the CSV
+    const shital = await loginAs('adonisatara@gmail.com'), krish = await loginAs('adonitechpune@gmail.com');
+    ok('lead times: sales person not in leadtime.users is refused', (await rq('GET', '/leadtimes', null, krish.token)).status === 403);
+    const ltl = await rq('GET', '/leadtimes', null, shital.token);
+    const lak = ltl.find && ltl.find(r => r.model === 'AKHG 100-200');
+    ok('lead times: Shital (leadtime.users) sees every product line', Array.isArray(ltl) && new Set(ltl.map(r => r.group)).size >= 5 && lak && lak.base_days > 0, ltl.length + ' lines');
+    ok('lead times: whole days only', (await rq('PUT', '/leadtimes', { changes: [{ table: 'shock_absorbers', key: lak.key, days: 4.5 }] }, shital.token)).status === 400);
+    const ltput = await rq('PUT', '/leadtimes', { changes: [{ table: 'shock_absorbers', key: lak.key, days: 63, note: 'seal kit from new supplier' }] }, shital.token);
+    const lcat = await rq('GET', '/portal/catalogue', null, TOKEN);
+    ok('lead times: new value live at once in the catalogue', ltput.ok && lcat.find(c => c.model === 'AKHG 100-200').lead_time_days === 63);
+    const lq = await rq('POST', '/portal/quote', { customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, nd2.token);
+    ok('lead times: and on new quotations', (await rq('GET', '/approve/' + lq.quotation_id, null, nd2.token)).quotation.items[0].lead_time_days === 63);
+    const ltl2 = await rq('GET', '/leadtimes', null, TOKEN);
+    ok('lead times: who and why are kept', ltl2.find(r => r.key === lak.key).override.by === 'adonisatara@gmail.com');
+    await rq('PUT', '/leadtimes', { changes: [{ table: 'shock_absorbers', key: lak.key, days: null }] }, shital.token);
+    ok('lead times: clearing returns to the database value', (await rq('GET', '/portal/catalogue', null, TOKEN)).find(c => c.model === 'AKHG 100-200').lead_time_days === lak.base_days);
+
+    // ---- customer master: sales make customers (-> CRM), quote without a selection
+    const cu1 = await rq('POST', '/customers', { company: 'Jindal Steel Works', contact: 'Rajesh Kulkarni', designation: 'Maintenance Head', email: 'rajesh.kulkarni@jindalsw.in', phone: '+91 98221 33445', gstin: '27AAACJ4323N1ZX', city: 'Dolvi', industry: 'Steel plant cranes' }, krish.token);
+    ok('customers: sales person creates a customer, numbered C-<FY>-0001', cu1.ok && /^C-\d{4}-0001$/.test(cu1.customer.id) && cu1.customer.state_code === '27', cu1.customer && cu1.customer.id);
+    ok('customers: pushed to the CRM (test has no UnitePro token -> reason recorded)', cu1.crm && cu1.crm.ok === false && /disabled|not configured/.test(cu1.crm.reason) && cu1.customer.crm && cu1.customer.crm.ok === false);
+    ok('customers: duplicate e-mail refused with the existing number', (await rq('POST', '/customers', { contact: 'R Kulkarni', email: 'Rajesh.Kulkarni@jindalsw.in', phone: '9000000000' }, krish.token)).status === 409);
+    ok('customers: whole sales team shares the list', (await rq('GET', '/customers?q=jindal', null, shital.token)).some(c => c.id === cu1.customer.id));
+    ok('customers: a dealer does not see ADONI TECH customers', !(await rq('GET', '/customers', null, nd2.token)).some(c => c.id === cu1.customer.id));
+    const dcu = await rq('POST', '/customers', { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, nd2.token);
+    ok('customers: dealer keeps his own list, never sent to the ADONI TECH CRM', dcu.ok && dcu.customer.id.startsWith(conf.dealer.code + '-C-') && dcu.crm === null);
+    const sq = await rq('POST', '/portal/quote', { customer_id: cu1.customer.id, project: { name: 'Crane 3 LT' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, krish.token);
+    const sqg = await rq('GET', '/approve/' + sq.quotation_id, null, krish.token);
+    ok('customers: sales quotation straight from the catalogue for a saved customer', sq.quotation && sq.customer_id === cu1.customer.id && sqg.quotation.customer.company === 'Jindal Steel Works' && sqg.quotation.customer.customer_id === cu1.customer.id && sqg.quotation.issuer.type === 'adoni', sq.quotation);
+    const sq2 = await rq('POST', '/portal/quote', { save_customer: true, customer: { company: 'Uttam Galva', contact: 'Sneha Pawar', email: 'sneha.pawar@uttamgalva.in', phone: '+91 97300 11223' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, krish.token);
+    ok('customers: a new customer typed on a quotation is saved to the list', sq2.customer_saved && (await rq('GET', '/customers?q=uttam', null, krish.token)).length === 1);
+    const sq3 = await rq('POST', '/portal/quote', { save_customer: true, customer: { company: 'Uttam Galva', contact: 'Sneha Pawar', email: 'sneha.pawar@uttamgalva.in', phone: '+91 97300 11223' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, krish.token);
+    ok('customers: typing the same customer again links him, no duplicate', !sq3.customer_saved && sq3.customer_id === sq2.customer_id && (await rq('GET', '/customers?q=uttam', null, krish.token)).length === 1);
+    }
     // ---- resale: packing & freight Rs 35/kg to the dealer's godown
     {
       const fq = await rq('GET', '/approve/' + pq.quotation_id, null, dlr.token), q0 = fq.quotation, b0 = fq.billing;

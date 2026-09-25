@@ -9,13 +9,43 @@ async function boot() {
   await bootCommon('nav_admin');
   const u = AUTH.user;
   if (!u || (u.role !== 'admin' && u.role !== 'sales')) { location.href = 'login.html?next=admin.html'; return; }
-  if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections', 'pricing'].includes(b.dataset.tab)) b.remove(); });
+  if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections', 'pricing', 'leadtimes'].includes(b.dataset.tab)) b.remove(); });
   $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show().catch(err); });
-  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing', 'dealers', 'dampa'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
+  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing', 'dealers', 'dampa', 'leadtimes'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
   await show();
 }
 const err = e => { V().insertAdjacentHTML('afterbegin', say('bad', esc(e.message))); };
-async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools, dealers: dealersTab, dampa: dampaTab })[TAB](); }
+async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools, dealers: dealersTab, dampa: dampaTab, leadtimes: leadTab })[TAB](); }
+
+/* ---------------- Lead times (admin + settings leadtime.users) ---------------- */
+let LT = null, LTG = '', LTQ = '';
+async function leadTab() {
+  try { LT = await api('leadtimes'); } catch (e) { V().innerHTML = `<div class="card">${say('bad', esc(e.message))}<p class="hint">Ask Paresh to add your e-mail to settings <b>leadtime.users</b>.</p></div>`; return; }
+  const groups = [...new Set(LT.map(r => r.group))];
+  V().innerHTML = `<div class="card"><h3>Lead times</h3><p class="hint">Days from a technically and commercially clear order. What you set here wins over the CSV database and shows at once in the selectors, quotations and the dealer portal — a later database upload or deploy does not overwrite it. Clear a box to go back to the database value. Every change is logged with your name.</p>
+    <div class="chips" id="ltG"><button data-g="" class="${!LTG ? 'on' : ''}">All</button>${groups.map(g => `<button data-g="${esc(g)}" class="${g === LTG ? 'on' : ''}">${esc(g)}</button>`).join('')}</div>
+    <div class="grid"><div><label>Search model or series</label><input id="ltQ" value="${esc(LTQ)}" placeholder="AKHG 100, AWRI-127, RCM-SS …"></div><div><label>Set all lines shown to (days)</label><div class="row"><input id="ltAll" type="number" min="0" style="max-width:110px"><button class="btn sm ghost" id="ltApply">Apply to shown</button></div></div><div><label>Reason (saved with the change)</label><input id="ltNote" placeholder="e.g. body tubes from new supplier, 5 weeks"></div></div>
+    <div class="row" style="margin-top:10px"><button class="btn" id="ltSave">Save changes</button><span id="ltOut" class="muted"></span></div></div>
+  <div class="card tbl-card"><div class="tw" style="max-height:620px;overflow:auto"><table><thead><tr><th>Model</th><th>Series</th><th class="n">Database</th><th class="n">Lead time (days)</th><th>Last set by</th></tr></thead><tbody id="ltBody"></tbody></table></div></div>`;
+  const draw = () => {
+    const q = LTQ.toLowerCase().replace(/[\s-]+/g, '');
+    const rows = LT.filter(r => (!LTG || r.group === LTG) && (!q || (r.model + r.series).toLowerCase().replace(/[\s-]+/g, '').includes(q)));
+    $('#ltBody').innerHTML = rows.slice(0, 800).map(r => `<tr data-t="${esc(r.table)}" data-k="${esc(r.key)}"><td><b>${esc(r.model)}</b></td><td>${esc(r.series)}</td><td class="n muted">${r.base_days ?? '—'}</td>
+      <td class="n"><input type="number" min="0" data-lt value="${r.override ? r.override.days : ''}" placeholder="${r.base_days ?? ''}" style="width:90px;text-align:right"></td>
+      <td><small class="muted">${r.override ? esc(r.override.by) + ' · ' + dt(r.override.at) + (r.override.note ? ' · ' + esc(r.override.note) : '') : 'database'}</small></td></tr>`).join('') + (rows.length > 800 ? `<tr><td colspan="5" class="muted">${rows.length - 800} more — narrow the search</td></tr>` : '');
+  };
+  draw();
+  $$('#ltG button').forEach(b => b.onclick = () => { LTG = b.dataset.g; $$('#ltG button').forEach(x => x.classList.toggle('on', x === b)); draw(); });
+  $('#ltQ').oninput = () => { LTQ = $('#ltQ').value; draw(); };
+  $('#ltApply').onclick = () => { const v = $('#ltAll').value; if (v === '') return; $$('#ltBody [data-lt]').forEach(i => { i.value = v; }); };
+  $('#ltSave').onclick = async () => {
+    const note = $('#ltNote').value.trim(), changes = [];
+    $$('#ltBody tr[data-k]').forEach(tr => { const r = LT.find(x => x.table === tr.dataset.t && x.key === tr.dataset.k); const v = tr.querySelector('[data-lt]').value;
+      const cur = r.override ? String(r.override.days) : ''; if (v !== cur) changes.push({ table: r.table, key: r.key, days: v === '' ? null : Number(v), note }); });
+    if (!changes.length) { $('#ltOut').textContent = 'Nothing changed.'; return; }
+    try { const r = await api('leadtimes', { method: 'PUT', body: { changes } }); $('#ltOut').textContent = `Saved ${r.changed} line(s).`; await leadTab(); } catch (e) { $('#ltOut').innerHTML = `<span style="color:#c0392b">${esc(e.message)}</span>`; }
+  };
+}
 
 /* ---------------- RFQ queue ---------------- */
 async function rfq() {
@@ -49,6 +79,27 @@ async function selections() {
 
 
 /* ---------------- dealers: approve once, then they quote in their own name ---------------- */
+/* one dealer's rules: standard or his own, every point ticked as confirmed, then the policy letter goes out */
+async function termsPanel(email) {
+  const P = await api('admin/dealers/' + encodeURIComponent(email) + '/policy');
+  const d = P.dealer, approving = d.status !== 'approved';
+  const inp = r => r.type === 'select' ? `<select data-r="${r.k}">${Object.entries(r.options).map(([k, v]) => `<option value="${k}" ${k === r.value ? 'selected' : ''}>${esc(v)}</option>`).join('')}</select>`
+    : r.type === 'number' ? `<input data-r="${r.k}" type="number" step="any" value="${esc(String(r.value))}" style="max-width:120px"> <small class="muted">${esc(r.unit)}</small>`
+    : `<textarea data-r="${r.k}" rows="${String(r.value).length > 90 ? 3 : 1}">${esc(String(r.value))}</textarea>`;
+  $('#termsPanel').innerHTML = `<div class="card" style="border:2px solid var(--orange,#F57C00)"><div class="spread"><h3>Terms for ${esc(d.company)} ${d.code ? `<span class="pill">${esc(d.code)}</span>` : ''}</h3><button class="btn sm ghost" id="tpClose">Close</button></div>
+    <p class="hint">Go through each point with the dealer. Leave the standard value or change it for this dealer only, tick <b>agreed</b>, then confirm — the dealer receives the policy letter by e-mail (copy to ADONI TECH) and it is kept as version ${(P.policy ? P.policy.version : 0) + 1}. Standard values are in Settings (dealer.*).</p>
+    <table class="kv">${P.rules.map(r => `<tr><td style="width:30%"><b>${esc(r.label)}</b><br><small class="muted">standard: ${esc(r.type === 'select' ? r.options[r.standard] : String(r.standard) + (r.type === 'number' ? ' ' + r.unit : ''))}</small></td><td>${inp(r)}</td><td style="width:90px"><label style="display:flex;gap:6px;align-items:center;font-weight:400"><input type="checkbox" data-ok="${r.k}" style="width:auto"> agreed</label></td></tr>`).join('')}</table>
+    <div class="grid" style="margin-top:8px"><div><label>Note printed in the letter (optional)</label><input id="tpNote"></div>${approving ? `<div><label>Dealer code</label><input id="tpCode" value="${esc(d.code || '')}" placeholder="auto"></div>` : ''}</div>
+    <div class="row" style="margin-top:10px"><button class="btn sm ghost" id="tpAll">Tick all</button><button class="btn sm ghost" id="tpPrev">Preview e-mail</button><button class="btn sm" id="tpGo">${approving ? 'Confirm terms, approve &amp; e-mail' : 'Confirm &amp; e-mail revised terms'}</button><span id="tpOut" class="muted"></span></div>
+    ${P.history.length ? `<p class="hint" style="margin-top:10px">History: ${P.history.map(h => `v${h.version} ${dt(h.confirmed_at)} by ${esc(h.confirmed_by || '')}${h.mail_ok ? ' · mailed' : ''}${h.own.length ? ' · own: ' + esc(h.own.join(', ')) : ''}`).join(' | ')}</p>` : ''}
+    <div id="tpPreview"></div></div>`;
+  $('#termsPanel').scrollIntoView({ behavior: 'smooth' });
+  const read = () => { const rules = {}, confirmed = []; $$('[data-r]').forEach(i => { rules[i.dataset.r] = i.value; }); $$('[data-ok]').forEach(c => { if (c.checked) confirmed.push(c.dataset.ok); }); return { rules, confirmed, note: $('#tpNote').value.trim(), code: $('#tpCode') ? $('#tpCode').value.trim() : undefined }; };
+  $('#tpClose').onclick = () => { $('#termsPanel').innerHTML = ''; };
+  $('#tpAll').onclick = () => $$('[data-ok]').forEach(c => { c.checked = true; });
+  $('#tpPrev').onclick = async () => { const r = await api('admin/dealers/' + encodeURIComponent(email) + '/policy', { method: 'POST', body: { ...read(), preview: true } }); $('#tpPreview').innerHTML = `<iframe style="width:100%;height:640px;border:1px solid var(--line);border-radius:8px;margin-top:10px;background:#fff" sandbox></iframe>`; $('#tpPreview iframe').srcdoc = r.html; };
+  $('#tpGo').onclick = async () => { try { const r = await api('admin/dealers/' + encodeURIComponent(email) + '/policy', { method: 'POST', body: { ...read(), approve: approving } }); alert(`Terms version ${r.dealer.policy.version} confirmed${approving ? ', dealer approved as ' + r.dealer.code : ''}. ${r.mail ? 'The policy letter has been e-mailed.' : 'E-mail not sent: ' + (r.reason || 'mail not configured')}`); show(); } catch (e) { $('#tpOut').innerHTML = `<span style="color:#c0392b">${esc(e.message)}</span>`; } };
+}
 async function dealersTab() {
   const [rows, st, com] = await Promise.all([api('admin/dealers'), api('admin/settings'), api('admin/commissions').catch(() => ({ states: [], rows: [] }))]);
   const sv = k => ((st.find(r => r.key === k) || {}).value || '');
@@ -64,12 +115,14 @@ async function dealersTab() {
     <div class="grid"><div><label>Standard dealer discount %</label><input id="tDisc" type="number" step="any" value="${esc(sv('dealer.discount_pct') || '25')}"></div><div><label>Max discount a dealer may give below list %</label><input id="tMax" type="number" step="any" value="${esc(sv('dealer.max_discount_pct') || '25')}"></div><div><label>Packing &amp; freight Rs per kg</label><input id="tFr" type="number" step="any" value="${esc(sv('freight.rate_per_kg') || '35')}"></div></div>
     <div class="row" style="margin-top:10px"><button class="btn sm" id="tSave">Save terms</button><span id="tSaved" class="muted"></span></div></div>
   <p class="hint">A dealer applies from the dealer sign-up page or the Quote portal after signing in (company, address, GSTIN, bank). Approve once: he then sees list prices, quotes his customers in his own name (cc you), may discount up to his limit or add markup, and you bill him at list − his dealer discount. Deeper discounts come to you as special-price requests. Each dealer gets his own terms at approval — e.g. a different structure for overseas dealers. Leave the % fields empty to use the standard values in Settings (dealer.discount_pct / dealer.max_discount_pct).</p>
-  <div class="card tbl-card"><div class="tw"><table><thead><tr><th>Dealer</th><th>Contact</th><th>GSTIN</th><th>Status</th><th>Code</th><th>Billing disc %</th><th>Max disc %</th><th></th></tr></thead><tbody>
+  <div class="card tbl-card"><div class="tw"><table><thead><tr><th>Dealer</th><th>Contact</th><th>GSTIN</th><th>Status</th><th>Code</th><th>Billing disc %</th><th>Max disc %</th><th>Terms</th><th></th></tr></thead><tbody>
   ${rows.map(d => `<tr data-e="${esc(d.email)}"><td><b>${esc(d.company)}</b>${d.logo ? ' <span class="pill ok">logo</span>' : ''}${d.country && d.country !== 'India' ? ' <span class="pill brand">overseas</span>' : ''}<br><small class="muted">${esc([d.addr1, d.city, d.state_name, d.country].filter(Boolean).join(', '))}</small>${d.territory || d.business_type || d.products ? `<br><small><b>Covers:</b> ${esc(d.territory || '—')}${d.business_type ? ' · ' + esc(d.business_type) : ''}${d.years ? ' · ' + esc(d.years) + ' yrs' : ''}${d.products ? '<br><b>Wants:</b> ' + esc(d.products) : ''}${d.industries ? ' · ' + esc(d.industries) : ''}</small>` : ''}${d.message ? `<br><small class="muted">“${esc(d.message)}”</small>` : ''}</td><td>${esc(d.contact || '')}<br><small class="muted">${esc(d.email)} · ${esc(d.phone || '')}</small></td>
     <td class="mono">${esc(d.gstin || '—')}${d.gstin && d.gstin_ok !== '1' ? `<br><small class="lim" style="color:#c0392b">${esc(d.gstin_warning || 'check')}</small>` : ''}</td><td>${pill(d.status)}<br><small class="muted">${dt(d.approved_at || d.applied_at)}</small></td>
     <td><input data-f="code" value="${esc(d.code || '')}" style="width:80px" placeholder="auto"></td><td><input data-f="discount_pct" type="number" step="any" value="${d.discount_pct ?? ''}" placeholder="${d.terms.discount_pct}" style="width:70px"></td><td><input data-f="max_discount_pct" type="number" step="any" value="${d.max_discount_pct ?? ''}" placeholder="${d.terms.max_discount_pct}" style="width:70px"></td>
-    <td class="row">${d.status !== 'approved' ? '<button class="btn sm" data-d="approve">Approve</button>' : '<button class="btn sm ghost" data-d="save">Save</button><button class="btn sm ghost" data-d="suspend">Suspend</button>'}${d.status === 'pending' ? '<button class="btn sm ghost" data-d="reject">Reject</button>' : ''}</td></tr>`).join('') || '<tr><td colspan="8" class="muted">No dealer applications yet. Send dealers the link to the Quote portal (portal.html).</td></tr>'}
+    <td>${d.policy ? `<span class="pill ${d.policy.mail_ok ? 'ok' : 'brand'}">v${d.policy.version}</span><br><small class="muted">${dt(d.policy.confirmed_at)}${d.policy.mail_ok ? ' · mailed' : d.policy.sent_at ? ' · mail failed' : ''}</small>` : '<span class="pill bad">not confirmed</span>'}${d.rules && Object.keys(d.rules).length ? `<br><small>own: ${esc(Object.keys(d.rules).join(', '))}</small>` : ''}</td>
+    <td class="row"><button class="btn sm ${d.status !== 'approved' ? '' : 'ghost'}" data-terms>${d.status !== 'approved' ? 'Terms &amp; approve' : 'Terms'}</button>${d.status !== 'approved' ? '' : '<button class="btn sm ghost" data-d="save">Save</button><button class="btn sm ghost" data-d="suspend">Suspend</button>'}${d.status === 'pending' ? '<button class="btn sm ghost" data-d="reject">Reject</button>' : ''}</td></tr>`).join('') || '<tr><td colspan="9" class="muted">No dealer applications yet. Send dealers the link to the Quote portal (portal.html).</td></tr>'}
   </tbody></table></div></div>
+  <div id="termsPanel"></div>
   <div class="card tbl-card"><div class="spread" style="padding:12px 14px 0"><h3>Commission register — direct supply</h3><span class="muted">${com.rows.length} quotation(s) · due ${com.rows.filter(r => ['customer_paid', 'invoice_received'].includes(r.status)).reduce((a, r) => a + (r.commission || 0), 0).toLocaleString('en-IN')} INR</span></div>
   <div class="tw"><table><thead><tr><th>Quotation</th><th>Channel partner</th><th>Customer</th><th class="n">Customer value</th><th class="n">Commission</th><th class="n">ADONI net</th><th>Status</th><th></th></tr></thead><tbody>
   ${com.rows.map(r => `<tr data-q="${esc(r.id)}"><td class="mono"><a href="approve.html?id=${encodeURIComponent(r.id)}">${esc(r.number)}${r.rev ? ' R' + r.rev : ''}</a><br><small class="muted">${esc(r.date)}</small></td><td>${esc(r.dealer)} <span class="pill">${esc(r.dealer_code || '')}</span></td><td>${esc(r.customer || '')}</td>
@@ -78,6 +131,7 @@ async function dealersTab() {
     <td><button class="btn sm ghost" data-csave>Save</button></td></tr>`).join('') || '<tr><td colspan="8" class="muted">No direct-supply quotations yet. A dealer picks "Direct supply by ADONI TECH" when he creates a quotation in the Quote portal.</td></tr>'}
   </tbody></table></div></div>`;
   $('#tSave').onclick = async () => { await api('admin/settings', { method: 'PUT', body: { 'dealer.discount_pct': $('#tDisc').value, 'dealer.max_discount_pct': $('#tMax').value, 'freight.rate_per_kg': $('#tFr').value } }); $('#tSaved').textContent = 'Saved — applies to new quotations.'; };
+  $$('[data-terms]').forEach(b => b.onclick = () => termsPanel(b.closest('tr').dataset.e));
   $$('[data-csave]').forEach(b => b.onclick = async () => { const tr = b.closest('tr');
     try { await api('admin/commission/' + encodeURIComponent(tr.dataset.q), { method: 'PATCH', body: { status: tr.querySelector('[data-cs]').value, note: tr.querySelector('[data-cn]').value } }); show(); } catch (e) { alert(e.message); } });
   $('#dSave').onclick = async () => { const ga = $('#dGa').value.trim(); if (ga && !/^G-[A-Z0-9]{4,}$/i.test(ga)) { alert('Google Analytics ID looks like G-ABC123XYZ'); return; }

@@ -1,4 +1,20 @@
 # Changelog
+## 2.8.0 — 25 Sep 2026 (dealer rules, lead-time editor, customer master)
+- **Dealer rules database.** The pricing policy has 13 points: dealer discount, max discount, markup, ways to sell (resale / direct / both), resale terms, commission terms, Rs/kg freight, export, payment terms, price list, lead times, territory and other conditions.
+  - The commonly agreed standard values sit in settings (`dealer.*`). Any point can have the dealer's own value.
+  - Admin → Dealers → **Terms & approve / Terms**: every point must be ticked "agreed" before confirming. You can preview the e-mail first. On confirmation the dealer is approved (first time) and the **policy letter is e-mailed** (copy to ADONI TECH).
+  - Each confirmation is a new version, with its history kept.
+  - His own discount, freight rate and allowed routes are enforced on his quotations.
+- **At sign-up** the applicant receives the standard pricing policy by e-mail, marked as reference only; his confirmed terms follow on approval. The dealer sees his confirmed terms in the portal.
+- **Lead times editor** (Admin → Lead times) for admin and settings `leadtime.users` (Shital: adonisatara@gmail.com).
+  - Filter by product line or search, set one line or all shown lines, and give a reason.
+  - The value is live at once in the selectors, quotations and portal. It is stored apart from the CSV, so a deploy or CSV upload does not overwrite it. Clearing a value returns to the database figure.
+  - Every change is logged with name, time and reason.
+- **Customer master in the Quote portal** (tab Customers):
+  - Sales and admin share one ADONI TECH customer list (C-<FY>-0001 …). A new customer is pushed to UnitePro as a lead at once; the CRM status is shown and can be retried.
+  - Duplicates (same GSTIN, e-mail or phone) are refused with the existing number.
+  - **Quote** on a customer opens a catalogue quotation for him — no selection needed. On a new quotation you pick a saved customer, or a typed-in one is saved automatically.
+  - A dealer keeps his own private list, which is never sent to the ADONI TECH CRM.
 ## 2.7.0 — 25 Sep 2026 (dealer routes, commission, packing & freight)
 - **Two ways for a dealer to sell**, chosen when he creates a quotation in the Quote portal:
   - **Resale** (as before): quotation in the dealer's name; ADONI TECH bills him list − his dealer discount (default 25 %, per dealer in Admin → Dealers). He decides the discount or markup to his customer.

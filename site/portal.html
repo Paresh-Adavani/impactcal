@@ -18,7 +18,7 @@
 </head><body>
 <header><div class="wrap"></div></header>
 <div class="wrap">
-  <div class="tabs" id="tabs" hidden><button data-tab="newq" class="on">New quotation</button><button data-tab="mine">My quotations</button><button data-tab="profile" id="tabProfile" hidden>My dealer profile</button></div>
+  <div class="tabs" id="tabs" hidden><button data-tab="newq" class="on">New quotation</button><button data-tab="customers">Customers</button><button data-tab="mine">My quotations</button><button data-tab="profile" id="tabProfile" hidden>My dealer profile</button></div>
   <div id="view"><div class="card">Loading…</div></div>
 </div>
 <script src="common.js?v=6"></script>
@@ -26,7 +26,8 @@
 'use strict';
 const V = () => $('#view');
 const note = (cls, m) => `<div class="note ${cls}">${m}</div>`;
-let TAB = 'newq', CAT = null, LINES = [], GROUP = '', ME = null;
+let TAB = 'newq', CAT = null, LINES = [], GROUP = '', ME = null, CUST = null;   // CUST = the saved customer picked for the next quotation
+const CFIELDS = [['company', 'Company'], ['contact', 'Contact person', 1], ['designation', 'Designation'], ['email', 'E-mail', 1], ['phone', 'Phone', 1], ['alt_phone', 'Alternate phone'], ['gstin', 'GSTIN'], ['addr1', 'Address line 1'], ['addr2', 'Address line 2'], ['city', 'City'], ['pincode', 'PIN code'], ['country', 'Country'], ['industry', 'Industry / application'], ['notes', 'Notes (internal)']];
 const PROFILE = [
   ['company', 'Company / firm name', 1], ['contact', 'Contact person', 1], ['phone', 'Phone', 1], ['gstin', 'GSTIN (India)', 0],
   ['addr1', 'Address line 1', 1], ['addr2', 'Address line 2', 0], ['city', 'City', 1], ['pincode', 'PIN code', 0], ['country', 'Country', 0],
@@ -48,10 +49,10 @@ async function boot() {
   $('#tabs').hidden = false;
   if (u.role === 'dealer') $('#tabProfile').hidden = false;
   $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show(); });
-  const h = (location.hash || '').slice(1); if (['newq', 'mine', 'profile'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
+  const h = (location.hash || '').slice(1); if (['newq', 'mine', 'profile', 'customers'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
   show();
 }
-function show() { ({ newq, mine, profile })[TAB]().catch(e => V().innerHTML = note('bad', esc(e.message))); }
+function show() { ({ newq, mine, profile, customers: customersTab })[TAB]().catch(e => V().innerHTML = note('bad', esc(e.message))); }
 
 /* ---------------- a customer login: apply to become a dealer ---------------- */
 async function dealerOnboarding() {
@@ -102,7 +103,7 @@ async function newq() {
   const TERMS = u.role === 'dealer' ? await api('dealer/me').then(m => m.terms || {}).catch(() => ({})) : {};
   V().innerHTML = `
   <div class="card"><h3>Quote from the catalogue</h3>
-    <p class="hint">Pick products and quantities, enter your customer, and a draft quotation opens in ${u.role === 'dealer' ? 'your name' : 'ADONI TECH\'s name'} at list price. You set the discount${u.role === 'dealer' ? ' or your markup' : ''} on the next screen, check the PDF and send it. Need an engineering selection first? Use a selector instead — when you are signed in, a request from a selector also becomes your draft quotation:</p>
+    <p class="hint">Pick products and quantities, pick a saved customer (or enter a new one — he is saved for next time), and a draft quotation opens in ${u.role === 'dealer' ? 'your name' : 'ADONI TECH\'s name'} at list price. You set the discount${u.role === 'dealer' ? ' or your markup' : ''} on the next screen, check the PDF and send it. Need an engineering selection first? Use a selector instead — when you are signed in, a request from a selector also becomes your draft quotation:</p>
     <div class="ways"><a href="selector.html"><b>Shock absorbers &amp; crane buffers</b><br><small class="muted">impact calculation</small></a><a href="wri/"><b>Wire rope isolators</b><br><small class="muted">shock &amp; vibration</small></a><a href="rubber.html"><b>Anti-vibration mounts</b><br><small class="muted">machine isolation</small></a></div>
   </div>
   <div class="card"><div class="spread"><h3>1 · Products</h3><input id="q" placeholder="Search model, series or size — e.g. AC-42, AKHG 100, AWRI-127" style="max-width:360px"></div>
@@ -110,10 +111,12 @@ async function newq() {
     <div class="cat" id="cat"></div>
     <h4 style="margin:14px 0 6px">In this quotation</h4><div class="tw"><table class="lines"><thead><tr><th>Model</th><th>Qty</th><th class="n">List ₹ each</th><th class="n">Line ₹</th><th>Remark</th><th></th></tr></thead><tbody id="lines"></tbody></table></div>
     <p class="hint">List prices in INR. Customers outside India are quoted in USD at the day's rate with the export uplift; GST is worked out from the customer's GSTIN.</p></div>
-  <div class="card"><h3>2 · Customer</h3>
+  <div class="card"><div class="spread"><h3>2 · Customer</h3><span id="custPicked"></span></div>
+    <div style="position:relative;margin-bottom:10px"><label>Pick a saved customer</label><input id="cSearch" placeholder="Type company, name, phone, GSTIN or customer no. …" autocomplete="off"><div id="cHits" class="cat" style="position:absolute;left:0;right:0;z-index:5;max-height:260px;display:none"></div></div>
     <div class="grid"><div><label>Company</label><input id="c_company"></div><div><label class="req">Contact person</label><input id="c_contact"></div><div><label class="req">E-mail</label><input id="c_email" type="email"></div><div><label class="req">Phone</label><input id="c_phone"></div>
       <div><label>Country</label><input id="c_country" value="India"></div><div><label>GSTIN</label><input id="c_gstin" placeholder="for GST / place of supply"></div><div><label>City</label><input id="c_city"></div>
       <div><label>Project / enquiry name</label><input id="p_name"></div><div><label>Customer reference</label><input id="p_ref"></div></div>
+    <label style="display:flex;gap:8px;align-items:center;margin-top:8px;font-weight:400" id="saveWrap"><input type="checkbox" id="saveCust" checked style="width:auto"> Save this customer to ${u.role === 'dealer' ? 'my customer list' : 'the ADONI TECH customer list and send it to the CRM'}</label>
     <div style="margin-top:8px"><label>Internal note (not printed)</label><textarea id="msg" rows="2"></textarea></div>
     ${u.role === 'dealer' ? `<h3 style="margin-top:16px">3 · How will the customer buy?</h3>
     <div class="routes">
@@ -125,6 +128,7 @@ async function newq() {
   $('#q').oninput = drawCat;
   drawCat(); drawLines();
   $('#make').onclick = make;
+  wireCustomerPick();
   $$('.route input').forEach(r => r.onchange = () => $$('.route').forEach(l => l.classList.toggle('on', l.querySelector('input').checked)));
 }
 function drawCat() {
@@ -145,16 +149,67 @@ function drawLines() {
 async function make() {
   const out = $('#out');
   if (!LINES.length) { out.innerHTML = note('bad', 'Add at least one product.'); return; }
+  if (CUST && CUST.dirty) CUST = null;   // edited after picking: treat as typed
   const customer = { company: $('#c_company').value.trim(), contact: $('#c_contact').value.trim(), email: $('#c_email').value.trim(), phone: $('#c_phone').value.trim(), country: $('#c_country').value.trim() || 'India', gstin: $('#c_gstin').value.trim(), city: $('#c_city').value.trim() };
   if (!customer.contact || !customer.email || !customer.phone) { out.innerHTML = note('bad', 'Customer contact person, e-mail and phone are required.'); return; }
   $('#make').disabled = true; $('#make').textContent = 'Creating…';
   try {
-    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark })), route: ($('.route input:checked') || {}).value || 'resale' } });
+    const r = await api('portal/quote', { method: 'POST', body: { customer, project: { name: $('#p_name').value.trim() || 'Enquiry', reference: $('#p_ref').value.trim() }, message: $('#msg').value, items: LINES.map(l => ({ table: l.table, key: l.key, qty: l.qty, remark: l.remark })), route: ($('.route input:checked') || {}).value || 'resale',
+      customer_id: CUST ? CUST.id : undefined, save_customer: !CUST && $('#saveCust').checked } });
+    CUST = null;
     if (!r.quotation_id) throw new Error('The request was saved as ' + r.number + ' but the draft could not be made. ADONI TECH has been alerted.');
     LINES = [];
     out.innerHTML = note('ok', `Draft <b>${esc(r.quotation)}</b> created — opening it…`);
     setTimeout(() => { location.href = 'approve.html?id=' + encodeURIComponent(r.quotation_id); }, 900);
   } catch (e) { out.innerHTML = note('bad', esc(e.message)); $('#make').disabled = false; $('#make').textContent = 'Create draft quotation →'; }
+}
+
+/* ---------------- saved customers ---------------- */
+const CMAP = { company: 'c_company', contact: 'c_contact', email: 'c_email', phone: 'c_phone', country: 'c_country', gstin: 'c_gstin', city: 'c_city' };
+function fillCustomer(c) {
+  CUST = c ? { id: c.id } : null;
+  for (const [k, id] of Object.entries(CMAP)) { const i = $('#' + id); if (i) i.value = c ? (c[k] || (k === 'country' ? 'India' : '')) : (k === 'country' ? 'India' : ''); }
+  $('#custPicked').innerHTML = c ? `<span class="pill ok">${esc(c.id)}</span> <button class="btn sm ghost" id="custClear">Clear</button>` : '';
+  $('#saveWrap').style.display = c ? 'none' : '';
+  if (c) $('#custClear').onclick = () => fillCustomer(null);
+}
+function wireCustomerPick() {
+  let t = null;
+  const hits = $('#cHits');
+  $('#cSearch').oninput = () => { clearTimeout(t); const q = $('#cSearch').value.trim(); if (q.length < 2) { hits.style.display = 'none'; return; }
+    t = setTimeout(async () => { const rows = await api('customers?q=' + encodeURIComponent(q)).catch(() => []);
+      hits.innerHTML = rows.slice(0, 20).map(c => `<div class="it" data-c="${esc(c.id)}" style="cursor:pointer"><div><b>${esc(c.company || c.contact)}</b> <span class="pill">${esc(c.id)}</span><small>${esc([c.contact, c.city, c.phone, c.gstin].filter(Boolean).join(' · '))}</small></div><div></div><div></div></div>`).join('') || '<div class="it muted">No saved customer matches — fill in the fields below; the customer is saved with the quotation.</div>';
+      hits.style.display = 'block';
+      $$('#cHits [data-c]').forEach(el => el.onclick = () => { const c = rows.find(x => x.id === el.dataset.c); fillCustomer(c); hits.style.display = 'none'; $('#cSearch').value = ''; });
+    }, 250); };
+  Object.values(CMAP).forEach(id => { const i = $('#' + id); if (i) i.addEventListener('input', () => { if (CUST) CUST.dirty = true; }); });
+  if (window.__presetCustomer) { fillCustomer(window.__presetCustomer); window.__presetCustomer = null; }
+}
+async function customersTab(q = '') {
+  const u = AUTH.user, adoni = u.role !== 'dealer';
+  const rows = await api('customers' + (q ? '?q=' + encodeURIComponent(q) : ''));
+  V().innerHTML = `<div class="card"><div class="spread"><h3>${adoni ? 'ADONI TECH customers' : 'My customers'}</h3><button class="btn sm" id="cNew">+ New customer</button></div>
+    <p class="hint">${adoni ? 'One list for the whole sales team. A new customer is sent to the CRM (UnitePro) as a lead straight away. Use <b>Quote</b> to make a quotation for him from the catalogue — no selection needed.' : 'Your own customer list — only you see it. Use <b>Quote</b> to make a quotation for him from the catalogue.'}</p>
+    <input id="cQ" value="${esc(q)}" placeholder="Search company, name, phone, GSTIN, city or customer no." style="max-width:420px"><div id="cForm"></div></div>
+  <div class="card tbl-card"><div class="tw"><table><thead><tr><th>No.</th><th>Customer</th><th>Contact</th><th>City / GSTIN</th>${adoni ? '<th>CRM</th>' : ''}<th></th></tr></thead><tbody>
+  ${rows.map(c => `<tr data-id="${esc(c.id)}"><td class="mono">${esc(c.id)}</td><td><b>${esc(c.company || '—')}</b>${c.industry ? `<br><small class="muted">${esc(c.industry)}</small>` : ''}</td><td>${esc(c.contact || '')}${c.designation ? ' · ' + esc(c.designation) : ''}<br><small class="muted">${esc([c.email, c.phone].filter(Boolean).join(' · '))}</small></td>
+    <td>${esc(c.city || '')}${c.gstin ? `<br><small class="mono">${esc(c.gstin)}</small>${c.gstin_warning ? ` <small style="color:#c0392b">${esc(c.gstin_warning)}</small>` : ''}` : ''}</td>
+    ${adoni ? `<td>${c.crm ? (c.crm.ok ? '<span class="pill ok">sent</span>' : `<span class="pill bad" title="${esc(c.crm.reason || c.crm.status || '')}">not sent</span> <button class="btn sm ghost" data-crm>Retry</button>`) : '<span class="muted">—</span>'}</td>` : ''}
+    <td class="row"><button class="btn sm" data-quote>Quote</button><button class="btn sm ghost" data-edit>Edit</button></td></tr>`).join('') || `<tr><td colspan="6" class="muted">${q ? 'Nothing matches.' : 'No customers yet — add the first one.'}</td></tr>`}</tbody></table></div></div>`;
+  let t = null; $('#cQ').oninput = () => { clearTimeout(t); t = setTimeout(() => customersTab($('#cQ').value.trim()).then(() => { const i = $('#cQ'); i.focus(); i.setSelectionRange(i.value.length, i.value.length); }), 350); };
+  const form = (c = {}) => {
+    $('#cForm').innerHTML = `<div class="card" style="margin-top:12px;box-shadow:none;border:1px solid var(--line)"><h3>${c.id ? 'Edit ' + esc(c.id) : 'New customer'}</h3><div class="grid">${CFIELDS.map(([k, l, req]) => `<div${k === 'notes' ? ' style="grid-column:1/-1"' : ''}><label class="${req ? 'req' : ''}">${l}</label>${k === 'notes' ? `<textarea data-k="${k}" rows="2">${esc(c[k] || '')}</textarea>` : `<input data-k="${k}" value="${esc(c[k] || (k === 'country' ? 'India' : ''))}">`}</div>`).join('')}</div>
+      <div class="row" style="margin-top:10px"><button class="btn" id="cSave">${c.id ? 'Save' : adoni ? 'Save & send to CRM' : 'Save'}</button><button class="btn ghost" id="cCancel">Cancel</button><span id="cOut"></span></div></div>`;
+    $('#cCancel').onclick = () => { $('#cForm').innerHTML = ''; };
+    $('#cSave').onclick = async () => { const b = {}; $$('#cForm [data-k]').forEach(i => { b[i.dataset.k] = i.value.trim(); });
+      try { const r = c.id ? await api('customers/' + encodeURIComponent(c.id), { method: 'PUT', body: b }) : await api('customers', { method: 'POST', body: b });
+        $('#cOut').innerHTML = note('ok', `Saved as <b>${esc(r.customer.id)}</b>${r.crm ? (r.crm.ok ? ' · sent to the CRM' : ' · CRM: ' + esc(r.crm.reason || 'not sent')) : ''}`); setTimeout(() => customersTab($('#cQ').value.trim()), 1100);
+      } catch (e) { $('#cOut').innerHTML = note('bad', esc(e.message)); } };
+  };
+  $('#cNew').onclick = () => form();
+  $$('[data-edit]').forEach(b => b.onclick = () => form(rows.find(c => c.id === b.closest('tr').dataset.id)));
+  $$('[data-crm]').forEach(b => b.onclick = async () => { try { const r = await api('customers/' + encodeURIComponent(b.closest('tr').dataset.id) + '/crm', { method: 'POST' }); alert(r.ok ? 'Sent to the CRM.' : 'Not sent: ' + (r.reason || r.status)); customersTab($('#cQ').value.trim()); } catch (e) { alert(e.message); } });
+  $$('[data-quote]').forEach(b => b.onclick = () => { window.__presetCustomer = rows.find(c => c.id === b.closest('tr').dataset.id); TAB = 'newq'; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === 'newq')); show(); });
 }
 
 /* ---------------- my quotations ---------------- */

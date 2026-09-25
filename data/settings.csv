@@ -78,6 +78,17 @@ office.pune.phone,,
 dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
 dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
 freight.rate_per_kg,35,"Packing & freight to the dealer's godown (resale) or the customer's site (direct supply), Rs per kg of estimated product weight. India only - export stays ex-works"
+dealer.markup,Free — as you decide,Dealer policy standard: markup rule
+dealer.routes,both,Dealer policy standard: both | resale | direct
+dealer.rule_resale,"Quotation in your own name, letterhead, GSTIN and bank. ADONI TECH invoices you at list price less your dealer discount, plus packing & freight to your godown and GST.",Dealer policy standard text
+dealer.rule_commission,"Quotation on ADONI TECH letterhead with you as channel partner. Your commission = your dealer discount less the discount you pass on, on your quoted price (list or marked-up), on the basic value (no GST, no freight). Paid after the customer has paid ADONI TECH in full, against your commission invoice; TDS as per law. Only on quotations you issue yourself.",Dealer policy standard text
+dealer.rule_export,"Ex-works Satara, quoted in USD at the day's exchange rate; freight and insurance by the buyer.",Dealer policy standard text
+dealer.payment_terms,"30% advance with PO, balance against proforma invoice before dispatch",Dealer policy standard: payment terms for dealer purchases
+dealer.rule_price_list,"ADONI TECH list prices as shown in your portal, revised from time to time; the list price on the date of your order applies.",Dealer policy standard text
+dealer.rule_lead_time,"As shown per product in the portal and on each quotation, from receipt of a technically and commercially clear order.",Dealer policy standard text
+dealer.rule_territory,Non-exclusive,Dealer policy standard territory (a dealer's own territory from his application is shown instead when he gave one)
+dealer.rule_special,,Dealer policy standard: other conditions
+leadtime.users,adonisatara@gmail.com,Who may update lead times in Admin -> Lead times besides admin (e-mails separated by ;)
 quote.terms_delivery_direct,"Door delivery to your site; packing & freight as per the quotation line. Lead time as stated per line, from receipt of technically & commercially clear PO",Delivery term printed on direct-supply quotations (ADONI TECH letterhead via a dealer)
 mail.dealer_cc,adonitech@gmail.com,Copied on every dealer quotation sent to a customer
 mail.dealer_from,,"Optional neutral sender address for dealer quotations (must be a verified ""Send mail as"" alias of SMTP_USER); blank = SMTP address. Dealers can also download the PDF and send it themselves."

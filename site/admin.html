@@ -4,12 +4,13 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=IBM+Plex+Mono&display=swap"><link rel="stylesheet" href="style.css?v=2">
 <style>.stat{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin-bottom:14px}.stat div{background:#fff;border:1px solid var(--line);border-radius:10px;padding:10px 12px}.stat b{display:block;font-size:22px;color:var(--navy)}.stat span{font-size:12px;color:var(--muted)}
 .tbl-card{padding:14px}.drop{border:2px dashed #C7CFD9;border-radius:10px;padding:14px;text-align:center;color:var(--muted);background:#FAFBFD}.drop.over{border-color:var(--orange);background:#FFF7EF}
-.sgrp h4{margin:16px 0 6px;color:var(--navy);font-size:14px;border-bottom:1px solid var(--line);padding-bottom:4px}.log{font-family:"IBM Plex Mono",monospace;font-size:12px;background:#1f2933;color:#d9e2ec;padding:10px;border-radius:8px;max-height:280px;overflow:auto;white-space:pre-wrap}</style>
+.sgrp h4{margin:16px 0 6px;color:var(--navy);font-size:14px;border-bottom:1px solid var(--line);padding-bottom:4px}.log{font-family:"IBM Plex Mono",monospace;font-size:12px;background:#1f2933;color:#d9e2ec;padding:10px;border-radius:8px;max-height:280px;overflow:auto;white-space:pre-wrap}
+.chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 12px}.chips button{border:1px solid var(--line);background:#fff;border-radius:18px;padding:5px 12px;cursor:pointer;font:inherit;font-size:13px}.chips button.on{background:var(--navy);color:#fff;border-color:var(--navy)}</style>
 </head><body>
 <header><div class="wrap"></div></header>
 <div class="wrap">
-  <div class="tabs" id="tabs"><button data-tab="rfq" class="on">RFQ queue</button><button data-tab="quotes">Quotations</button><button data-tab="selections">Report leads</button><button data-tab="dealers">Dealers</button><button data-tab="dampa">DAMPA AI</button><button data-tab="pricing">Pricing &amp; costing</button><button data-tab="db">CSV database</button><button data-tab="settings">Settings</button><button data-tab="drawings">Drawings &amp; Drive</button><button data-tab="users">Team &amp; activity</button><button data-tab="tools">Tools</button></div>
+  <div class="tabs" id="tabs"><button data-tab="rfq" class="on">RFQ queue</button><button data-tab="quotes">Quotations</button><button data-tab="selections">Report leads</button><button data-tab="dealers">Dealers</button><button data-tab="dampa">DAMPA AI</button><button data-tab="pricing">Pricing &amp; costing</button><button data-tab="leadtimes">Lead times</button><button data-tab="db">CSV database</button><button data-tab="settings">Settings</button><button data-tab="drawings">Drawings &amp; Drive</button><button data-tab="users">Team &amp; activity</button><button data-tab="tools">Tools</button></div>
   <div id="view"><div class="card">Loading…</div></div>
 </div>
-<script src="common.js?v=6"></script><script src="admin.js?v=8"></script>
+<script src="common.js?v=6"></script><script src="admin.js?v=9"></script>
 </body></html>
