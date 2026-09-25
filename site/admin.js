@@ -11,11 +11,11 @@ async function boot() {
   if (!u || (u.role !== 'admin' && u.role !== 'sales')) { location.href = 'login.html?next=admin.html'; return; }
   if (u.role === 'sales') $$('#tabs button').forEach(b => { if (!['rfq', 'quotes', 'selections', 'pricing'].includes(b.dataset.tab)) b.remove(); });
   $$('#tabs button').forEach(b => b.onclick = () => { TAB = b.dataset.tab; $$('#tabs button').forEach(x => x.classList.toggle('on', x === b)); show().catch(err); });
-  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing', 'dealers'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
+  const h = (location.hash || '').replace('#', ''); if (['selections', 'quotes', 'drawings', 'tools', 'db', 'settings', 'users', 'pricing', 'dealers', 'dampa'].includes(h)) { TAB = h; $$('#tabs button').forEach(x => x.classList.toggle('on', x.dataset.tab === h)); }
   await show();
 }
 const err = e => { V().insertAdjacentHTML('afterbegin', say('bad', esc(e.message))); };
-async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools, dealers: dealersTab })[TAB](); }
+async function show() { V().innerHTML = '<div class="card muted">Loading…</div>'; await ({ rfq, quotes, selections, pricing, db, settings, drawings, users, tools, dealers: dealersTab, dampa: dampaTab })[TAB](); }
 
 /* ---------------- RFQ queue ---------------- */
 async function rfq() {
@@ -76,6 +76,35 @@ async function dealersTab() {
       else { if (b.dataset.d !== 'approve' && !confirm(b.dataset.d + ' this dealer?')) return; const r = await api('admin/dealers/' + encodeURIComponent(email) + '/decide', { method: 'POST', body: { decision: b.dataset.d, ...f } }); if (b.dataset.d === 'approve') alert(`Approved as ${r.dealer.code}. ${r.mail ? 'The dealer has been e-mailed.' : 'The approval mail could not be sent — please tell him to sign in again.'}`); }
       show();
     } catch (e) { alert(e.message); }
+  });
+}
+
+/* ---------------- DAMPA AI assistant: conversations, files, usage ---------------- */
+async function dampaTab() {
+  const [d, st] = await Promise.all([api('admin/assistant'), api('admin/settings')]);
+  const sv = k => ((st.find(r => r.key === k) || {}).value || '');
+  const c = d.config, u = d.usage;
+  const status = c.enabled ? say('ok', `<b>${esc(c.name)}</b> is live on every page (model ${esc(c.model)}).`) : !c.key ? say('warn', `<b>${esc(c.name)}</b> is built but not connected: add the environment variable <b>ANTHROPIC_API_KEY</b> in Netlify (Site configuration → Environment variables), then redeploy. Until then only admin sees the chat button.`) : say('warn', `${esc(c.name)} is switched off in settings.`);
+  V().innerHTML = `${status}
+  <div class="stat"><div><b>$${(u.usd || 0).toFixed(2)}</b><span>API cost this month (cap $${c.monthly_usd})</span></div><div><b>${u.conversations || 0}</b><span>conversations this month</span></div><div><b>${u.messages || 0}</b><span>AI calls this month</span></div><div><b>${d.conversations.filter(x => x.rfq).length}</b><span>chats that became RFQs</span></div></div>
+  <div class="card"><h3>Settings</h3><div class="grid">
+    <div><label>Name</label><input id="aName" value="${esc(sv('assistant.name') || 'DAMPA')}"></div><div><label>Tagline</label><input id="aTag" value="${esc(sv('assistant.tagline'))}"></div>
+    <div><label>Model</label><select id="aModel">${['claude-sonnet-5', 'claude-haiku-4-5-20251001', 'claude-opus-5-5'].map(m => `<option ${m === c.model ? 'selected' : ''}>${m}</option>`).join('')}</select></div>
+    <div><label>Monthly cap (USD)</label><input id="aCap" type="number" value="${esc(sv('assistant.monthly_cap_usd') || 40)}"></div>
+    <div><label>Messages/day — visitor</label><input id="aVis" type="number" value="${esc(sv('assistant.daily_limit_visitor') || 25)}"></div><div><label>Messages/day — signed-in</label><input id="aUsr" type="number" value="${esc(sv('assistant.daily_limit_user') || 120)}"></div>
+    <div><label>On / off</label><select id="aOn"><option value="1" ${sv('assistant.enabled') !== '0' ? 'selected' : ''}>On</option><option value="0" ${sv('assistant.enabled') === '0' ? 'selected' : ''}>Off</option></select></div></div>
+    <div class="row" style="margin-top:8px"><button class="btn sm" id="aSave">Save</button><span id="aSaved" class="muted"></span></div>
+    <p class="hint">Sonnet 5 gives the best engineering answers (~US$0.01 per message). Haiku 4.5 costs about half and answers faster. At the cap ${esc(c.name)} pauses until next month and points visitors to the selectors and sales@adonitech.co.in.</p></div>
+  <div class="card tbl-card"><h3>Conversations</h3><div class="tw"><table><thead><tr><th>When</th><th>Who</th><th>Page</th><th>First message</th><th class="n">Turns</th><th class="n">Files</th><th>RFQ</th><th class="n">Cost $</th><th></th></tr></thead><tbody>
+    ${d.conversations.map(x => `<tr><td>${dt(x.updated_at || x.created_at)}</td><td><small>${esc(x.user || 'visitor')}</small></td><td><small>${esc(x.page || '')}</small></td><td>${esc(x.title || '')}</td><td class="n">${x.turns}</td><td class="n">${x.files || ''}</td><td class="mono">${esc(x.rfq || '')}</td><td class="n">${(x.usd || 0).toFixed(3)}</td><td><button class="btn sm ghost" data-cv="${esc(x.id)}">Open</button></td></tr>`).join('') || '<tr><td colspan="9" class="muted">No conversations yet.</td></tr>'}
+  </tbody></table></div></div><div id="cvOut"></div>`;
+  $('#aSave').onclick = async () => { await api('admin/settings', { method: 'PUT', body: { 'assistant.name': $('#aName').value.trim() || 'DAMPA', 'assistant.tagline': $('#aTag').value.trim(), 'assistant.model': $('#aModel').value, 'assistant.monthly_cap_usd': $('#aCap').value, 'assistant.daily_limit_visitor': $('#aVis').value, 'assistant.daily_limit_user': $('#aUsr').value, 'assistant.enabled': $('#aOn').value } }); $('#aSaved').textContent = 'Saved.'; };
+  $$('[data-cv]').forEach(b => b.onclick = async () => {
+    const cv = await api('admin/assistant/conv/' + encodeURIComponent(b.dataset.cv));
+    $('#cvOut').innerHTML = `<div class="card"><div class="spread"><h3>${esc(cv.user ? cv.user.email : 'Visitor')} · ${dt(cv.created_at)}</h3><span class="muted">${esc(cv.page || '')}${cv.rfq_number ? ' · RFQ ' + esc(cv.rfq_number) : ''}</span></div>
+      ${cv.files.length ? `<p><b>Files sent:</b> ${cv.files.map(f => `<a href="/api/admin/assistant/file?key=${encodeURIComponent(f.key)}&token=${encodeURIComponent(AUTH.token)}" target="_blank">${esc(f.name)}</a> <small class="muted">(${(f.bytes / 1024).toFixed(0)} kB)</small>`).join(' · ')}</p>` : ''}
+      <div class="log" style="max-height:520px">${cv.transcript.map(m => `<b>${m.role === 'user' ? 'USER' : m.role === 'tool' ? '  ⚙ tool' : esc(c.name)}:</b> ${esc(m.text)}`).join('\n\n')}</div></div>`;
+    $('#cvOut').scrollIntoView({ behavior: 'smooth' });
   });
 }
 

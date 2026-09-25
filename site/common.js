@@ -81,7 +81,9 @@ function renderHeader(active) {
   const lb = $('#logoutBtn'); if (lb) lb.onclick = () => AUTH.logout();
   applyI18n(el);
 }
+function loadDampa() { if (document.querySelector('script[data-dampa]')) return; const s = document.createElement('script'); s.src = '/dampa.js?v=1'; s.defer = true; s.dataset.dampa = '1'; document.head.appendChild(s); }
 async function bootCommon(active) {
+  if (active !== 'nav_login') loadDampa();
   await loadI18n();
   renderHeader(active);
   applyI18n();

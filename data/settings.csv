@@ -82,3 +82,10 @@ mail.dealer_from,,"Optional neutral sender address for dealer quotations (must b
 dealer.cities,,Cities where ADONI TECH is appointing dealers - shown on the dealer sign-up page (separate with ;)
 dealer.cities_note,Not in the list? We still want to hear from you - strong partners anywhere in India and abroad are welcome.,Line under the city list on the dealer page
 analytics.ga_id,,"Google Analytics 4 measurement ID (G-XXXXXXX) - when set, every page loads Google tag and dealer sign-ups are tracked as a conversion"
+assistant.enabled,1,1 = DAMPA chat on every page (needs ANTHROPIC_API_KEY in Netlify environment variables)
+assistant.name,DAMPA,Name of the AI assistant shown to users
+assistant.tagline,Your impact & vibration engineer,Line under the name
+assistant.model,claude-sonnet-5,"Claude model: claude-sonnet-5 (best), claude-haiku-4-5-20251001 (cheaper, faster), claude-opus-5-5 (deepest)"
+assistant.daily_limit_visitor,25,Messages per day for a website visitor who is not signed in
+assistant.daily_limit_user,120,Messages per day for a signed-in user
+assistant.monthly_cap_usd,40,DAMPA stops for the month when API usage reaches this many US dollars

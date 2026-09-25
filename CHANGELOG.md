@@ -1,4 +1,11 @@
 # Changelog
+## 2.5.0 — 25 Sep 2026 (DAMPA AI assistant)
+- **DAMPA** — "your impact & vibration engineer": a chat button on every page (home, selectors, WRI, rubber, dealer page, portal, admin). Customers and staff describe the application or attach photos, drawings, PDFs, Excel/CSV; DAMPA extracts the data, lists missing inputs, runs the real selection engines (crane buffers / shock absorbers, wire rope isolators, rubber mounts), explains the result in MKS units and offers an RFQ card that goes into the normal RFQ → quotation flow.
+- Runs on the Claude API (env var `ANTHROPIC_API_KEY`; model, name, daily message limits and a monthly USD cap in settings `assistant.*`). No prices for visitors; prices for sales / dealers / admin. Never names competitor brands.
+- Admin → **DAMPA AI**: usage and cost this month, settings, every conversation with transcript, the files people sent, and which chats became RFQs.
+- Wire rope isolator selection now also runs on the server (`lib/wri.js`, same method as the WRI page).
+- Rubber mounts without stiffness or natural-frequency data are no longer shown as passing.
+- Home page: "Meet DAMPA" banner (shown when DAMPA is live).
 ## 2.4.1 — 25 Sep 2026 (GA library upload)
 - Admin → Drawings → Whole folder: PDFs over 3 MB are sent in parts (no more 6 MB function limit), four files upload in parallel with one retry, folders starting with `_` (e.g. `_excluded`) are skipped, files already in the app are skipped unless "re-upload" is ticked.
 - A drawing too large for a download link (> 4 MB) is attached to the quotation mail instead.

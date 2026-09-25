@@ -11,7 +11,7 @@
   <a class="btn ghost" id="pdf" target="_blank" style="text-decoration:none">Preview PDF</a>
   <button class="btn ghost" id="self" hidden style="margin-left:auto">Download PDF &amp; send it myself</button><button class="btn" id="send">Send to customer</button>
 </div>
-<script src="common.js?v=5"></script>
+<script src="common.js?v=6"></script>
 <script>
 const P = new URLSearchParams(location.search), ID = P.get('id'), T = P.get('t');
 const hdr = () => T ? { 'x-approve-token': T } : {};

@@ -214,3 +214,6 @@ $('#pgstin').addEventListener('blur', async () => { const g = $('#pgstin').value
   $('#gstinMsg').innerHTML = v.ok ? `<div class="note ok">${t('gstin_ok')} — ${esc(v.state_name)} (${v.state_code}), PAN ${esc(v.pan)}</div>` : `<div class="note bad">${t('gstin_bad')}: ${esc(v.reason)}.` + (v.suggestions && v.suggestions.length ? ` ${t('did_you_mean')} <b>${esc(v.suggestions[0])}</b>?` : '') + `</div>`; });
 CASE = S.case || null;
 boot().catch(e => document.body.insertAdjacentHTML('afterbegin', `<div class="note bad">${esc(e.message)}</div>`));
+
+/* DAMPA (the AI assistant) reads what the user has entered on this page */
+window.IC_CONTEXT = () => { let d = null; try { d = CASE ? duty() : null; } catch {} return { group: GROUP, case_id: CASE, duty: d }; };

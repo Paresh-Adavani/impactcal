@@ -5,6 +5,7 @@ process.env.IMPACTCAL_STORE = fs.mkdtempSync(path.join(os.tmpdir(), 'impactcal-t
 process.env.IMPACTCAL_SECRET = 'test-secret';
 process.env.ADMIN_EMAILS = 'adonitech@gmail.com';
 process.env.PUBLIC_URL = 'http://test.local';
+process.env.ANTHROPIC_API_KEY = 'test-key';
 const { app } = require('../lib/app');
 const gst = require('../lib/gst');
 const csv = require('../lib/csv');
@@ -53,7 +54,9 @@ const server = app.listen(0, async () => {
     ok('114 AWRI models served', wri.awri.length === 114 && wri.prices_visible === false && Object.keys(wri.prices).length === 0);
     const rb = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 25, isolation_pct: 90 });
     ok('rubber: required fn from 90% isolation at 25 Hz is 7.54 Hz', near(rb.required.fn_req_hz, 25 / Math.sqrt(11)), rb.required.fn_req_hz.toFixed(2));
-    ok('rubber: candidates found', rb.count > 0 && rb.candidates.every(c => c.fn_hz <= rb.required.fn_req_hz * 1.02), rb.count + ' pass');
+    const rb2 = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 50, isolation_pct: 90 });
+    ok('rubber: 3000 rpm case finds mounts, all with a real natural frequency', rb2.count > 0 && rb2.candidates.every(c => c.fn_hz > 0 && c.fn_hz <= rb2.required.fn_req_hz * 1.02), rb2.count + ' pass');
+    ok('rubber: 1500 rpm / 90 % honestly finds none (needs fn <= 7.5 Hz)', rb.count === 0);
 
     console.log('\n— GSTIN —');
     ok('rejects the mistyped GSTIN', !(await get('/gstin/27AHAPAPA3555B1Z1')).ok);
@@ -334,6 +337,52 @@ const server = app.listen(0, async () => {
     ok('ga: missing part reported', /part 1 of 2 missing/.test(miss.error || ''), miss.error);
     const notpdf = await post('/admin/ga/chunk', { path: 'AC/Y.pdf', upload_id: 'testupload03', index: 0, total: 1, base64: Buffer.from('hello').toString('base64') });
     ok('ga: non-PDF refused', notpdf.error === 'not a PDF');
+
+    {
+    console.log('\n— DAMPA assistant (mock Claude API) —');
+    const http = require('http'); const seen = [];
+    const mock = http.createServer((q, r) => { let b = ''; q.on('data', c => b += c); q.on('end', () => {
+      const body = JSON.parse(b); seen.push(body); const last = body.messages[body.messages.length - 1];
+      const lastText = JSON.stringify(last.content);
+      let out;
+      if (/tool_result/.test(lastText) && /AWRI/.test(lastText)) out = { stop_reason: 'tool_use', content: [{ type: 'text', text: 'AWRI-127-90 passes all checks.' }, { type: 'tool_use', id: 't2', name: 'prepare_rfq', input: { line: 'wri', items: [{ model: 'AWRI-127-90', qty: 4 }], summary: { mass: '280 kg' } } }] };
+      else if (/tool_result/.test(lastText)) out = { stop_reason: 'end_turn', content: [{ type: 'text', text: 'Please confirm your contact details in the card.' }] };
+      else if (/280 kg/.test(lastText)) out = { stop_reason: 'tool_use', content: [{ type: 'tool_use', id: 't1', name: 'select_wire_rope_isolator', input: { mass_kg: 280, isolators: 4, standard: 'BR3021' } }] };
+      else out = { stop_reason: 'end_turn', content: [{ type: 'text', text: 'What is the mass of the equipment (kg)?' }] };
+      r.writeHead(200, { 'content-type': 'application/json' }); r.end(JSON.stringify({ ...out, usage: { input_tokens: 1000, output_tokens: 200 } })); }); });
+    await new Promise(r => mock.listen(0, r)); process.env.ANTHROPIC_BASE_URL = 'http://127.0.0.1:' + mock.address().port;
+    const acfg = await (await fetch(base + '/assistant/config')).json();
+    ok('dampa: config public, named DAMPA, enabled with key', acfg.enabled && acfg.name === 'DAMPA');
+    const dpng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const vis = (b) => fetch(base + '/assistant/chat', { method: 'POST', headers: { 'content-type': 'application/json', 'user-agent': 'dampa-test' }, body: JSON.stringify(b) }).then(async r => ({ status: r.status, ...(await r.json()) }));
+    const c1 = await vis({ text: 'I need isolators for a naval cabinet', page: 'index', files: [{ name: 'cabinet.png', type: 'image/png', base64: dpng }, { name: 'data.csv', type: 'text/csv', base64: Buffer.from('shock,50 g\nmounts,4').toString('base64') }] });
+    ok('dampa: first turn asks for the gap', c1.status === 200 && /mass/.test(c1.reply) && /^d[a-z0-9]+$/.test(c1.conversation_id), c1.reply);
+    const sent = seen[0].messages[0].content;
+    ok('dampa: photo sent as image, CSV as text, page context included', sent.some(b => b.type === 'image') && sent.some(b => b.type === 'text' && /50 g/.test(b.text)) && sent.some(b => /\[Page: index/.test(b.text || '')));
+    ok('dampa: system prompt hides prices from visitors, bans competitor names', /Do not state prices/.test(seen[0].system) && /Enidine/.test(seen[0].system));
+    const c2 = await vis({ conversation_id: c1.conversation_id, text: 'It is 280 kg on 4 mounts, BR 3021' });
+    ok('dampa: runs WRI selection tool, then offers RFQ card', c2.status === 200 && c2.tools.join() === 'select_wire_rope_isolator,prepare_rfq' && c2.rfq && c2.rfq.items[0].model === 'AWRI-127-90', c2.tools.join());
+    const toolRes = JSON.stringify(seen.find(b => /tool_result/.test(JSON.stringify(b.messages[b.messages.length - 1]))).messages.slice(-1));
+    ok('dampa: tool result carries real candidates, no price for visitor', /AWRI-127-90/.test(toolRes) && !/list_price_inr/.test(toolRes));
+    const rq2 = await post('/rfq', { line: 'wri', customer: { company: 'Bharat Naval Systems', contact: 'Arun Menon', email: 'arun.menon@bharatnaval.in', phone: '+91 98470 12345' }, items: [{ table: 'wire_rope_isolators', key: 'AWRI-127-90', model: 'AWRI-127-90', qty: 4 }], selection: { case_id: 'DAMPA', summary: { mass: '280 kg' } }, message: 'Prepared with DAMPA', assistant_conversation: c1.conversation_id }, { 'content-type': 'application/json' });
+    const al = await get('/admin/assistant');
+    const row = al.conversations.find(x => x.id === c1.conversation_id);
+    ok('dampa: admin sees conversation, files, cost and linked RFQ', row && row.files === 2 && row.rfq === rq2.number && al.usage.usd > 0, JSON.stringify(row));
+    const tv = await get('/admin/assistant/conv/' + c1.conversation_id);
+    ok('dampa: transcript + stored files', tv.transcript.some(m => m.role === 'tool' && /select_wire_rope_isolator/.test(m.text)) && tv.files.length === 2);
+    const fdl = await fetch(base + '/admin/assistant/file?key=' + encodeURIComponent(tv.files[0].key), { headers: H() });
+    ok('dampa: admin downloads the customer photo', fdl.status === 200 && (await fdl.arrayBuffer()).byteLength > 60);
+    ok('dampa: visitor cannot read the admin view', (await fetch(base + '/admin/assistant')).status === 401);
+    const other = await fetch(base + '/assistant/chat', { method: 'POST', headers: { 'content-type': 'application/json', 'user-agent': 'someone-else' }, body: JSON.stringify({ conversation_id: c1.conversation_id, text: 'hello' }) }).then(r => r.json());
+    ok('dampa: another visitor cannot continue that chat', other.conversation_id !== c1.conversation_id);
+    await put('/admin/settings', { 'assistant.daily_limit_visitor': '2' });
+    const lim = await vis({ text: 'one more' });
+    ok('dampa: daily visitor limit enforced', lim.status === 429 && /Daily limit/.test(lim.error), lim.error);
+    await put('/admin/settings', { 'assistant.enabled': '0' });
+    ok('dampa: switched off in settings', (await (await fetch(base + '/assistant/config')).json()).enabled === false);
+    await put('/admin/settings', { 'assistant.enabled': '1', 'assistant.daily_limit_visitor': '25' });
+    mock.close();
+    }
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);
   } catch (e) { console.error('\nERROR', e); fail++; }
   server.close(); fs.rmSync(process.env.IMPACTCAL_STORE, { recursive: true, force: true }); process.exit(fail ? 1 : 0);
