@@ -195,6 +195,7 @@
   async function init() {
     try { CFG = await api('assistant/config'); } catch { return; }
     const u = me();
+    if (CFG.held) return;   // on hold: hidden for everyone
     if (!CFG.enabled && !(u && u.role === 'admin')) return;
     if (!CFG.enabled) CFG.tagline = 'not connected yet — add ANTHROPIC_API_KEY';
     build();

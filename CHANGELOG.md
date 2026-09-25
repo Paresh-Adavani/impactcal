@@ -1,4 +1,7 @@
 # Changelog
+## 2.5.1 — 25 Sep 2026
+- DAMPA put on hold (settings `assistant.enabled` = 0): chat button and home banner hidden for everyone, including admin. Switch on later in Admin → DAMPA AI once the API key is set.
+
 ## 2.5.0 — 25 Sep 2026 (DAMPA AI assistant)
 - **DAMPA** — "your impact & vibration engineer": a chat button on every page (home, selectors, WRI, rubber, dealer page, portal, admin). Customers and staff describe the application or attach photos, drawings, PDFs, Excel/CSV; DAMPA extracts the data, lists missing inputs, runs the real selection engines (crane buffers / shock absorbers, wire rope isolators, rubber mounts), explains the result in MKS units and offers an RFQ card that goes into the normal RFQ → quotation flow.
 - Runs on the Claude API (env var `ANTHROPIC_API_KEY`; model, name, daily message limits and a monthly USD cap in settings `assistant.*`). No prices for visitors; prices for sales / dealers / admin. Never names competitor brands.

@@ -351,6 +351,9 @@ const server = app.listen(0, async () => {
       else out = { stop_reason: 'end_turn', content: [{ type: 'text', text: 'What is the mass of the equipment (kg)?' }] };
       r.writeHead(200, { 'content-type': 'application/json' }); r.end(JSON.stringify({ ...out, usage: { input_tokens: 1000, output_tokens: 200 } })); }); });
     await new Promise(r => mock.listen(0, r)); process.env.ANTHROPIC_BASE_URL = 'http://127.0.0.1:' + mock.address().port;
+    const held = await (await fetch(base + '/assistant/config')).json();
+    ok('dampa: on hold by default (hidden for everyone)', held.held === true && held.enabled === false);
+    await put('/admin/settings', { 'assistant.enabled': '1' });
     const acfg = await (await fetch(base + '/assistant/config')).json();
     ok('dampa: config public, named DAMPA, enabled with key', acfg.enabled && acfg.name === 'DAMPA');
     const dpng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
@@ -380,7 +383,7 @@ const server = app.listen(0, async () => {
     ok('dampa: daily visitor limit enforced', lim.status === 429 && /Daily limit/.test(lim.error), lim.error);
     await put('/admin/settings', { 'assistant.enabled': '0' });
     ok('dampa: switched off in settings', (await (await fetch(base + '/assistant/config')).json()).enabled === false);
-    await put('/admin/settings', { 'assistant.enabled': '1', 'assistant.daily_limit_visitor': '25' });
+    await put('/admin/settings', { 'assistant.enabled': '0', 'assistant.daily_limit_visitor': '25' });
     mock.close();
     }
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);
