@@ -14,10 +14,21 @@
     <div class="grid" style="margin-top:16px">
       <div><label data-t="f_mass">Supported mass <span class="muted">kg</span></label><input id="mass" type="number" step="any" inputmode="decimal" value="250"></div>
       <div><label data-t="f_mounts">Number of mounts</label><input id="mounts" type="number" min="1" value="4"></div>
-      <div><label data-t="f_rpm">Running speed <span class="muted">rpm</span></label><input id="rpm" type="number" step="any" value="1500"></div>
+      <div><label data-t="f_rpm">Running speed <span class="muted">rpm</span></label><input id="rpm" type="number" step="any" value="1500" placeholder="empty = bump only"></div>
       <div><label data-t="f_iso">Isolation wanted <span class="muted">%</span></label><select id="iso"><option>80</option><option>85</option><option selected>90</option><option>95</option></select></div>
       <div><label data-t="f_cg">CG load factor <span class="muted">1.0 = central</span></label><input id="cg" type="number" step="0.05" value="1.0"></div>
     </div>
+    <details id="shockBox" style="margin-top:18px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff">
+      <summary style="cursor:pointer;font-weight:600;color:var(--navy)"><span data-t="bump_title">Shock / bump check</span> <span class="muted" style="font-weight:400" data-t="bump_opt">(optional — transport, road or ship bumps, drops, test standards)</span></summary>
+      <p class="hint" data-t="bump_hint">Enter the bump the equipment must survive and how much it can take. The selector runs the pulse through every mount and shows the g reaching the equipment and the travel needed. Leave the running speed empty to select for the bump alone.</p>
+      <div class="grid">
+        <div><label data-t="f_bump_g">Bump peak <span class="muted">g</span></label><input id="bg" type="number" step="any" placeholder="e.g. 15"></div>
+        <div><label data-t="f_bump_ms">Pulse duration <span class="muted">ms</span></label><input id="bms" type="number" step="any" placeholder="e.g. 11"></div>
+        <div><label data-t="f_bump_shape">Pulse shape</label><select id="bshape"><option value="half-sine">Half-sine</option><option value="rect">Rectangular</option><option value="sawtooth">Terminal-peak sawtooth</option></select></div>
+        <div><label data-t="f_bump_frag">Equipment can take <span class="muted">g (fragility)</span></label><input id="bfrag" type="number" step="any" placeholder="e.g. 10"></div>
+        <div><label data-t="f_bump_sway">Free travel around it <span class="muted">mm</span></label><input id="bsway" type="number" step="any" placeholder="e.g. 25"></div>
+      </div>
+    </details>
     <h3 style="margin-top:18px" data-t="mount_type_title">Mount type</h3>
     <p class="hint" data-t="mount_type_hint">Optional — tick the mount types you would accept. Leave all unticked to search every type. Hover a picture for the description.</p>
     <div class="picker" id="mountTypes"></div>
@@ -39,7 +50,7 @@
   </section>
   <section class="card hidden" id="res">
     <div class="spread"><h3 data-t="results_title">Selection</h3><div id="reqOut"></div></div>
-    <div class="tw"><table id="tbl"><thead><tr><th></th><th data-t="th_model">Model</th><th data-t="th_type">Type</th><th class="n">Load band kg</th><th class="n">fn at load Hz</th><th class="n">r = f/fn</th><th class="n">Isolation %</th><th class="n">Static defl. mm</th><th class="n">Util.</th><th class="n price-col hidden" data-t="th_price">Price</th><th class="n price-col hidden" data-t="th_lead">Lead time</th><th data-t="th_notes">Notes</th></tr></thead><tbody></tbody></table></div>
+    <div class="tw"><table id="tbl"><thead><tr><th></th><th data-t="th_model">Model</th><th data-t="th_type">Type</th><th class="n">Load band kg</th><th class="n">fn at load Hz</th><th class="n">r = f/fn</th><th class="n">Isolation %</th><th class="n">Static defl. mm</th><th class="n">Util.</th><th class="n shock-col hidden">Bump out g</th><th class="n shock-col hidden">Bump travel mm</th><th class="n price-col hidden" data-t="th_price">Price</th><th class="n price-col hidden" data-t="th_lead">Lead time</th><th data-t="th_notes">Notes</th></tr></thead><tbody></tbody></table></div>
     <div class="row" style="margin-top:14px"><button class="btn" id="toRfq" disabled data-t="to_rfq">Request drawings &amp; quotation →</button><button class="btn ghost" id="dlReport" disabled data-t="dl_report">Download my selection report (PDF)</button><span id="dlOut" class="muted" style="align-self:center"></span></div>
   </section>
   <section class="card hidden" id="rfq">
@@ -82,12 +93,18 @@ async function loadTypes() {
 }
 async function calc() {
   const body = { application: APP, mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), disturbing_hz: Number($('#rpm').value) / 60, isolation_pct: Number($('#iso').value), cg_factor: Number($('#cg').value) };
+  const bg = Number($('#bg').value), bms = Number($('#bms').value);
+  if (bg > 0 || bms > 0) { if (!(bg > 0 && bms > 0)) { alert(t('bump_need')); $('#shockBox').open = true; return; }
+    body.shock = { peak_g: bg, pulse_ms: bms, shape: $('#bshape').value, fragility_g: Number($('#bfrag').value) || null, sway_mm: Number($('#bsway').value) || null }; }
   CHOSEN = null; $('#toRfq').disabled = $('#dlReport').disabled = true; $('#rfq').classList.add('hidden');
   RES = await api('rubber/select', { method: 'POST', body });
   if (TYPES.size) RES.candidates = RES.candidates.filter(c => TYPES.has(c.product.family));
   const r = RES.required;
-  $('#reqOut').innerHTML = `<span class="pill">W = ${nf(r.W_kg)} kg / mount</span> <span class="pill">fn ≤ ${nf(r.fn_req_hz, 2)} Hz</span> <span class="pill">δ ≥ ${nf(r.d_req_mm)} mm</span> <span class="pill">k ≤ ${nf(r.k_req_n_mm, 0)} N/mm</span>`;
-  $('#tbl tbody').innerHTML = RES.candidates.length ? RES.candidates.map((c, i) => { const p = c.product; return `<tr data-i="${i}"><td><input type="radio" name="pick"></td><td><b>${esc(p.model)}</b></td><td><div style="display:flex;gap:8px;align-items:center;min-width:180px"><img src="${esc(p.image || 'img/series/RUBBER.svg')}" alt="" style="height:44px;width:70px;object-fit:contain;background:#F7F9FC;border-radius:6px"><small>${esc(p.family)}<br><span class="muted">${esc(p.type || '')}</span></small></div></td><td class="n">${p.load_min_kg ?? '—'}–${p.load_max_kg ?? '—'}</td><td class="n">${c.fn_hz ? c.fn_hz.toFixed(1) : '—'}</td><td class="n">${nf(c.r, 2)}</td><td class="n">${nf(c.isolation_pct, 0)}</td><td class="n">${c.static_deflection_mm ? c.static_deflection_mm.toFixed(1) : '—'}</td><td class="n">${(c.util * 100).toFixed(0)}%</td>${PRICES ? `<td class="n price">${p.price_inr != null ? money(p.price_inr, 'INR') : '—'}</td><td class="n">${p.lead_time_days || '—'} d</td>` : ''}<td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`; }).join('')
+  const S = r.shock;
+  $('#reqOut').innerHTML = `<span class="pill">W = ${nf(r.W_kg)} kg / mount</span> ${r.fn_req_hz ? `<span class="pill">fn ≤ ${nf(r.fn_req_hz, 2)} Hz${r.fn_governed_by === 'shock' ? ' (bump)' : ''}</span> <span class="pill">δ ≥ ${nf(r.d_req_mm)} mm</span> <span class="pill">k ≤ ${nf(r.k_req_n_mm, 0)} N/mm</span>` : ''}`
+    + (S ? `<div class="note ${S.feasible ? 'blue' : 'bad'}" style="margin-top:8px"><b>Bump ${nf(S.peak_g, 0)} g / ${nf(S.pulse_ms, 1)} ms ${esc(S.shape)}</b> — velocity change ${nf(S.dv_m_s, 2)} m/s${S.T != null ? ` · needs ${nf(S.T * 100, 0)} % transmissibility, fn ≤ ${nf(S.fn_max_hz, 1)} Hz, about ${nf(S.stroke_linear_mm, 0)} mm travel (ideal floor ${nf(S.stroke_floor_mm, 0)} mm)` : ''}.<br>${esc(S.verdict.charAt(0).toUpperCase() + S.verdict.slice(1))}.${!S.feasible ? ' ' + t('bump_options') : ''}</div>` : '');
+  $$('.shock-col').forEach(x => x.classList.toggle('hidden', !S));
+  $('#tbl tbody').innerHTML = RES.candidates.length ? RES.candidates.map((c, i) => { const p = c.product; return `<tr data-i="${i}"><td><input type="radio" name="pick"></td><td><b>${esc(p.model)}</b></td><td><div style="display:flex;gap:8px;align-items:center;min-width:180px"><img src="${esc(p.image || 'img/series/RUBBER.svg')}" alt="" style="height:44px;width:70px;object-fit:contain;background:#F7F9FC;border-radius:6px"><small>${esc(p.family)}<br><span class="muted">${esc(p.type || '')}</span></small></div></td><td class="n">${p.load_min_kg ?? '—'}–${p.load_max_kg ?? '—'}</td><td class="n">${c.fn_hz ? c.fn_hz.toFixed(1) : '—'}</td><td class="n">${r.vibration ? nf(c.r, 2) : '—'}</td><td class="n">${r.vibration ? nf(c.isolation_pct, 0) : '—'}</td><td class="n">${c.static_deflection_mm ? c.static_deflection_mm.toFixed(1) : '—'}</td><td class="n">${(c.util * 100).toFixed(0)}%</td>${S ? `<td class="n">${c.shock ? nf(c.shock.a_out_g, 1) : '—'}</td><td class="n">${c.shock ? nf(c.shock.travel_mm, 1) : '—'}</td>` : ''}${PRICES ? `<td class="n price">${p.price_inr != null ? money(p.price_inr, 'INR') : '—'}</td><td class="n">${p.lead_time_days || '—'} d</td>` : ''}<td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`; }).join('')
     : `<tr><td colspan="12"><div class="note bad">${t('no_result')}</div></td></tr>`;
   $$('#tbl tbody tr').forEach(tr => tr.onclick = () => { $$('#tbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); CHOSEN = RES.candidates[tr.dataset.i]; $('#toRfq').disabled = $('#dlReport').disabled = false; });
   $('#res').classList.remove('hidden'); $('#res').scrollIntoView({ behavior: 'smooth' });
@@ -116,8 +133,9 @@ function contactOk() {
   $('#who').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('#' + miss[0]).focus(), 400);
   return false;
 }
-function selectionBlock() { const p = CHOSEN.product, r = RES.required; return { case_id: 'RUBBER', inputs: { mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), rpm: Number($('#rpm').value), isolation_pct: Number($('#iso').value) }, chosen: p.model,
-  summary: { 'Application': t(APPS.find(a => a[0] === APP)[1]), 'Mass': $('#mass').value + ' kg on ' + $('#mounts').value + ' mounts', 'Disturbing frequency': (Number($('#rpm').value) / 60).toFixed(1) + ' Hz', 'Load per mount': nf(r.W_kg) + ' kg', 'Required fn': '≤ ' + nf(r.fn_req_hz, 2) + ' Hz', 'Selected fn': nf(CHOSEN.fn_hz, 2) + ' Hz', 'Isolation': nf(CHOSEN.isolation_pct, 0) + ' %' } }; }
+function selectionBlock() { const p = CHOSEN.product, r = RES.required; return { case_id: 'RUBBER', inputs: { mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), rpm: Number($('#rpm').value), isolation_pct: Number($('#iso').value), ...(r.shock ? { shock: { peak_g: r.shock.peak_g, pulse_ms: r.shock.pulse_ms, shape: r.shock.shape, fragility_g: r.shock.fragility_g, sway_mm: r.shock.sway_mm } } : {}) }, chosen: p.model,
+  summary: { 'Application': t(APPS.find(a => a[0] === APP)[1]), 'Mass': $('#mass').value + ' kg on ' + $('#mounts').value + ' mounts', ...(r.vibration ? { 'Disturbing frequency': (Number($('#rpm').value) / 60).toFixed(1) + ' Hz' } : {}), 'Load per mount': nf(r.W_kg) + ' kg', ...(r.fn_req_hz ? { 'Required fn': '≤ ' + nf(r.fn_req_hz, 2) + ' Hz' } : {}), 'Selected fn': nf(CHOSEN.fn_hz, 2) + ' Hz', ...(r.vibration ? { 'Isolation': nf(CHOSEN.isolation_pct, 0) + ' %' } : {}),
+    ...(r.shock ? { 'Bump': `${r.shock.peak_g} g / ${r.shock.pulse_ms} ms ${r.shock.shape}, Δv ${nf(r.shock.dv_m_s, 2)} m/s`, ...(r.shock.fragility_g ? { 'Equipment limit': r.shock.fragility_g + ' g' } : {}), ...(r.shock.sway_mm ? { 'Free travel': r.shock.sway_mm + ' mm' } : {}), ...(CHOSEN.shock ? { 'Bump reaching equipment': nf(CHOSEN.shock.a_out_g, 1) + ' g', 'Bump travel': nf(CHOSEN.shock.travel_mm, 1) + ' mm' } : {}) } : {}) } }; }
 $('#dlReport').onclick = async () => {
   if (!CHOSEN || !contactOk()) return;
   const p = CHOSEN.product;
@@ -130,7 +148,7 @@ $('#dlReport').onclick = async () => {
   } catch (e) { $('#dlOut').textContent = ''; alert(e.message); if (/name|e-mail|phone|contact/i.test(e.message)) { ['pcontact', 'pemail', 'pphone'].forEach(id => $('#' + id).classList.add('need')); $('#who').scrollIntoView({ behavior: 'smooth', block: 'center' }); } }
   finally { $('#dlReport').disabled = false; }
 };
-$('#toRfq').onclick = () => { if (!contactOk()) return; const p = CHOSEN.product; $('#rfqLines').innerHTML = `<div class="note blue"><b>${esc(p.model)}</b> — ${p.load_min_kg ?? ''}–${p.load_max_kg} kg, fn ${nf(CHOSEN.fn_hz)} Hz at ${nf(RES.required.W_kg, 0)} kg, ${nf(CHOSEN.isolation_pct, 0)}% isolation</div>`; $('#rqty').value = $('#mounts').value; $('#rfq').classList.remove('hidden'); $('#rfq').scrollIntoView({ behavior: 'smooth' }); };
+$('#toRfq').onclick = () => { if (!contactOk()) return; const p = CHOSEN.product; $('#rfqLines').innerHTML = `<div class="note blue"><b>${esc(p.model)}</b> — ${p.load_min_kg ?? ''}–${p.load_max_kg} kg, fn ${nf(CHOSEN.fn_hz)} Hz at ${nf(RES.required.W_kg, 0)} kg, ${RES.required.vibration ? nf(CHOSEN.isolation_pct, 0) + '% isolation' : ''}${CHOSEN.shock ? ` · bump ${nf(CHOSEN.shock.a_out_g, 1)} g to the equipment, ${nf(CHOSEN.shock.travel_mm, 1)} mm travel` : ''}</div>`; $('#rqty').value = $('#mounts').value; $('#rfq').classList.remove('hidden'); $('#rfq').scrollIntoView({ behavior: 'smooth' }); };
 $('#sendRfq').onclick = async () => {
   const p = CHOSEN.product;
   if (!contactOk()) return;

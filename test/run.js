@@ -57,6 +57,17 @@ const server = app.listen(0, async () => {
     const rb2 = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 50, isolation_pct: 90 });
     ok('rubber: 3000 rpm case finds mounts, all with a real natural frequency', rb2.count > 0 && rb2.candidates.every(c => c.fn_hz > 0 && c.fn_hz <= rb2.required.fn_req_hz * 1.02), rb2.count + ' pass');
     ok('rubber: 1500 rpm / 90 % now finds AT-RCM cylindrical mounts (fn <= 7.5 Hz)', rb.count > 0 && rb.candidates.every(c => c.product.model.startsWith('AT-RCM-') && c.fn_hz <= rb.required.fn_req_hz * 1.02), rb.count + ' pass, best ' + (rb.candidates[0] || {}).product?.model);
+    // ---- bump / shock check (the 29 Aug application note: 5 kg on 6 points, 60 g / 11 ms, 10 g limit, 25 mm)
+    const bn = await post('/rubber/select', { mass_kg: 5, mounts: 6, shock: { peak_g: 60, pulse_ms: 11, fragility_g: 10, sway_mm: 25 } });
+    ok('bump: 60 g / 11 ms -> Δv 4.12 m/s, 173 mm travel needed, not possible in 25 mm (as in the application note)', near(bn.shock ? 0 : bn.required.shock.dv_m_s, 4.12, 0.01) && Math.round(bn.required.shock.stroke_linear_mm) === 173 && Math.round(bn.required.shock.stroke_floor_mm) === 87 && !bn.required.shock.feasible && bn.count === 0, bn.required.shock.verdict);
+    ok('bump: best a linear mount can do in 25 mm is 69 g', Math.round(bn.required.shock.best_linear_g) === 69);
+    const rb3 = require('../lib/rubber');
+    ok('bump: SDOF simulation matches the shock spectrum (fn 3.8 Hz undamped -> 10 g, 172 mm)', near(rb3.sdof(3.8, { A: 60, tau: 0.011, shape: 'half-sine', zeta: 0.0001 }).a_out_g, 10, 0.02) && near(rb3.sdof(3.8, { A: 60, tau: 0.011, shape: 'half-sine', zeta: 0.0001 }).travel_mm, 173, 0.02));
+    const bok = await post('/rubber/select', { mass_kg: 200, mounts: 4, shock: { peak_g: 15, pulse_ms: 11, fragility_g: 10, sway_mm: 30 } });
+    ok('bump only: 200 kg, 15 g / 11 ms, 10 g limit -> mounts found, each within 10 g and 30 mm', bok.count > 0 && bok.candidates.every(c => c.shock.a_out_g <= 10.2 && c.shock.travel_mm <= 30), bok.count + ' pass, best ' + bok.candidates[0].product.model + ' ' + bok.candidates[0].shock.a_out_g.toFixed(1) + ' g');
+    const both = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 50, isolation_pct: 90, shock: { peak_g: 15, pulse_ms: 11, fragility_g: 10, sway_mm: 30 } });
+    ok('vibration + bump: every pick passes both, short mounts that would bottom out are rejected', both.count > 0 && both.count < rb2.count && both.candidates.every(c => c.isolation_pct >= 89.9 && c.shock.a_out_g <= 10.2 && (c.shock.strain_pct == null || c.shock.strain_pct <= 40)), both.count + ' of ' + rb2.count);
+    ok('rubber: neither running speed nor bump -> clear message', /running speed|bump/.test((await post('/rubber/select', { mass_kg: 200, mounts: 4 })).error || ''));
     const rbd = await get('/rubber/data');
     const rcm = rbd.filter(r => r.model.startsWith('AT-RCM-'));
     ok('rubber: 206 AT-RCM sizes in 5 styles, each with stiffness and its own icon', rcm.length === 206 && new Set(rcm.map(r => r.mount_style)).size === 5 && rcm.every(r => Number(r.stiffness_n_mm) > 0 && /RCM-(SU|SS|SF|FF|F0)\.svg$/.test(r.image)) && rcm.every(r => fs.existsSync(path.join(__dirname, '..', 'site', r.image))));

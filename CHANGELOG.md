@@ -1,4 +1,18 @@
 # Changelog
+## 2.9.0 — 25 Sep 2026 (bump / shock check in the rubber selector)
+- The rubber mount page has an optional **Shock / bump check**. Enter:
+  - peak g
+  - pulse duration (ms)
+  - pulse shape: half-sine, rectangular or terminal-peak sawtooth
+  - what the equipment can take (g)
+  - the free travel (mm)
+- For the bump itself it shows:
+  - the velocity change, the transmissibility needed and the highest natural frequency allowed
+  - the travel needed (linear mount, and the ideal-absorber floor)
+  - a plain go / no-go verdict, with the best g achievable in the space given
+- Every mount is checked by running the pulse through it as a damped single-mass system (5 % damping, natural rubber). This gives the **g reaching the equipment** and the **bump travel**. A mount is rejected if it exceeds the g limit or the free travel. It is flagged if rubber compression passes 25 % of its height, and rejected above 40 %.
+- Works with vibration or alone: leave the running speed empty for a bump-only selection. The bump figures go into the selection report and the RFQ.
+- Checked against the 29 Aug application note: 5 kg on 6 points, 60 g / 11 ms, 10 g limit, 25 mm. Result: Δv 4.12 m/s, 173 mm needed (floor 87 mm), best 69 g in 25 mm → not possible.
 ## 2.8.0 — 25 Sep 2026 (dealer rules, lead-time editor, customer master)
 - **Dealer rules database.** The pricing policy has 13 points: dealer discount, max discount, markup, ways to sell (resale / direct / both), resale terms, commission terms, Rs/kg freight, export, payment terms, price list, lead times, territory and other conditions.
   - The commonly agreed standard values sit in settings (`dealer.*`). Any point can have the dealer's own value.
