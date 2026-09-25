@@ -1,4 +1,10 @@
 # Changelog
+## 2.6.0 — 25 Sep 2026 (AT-RCM cylindrical rubber mounts)
+- New range **AT-RCM** — 206 cylindrical rubber mounts, D10–D100 mm, M3–M16, in five styles with their own icons in the rubber selector: SU stud / plain face, SS studs both ends, SF stud + tapped hole, FF tapped holes both ends, F0 tapped hole / plain face. Imported or moulded locally in India.
+- Data per size: rated compression load and deflection -> secant stiffness (N/mm), fn at rated load, load band (20–100 % of rating), shear rating in the note. Built by `tools/build_rcm.py` (re-runnable).
+- List prices from the local-moulding cost build-up (same parameters as the price list: rubber Rs 420/kg, moulding, hardware, mould over 50 pcs, +50 %): Rs 450 – 1,800. Costing rows added to `costing.csv`.
+- Supplier cross-references stay internal: the `source` column is shown to admin and sales only; no supplier brand appears anywhere.
+- Rubber selection: plain-face styles (SU, F0) are flagged "not bolted at one end" and ranked slightly below boltable ones. The 1500 rpm / 90 % case that found nothing before now returns AT-RCM mounts.
 ## 2.5.1 — 25 Sep 2026
 - DAMPA put on hold (settings `assistant.enabled` = 0): chat button and home banner hidden for everyone, including admin. Switch on later in Admin → DAMPA AI once the API key is set.
 

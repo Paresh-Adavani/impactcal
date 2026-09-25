@@ -56,7 +56,13 @@ const server = app.listen(0, async () => {
     ok('rubber: required fn from 90% isolation at 25 Hz is 7.54 Hz', near(rb.required.fn_req_hz, 25 / Math.sqrt(11)), rb.required.fn_req_hz.toFixed(2));
     const rb2 = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 50, isolation_pct: 90 });
     ok('rubber: 3000 rpm case finds mounts, all with a real natural frequency', rb2.count > 0 && rb2.candidates.every(c => c.fn_hz > 0 && c.fn_hz <= rb2.required.fn_req_hz * 1.02), rb2.count + ' pass');
-    ok('rubber: 1500 rpm / 90 % honestly finds none (needs fn <= 7.5 Hz)', rb.count === 0);
+    ok('rubber: 1500 rpm / 90 % now finds AT-RCM cylindrical mounts (fn <= 7.5 Hz)', rb.count > 0 && rb.candidates.every(c => c.product.model.startsWith('AT-RCM-') && c.fn_hz <= rb.required.fn_req_hz * 1.02), rb.count + ' pass, best ' + (rb.candidates[0] || {}).product?.model);
+    const rbd = await get('/rubber/data');
+    const rcm = rbd.filter(r => r.model.startsWith('AT-RCM-'));
+    ok('rubber: 206 AT-RCM sizes in 5 styles, each with stiffness and its own icon', rcm.length === 206 && new Set(rcm.map(r => r.mount_style)).size === 5 && rcm.every(r => Number(r.stiffness_n_mm) > 0 && /RCM-(SU|SS|SF|FF|F0)\.svg$/.test(r.image)) && rcm.every(r => fs.existsSync(path.join(__dirname, '..', 'site', r.image))));
+    const r80 = rcm.find(r => r.model === 'AT-RCM-SS-80x70-M14');
+    ok('rubber: D80 x 70 M14 stiffness = 5000 N / 17 mm = 294 N/mm (as in the Pune report)', r80 && Number(r80.stiffness_n_mm) === 294, r80 && r80.stiffness_n_mm);
+    ok('rubber: no supplier name or supplier reference reaches the public', !JSON.stringify(rbd).match(/radiaflex|paulstra|Supplier ref/i) && rcm.every(r => r.source === undefined && r.price_inr === undefined));
 
     console.log('\n— GSTIN —');
     ok('rejects the mistyped GSTIN', !(await get('/gstin/27AHAPAPA3555B1Z1')).ok);

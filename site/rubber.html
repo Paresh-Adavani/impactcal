@@ -78,7 +78,7 @@ function drawTypes() {
 async function loadTypes() {
   try { const rows = await api('rubber/data'); const m = new Map();
     for (const r of rows) { const f = m.get(r.family) || { family: r.family, type: r.type, image: r.image || 'img/series/RUBBER.svg', n: 0 }; f.n++; m.set(r.family, f); }
-    FAMILIES = [...m.values()]; drawTypes(); } catch (e) { console.warn('types', e.message); }
+    FAMILIES = [...m.values()].sort((a, b) => b.family.startsWith('AT-RCM') - a.family.startsWith('AT-RCM')); drawTypes(); } catch (e) { console.warn('types', e.message); }
 }
 async function calc() {
   const body = { application: APP, mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), disturbing_hz: Number($('#rpm').value) / 60, isolation_pct: Number($('#iso').value), cg_factor: Number($('#cg').value) };
