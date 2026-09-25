@@ -322,6 +322,18 @@ const server = app.listen(0, async () => {
     ok('dealer page: application keeps territory and products', nda.ok && nda.dealer.territory === 'Nashik, Dhule' && nda.dealer.products === 'Crane buffers, Wire rope isolators');
     const susp = await post('/admin/dealers/ravi@kumarengg.in/decide', { decision: 'suspend' });
     ok('dealer: suspended dealer loses the portal', susp.ok && (await rq('GET', '/portal/catalogue', null, dlr.token)).status === 403);
+
+    console.log('\n— GA library: large PDFs in chunks —');
+    const big = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.alloc(7 * 1024 * 1024, 65), Buffer.from('\n%%EOF')]);
+    const C = 3 * 1024 * 1024, nP = Math.ceil(big.length / C); let cr;
+    for (let i = 0; i < nP; i++) cr = await post('/admin/ga/chunk', { path: 'AC/AC-TEST-BIG.pdf', upload_id: 'testupload01', index: i, total: nP, base64: big.slice(i * C, (i + 1) * C).toString('base64') });
+    ok('ga: 7 MB drawing uploaded in 3 parts', cr.ok && cr.bytes === big.length && cr.chunks === 3, JSON.stringify(cr));
+    const gl = await get('/admin/ga');
+    ok('ga: large drawing listed as available', gl.uploaded_paths.includes('AC/AC-TEST-BIG.pdf'));
+    const miss = await post('/admin/ga/chunk', { path: 'AC/X.pdf', upload_id: 'testupload02', index: 1, total: 2, base64: Buffer.from('x').toString('base64') });
+    ok('ga: missing part reported', /part 1 of 2 missing/.test(miss.error || ''), miss.error);
+    const notpdf = await post('/admin/ga/chunk', { path: 'AC/Y.pdf', upload_id: 'testupload03', index: 0, total: 1, base64: Buffer.from('hello').toString('base64') });
+    ok('ga: non-PDF refused', notpdf.error === 'not a PDF');
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);
   } catch (e) { console.error('\nERROR', e); fail++; }
   server.close(); fs.rmSync(process.env.IMPACTCAL_STORE, { recursive: true, force: true }); process.exit(fail ? 1 : 0);

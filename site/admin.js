@@ -175,17 +175,31 @@ async function drawings() {
     <label><input type="checkbox" id="gaForce"> re-upload files that are already in the app (after a drawing revision)</label></div><div id="gaOut" style="margin-top:8px"></div></div>
   <div class="card"><h3>Missing in the app (${ga.missing.length})</h3><div class="log">${ga.missing.slice(0, 400).map(esc).join('\n') || 'none'}</div></div>`;
   $('#sync').onclick = async () => { $('#syncOut').innerHTML = say('blue', 'Syncing… (up to 25 s per run; large libraries finish over several runs)'); try { const r = await api('admin/drive/sync', { method: 'POST' }); $('#syncOut').innerHTML = say(r.ok ? 'ok' : 'bad', `pulled ${r.pulled}, unchanged ${r.unchanged}, pushed ${r.pushed}${r.errors.length ? '<br>' + r.errors.map(esc).join('<br>') : ''}`); } catch (e) { $('#syncOut').innerHTML = say('bad', esc(e.message)); } };
+  const readB64 = blob => new Promise((r, j) => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.onerror = () => j(fr.error); fr.readAsDataURL(blob); });
+  const CHUNK = 3 * 1024 * 1024;   // raw bytes per request; base64 makes it ~4 MB, under the 6 MB function limit
+  const sendOne = async (f, path) => {
+    if (f.size <= CHUNK) return api('admin/ga', { method: 'POST', body: { path, base64: await readB64(f) } });
+    const total = Math.ceil(f.size / CHUNK), id = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8); let r;
+    for (let i = 0; i < total; i++) r = await api('admin/ga/chunk', { method: 'POST', body: { path, upload_id: id, index: i, total, base64: await readB64(f.slice(i * CHUNK, (i + 1) * CHUNK)) } });
+    return r;
+  };
   const uploadGa = async (files, pathOf) => {
     const have = new Set(ga.uploaded_paths || []); const force = $('#gaForce').checked;
-    const list = [...files].filter(f => /\.pdf$/i.test(f.name)); const out = []; let n = 0, skipped = 0;
-    for (const f of list) {
-      const path = pathOf(f); n++;
-      if (have.has(path) && !force) { skipped++; continue; }
-      const b64 = await new Promise(r => { const fr = new FileReader(); fr.onload = () => r(fr.result.split(',')[1]); fr.readAsDataURL(f); });
-      try { const r = await api('admin/ga', { method: 'POST', body: { path, base64: b64 } }); out.push(`✓ ${r.path} (${(r.bytes / 1024).toFixed(0)} kB)`); } catch (e) { out.push(`✗ ${path}: ${e.message}`); }
-      $('#gaOut').innerHTML = `<div class="log">${n}/${list.length} · skipped ${skipped} already uploaded\n${out.slice(-40).map(esc).join('\n')}</div>`;
-    }
-    $('#gaOut').innerHTML = `<div class="log">Done: ${list.length} files, ${out.filter(x => x[0] === '✓').length} uploaded, ${skipped} already uploaded, ${out.filter(x => x[0] === '✗').length} failed\n${out.filter(x => x[0] === '✗').map(esc).join('\n')}</div>` + `<p><a href="#drawings" onclick="location.reload()">Refresh counts</a></p>`;
+    const all = [...files].filter(f => /\.pdf$/i.test(f.name));
+    const excluded = all.filter(f => /(^|\/)_/.test(f.webkitRelativePath || '')), list = all.filter(f => !excluded.includes(f));
+    const todo = list.filter(f => force || !have.has(pathOf(f)));
+    const skipped = list.length - todo.length, out = []; let done = 0;
+    const show = () => { $('#gaOut').innerHTML = `<div class="log">${done}/${todo.length} sent · ${skipped} already in the app · ${excluded.length} in _ folders ignored\n${out.slice(-40).map(esc).join('\n')}</div>`; };
+    show();
+    const queue = todo.slice();
+    const worker = async () => { while (queue.length) { const f = queue.shift(), path = pathOf(f);
+      let ok = false, err = '';
+      for (let attempt = 0; attempt < 2 && !ok; attempt++) { try { const r = await sendOne(f, path); out.push(`✓ ${r.path} (${(r.bytes / 1024).toFixed(0)} kB${r.chunks ? ', ' + r.chunks + ' parts' : ''})`); ok = true; } catch (e) { err = e.message; } }
+      if (!ok) out.push(`✗ ${path}: ${err}`);
+      done++; show(); } };
+    await Promise.all([worker(), worker(), worker(), worker()]);
+    const failed = out.filter(x => x[0] === '✗');
+    $('#gaOut').innerHTML = `<div class="log">Done: ${todo.length} sent, ${todo.length - failed.length} uploaded, ${failed.length} failed · ${skipped} already in the app · ${excluded.length} in _ folders ignored\n${failed.map(esc).join('\n')}</div><p><a href="#drawings" onclick="location.reload()">Refresh counts</a></p>`;
   };
   $('#gaFiles').onchange = () => uploadGa($('#gaFiles').files, f => `${f.name.split(/[-\s]/)[0].toUpperCase()}/${f.name}`);
   $('#gaFolder').onchange = () => uploadGa($('#gaFolder').files, f => { const parts = (f.webkitRelativePath || f.name).split('/'); return parts.length >= 2 ? parts.slice(-2).join('/') : `${f.name.split(/[-\s]/)[0].toUpperCase()}/${f.name}`; });

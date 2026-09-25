@@ -1,4 +1,7 @@
 # Changelog
+## 2.4.1 — 25 Sep 2026 (GA library upload)
+- Admin → Drawings → Whole folder: PDFs over 3 MB are sent in parts (no more 6 MB function limit), four files upload in parallel with one retry, folders starting with `_` (e.g. `_excluded`) are skipped, files already in the app are skipped unless "re-upload" is ticked.
+- A drawing too large for a download link (> 4 MB) is attached to the quotation mail instead.
 ## 2.4.0 — 24 Sep 2026 (dealer sign-up page)
 - **Dealer sign-up page** at `/dealers` (also `/become-a-dealer`): programme pitch, product families, the dealer-protection promise, how it works, FAQ, and a two-part application form (business + market: territory, products, industries) with inline e-mail verification. Welcome screen on submit; application lands in Admin → Dealers with territory and interests.
 - Admin → Dealers: edit the **cities where dealers are sought** (shown on the sign-up page and the home banner) and the Google Analytics 4 ID.
