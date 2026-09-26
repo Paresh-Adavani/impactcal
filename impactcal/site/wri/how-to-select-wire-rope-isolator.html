@@ -1,0 +1,256 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>How to Select a Wire Rope Isolator — Step-by-Step Engineering Guide | Adonitech</title>
+<meta name="description" content="Complete guide to wire rope isolator selection: static load and 2x design rule, natural frequency, transmissibility, Miles random response, shock stroke and mounting axes. Includes a worked naval 65 kg example and a free online selector.">
+<meta name="keywords" content="how to select wire rope isolator, wire rope isolator selection guide, wire rope isolator sizing, vibration isolator selection, natural frequency calculation, shock stroke calculation, wire rope isolator design, isolator utilization, Kv Ks stiffness, wire rope mount selection, anti vibration mount sizing, AWRI selection">
+<meta name="author" content="Adoni Tech">
+<link rel="canonical" href="https://awri-selector.netlify.app/how-to-select-wire-rope-isolator.html">
+<meta property="og:type" content="article"><meta property="og:title" content="How to Select a Wire Rope Isolator — Step-by-Step Engineering Guide | Adonitech">
+<meta property="og:description" content="Complete guide to wire rope isolator selection: static load and 2x design rule, natural frequency, transmissibility, Miles random response, shock stroke and mounting axes. Includes a worked naval 65 kg example and a free online selector.">
+<meta property="og:url" content="https://awri-selector.netlify.app/how-to-select-wire-rope-isolator.html">
+<meta property="og:image" content="https://awri-selector.netlify.app/icon-512.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--brand:#F57C00;--brand-d:#D96A00;--brand-l:#FF9A33;--brand-xl:#FFF3E6;
+--blue:#467FF7;--blue-d:#2E63D4;--blue-l:#E4EDFE;--sky:#6EC1E4;--navy:#1B3160;
+--ink:#333333;--ink-2:#5A6672;--ink-3:#8B96A3;--line:#E2E6EB;--card:#FFFFFF;--card-2:#F3F4F6;--bg:#FFFFFF;--topbar:#FFFFFF;
+--ok:#0E8A4D;--warn:#B7791F;--bad:#C0392B;}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Poppins,"Segoe UI",system-ui,Arial,sans-serif;background:var(--bg);color:var(--ink);font-size:15.5px;line-height:1.75}
+a{color:var(--blue)}
+.sitenav{background:var(--blue)}
+.sitenav-in{max-width:1180px;margin:0 auto;padding:8px 20px;display:flex;flex-wrap:wrap;gap:2px;align-items:center}
+.sitenav a{color:#FFFFFF;text-decoration:none;font-size:12.4px;font-weight:500;padding:5px 11px;border-radius:6px;white-space:nowrap}
+.sitenav a:hover{background:rgba(255,255,255,.22)}
+.sitenav a.cta{background:var(--brand);color:#fff;font-weight:600}
+.sitenav a.cta:hover{background:var(--brand-d)}
+.sitenav .sp{flex:1}
+.topbar{background:var(--topbar);border-bottom:3px solid var(--brand);position:sticky;top:0;z-index:50;box-shadow:0 2px 10px rgba(27,49,96,.09)}
+.topbar-in{max-width:1180px;margin:0 auto;display:flex;align-items:center;gap:16px;padding:11px 20px;flex-wrap:wrap}
+.logo{font-size:30px;font-weight:800;color:var(--blue);text-decoration:none;letter-spacing:-1px}
+.tagline{font-size:11.5px;color:var(--ink-2);border-left:2px solid var(--line);padding-left:12px;line-height:1.35}
+.btn{border:none;border-radius:8px;padding:9px 18px;font-weight:600;font-size:13.5px;text-decoration:none;display:inline-block;cursor:pointer}
+.btn-p{background:var(--brand);color:#fff}.btn-p:hover{background:var(--brand-d)}
+.btn-o{background:#fff;color:var(--brand);border:1.5px solid var(--brand)}.btn-o:hover{background:var(--brand-xl)}
+.ml{margin-left:auto;display:flex;gap:9px;flex-wrap:wrap}
+.wrap{max-width:1180px;margin:0 auto;padding:0 20px}
+.crumbs{font-size:12px;color:var(--ink-3);padding:14px 0}
+.crumbs a{color:var(--ink-3);text-decoration:none}.crumbs a:hover{color:var(--brand)}
+.hero{background:var(--card-2);border:1px solid var(--line);border-left:5px solid var(--brand);border-radius:14px;padding:32px 34px 28px;margin-bottom:26px}
+h1{font-size:34px;line-height:1.22;font-weight:800;margin-bottom:12px;color:var(--navy)}
+.hero p.lead{font-size:16.5px;color:var(--ink-2);max-width:860px}
+.layout{display:grid;grid-template-columns:1fr 285px;gap:34px;align-items:start}
+@media(max-width:940px){.layout{grid-template-columns:1fr}}
+article h2{font-size:24px;font-weight:700;color:var(--navy);margin:38px 0 12px;scroll-margin-top:90px;border-bottom:2px solid var(--brand);padding-bottom:6px;display:inline-block}
+article h3{font-size:18px;font-weight:700;margin:26px 0 8px;color:var(--blue-d)}
+article p{margin-bottom:14px;color:var(--ink-2)}
+article ul,article ol{margin:0 0 16px 22px;color:var(--ink-2)}
+article li{margin-bottom:7px}
+article b,article strong{color:var(--ink)}
+.box{background:var(--brand-xl);border:1px solid #FAD9B4;border-left:4px solid var(--brand);border-radius:10px;padding:16px 20px;margin:20px 0}
+.box h4{color:var(--brand-d);font-size:14px;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.box p{color:var(--ink-2)}
+.formula{background:#F5F8FF;border:1px solid #D9E4FB;border-radius:8px;padding:13px 18px;margin:14px 0;font-family:Consolas,"Courier New",monospace;font-size:14.5px;color:var(--navy);overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13.5px;margin:18px 0;background:#fff}
+th{background:var(--navy);color:#fff;padding:9px 11px;text-align:left;font-size:12.5px}
+td{padding:8px 11px;border-bottom:1px solid var(--line);color:var(--ink-2)}
+tr:nth-child(even) td{background:#FAFBFC}
+tr:hover td{background:var(--blue-l)}
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:10px}
+aside{position:sticky;top:88px}
+.side{background:var(--card-2);border:1px solid var(--line);border-radius:12px;padding:18px;margin-bottom:16px}
+.side h4{font-size:13px;text-transform:uppercase;letter-spacing:.6px;color:var(--navy);margin-bottom:10px}
+.side a{display:block;color:var(--ink-2);text-decoration:none;font-size:13.2px;padding:6px 0;border-bottom:1px solid var(--line)}
+.side a:hover{color:var(--brand)}
+.cta-side{background:linear-gradient(140deg,var(--brand),var(--brand-d));border:none}
+.cta-side h4,.cta-side p{color:#fff}.cta-side p{font-size:13px;margin-bottom:12px;opacity:.96}
+.cta-side .btn{background:#fff;color:var(--brand-d);width:100%;text-align:center}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(255px,1fr));gap:18px;margin:22px 0}
+.kcard{background:#fff;border:1px solid var(--line);border-radius:12px;padding:22px;text-decoration:none;display:block;transition:.15s;box-shadow:0 1px 3px rgba(27,49,96,.06)}
+.kcard:hover{border-color:var(--brand);transform:translateY(-3px);box-shadow:0 6px 18px rgba(27,49,96,.1)}
+.kcard h3{color:var(--brand-d);font-size:17px;margin-bottom:7px}
+.kcard p{font-size:13.4px;color:var(--ink-2);margin:0}
+.faq{border:1px solid var(--line);border-radius:10px;margin-bottom:10px;background:#fff}
+.faq summary{padding:14px 18px;cursor:pointer;font-weight:600;color:var(--navy)}
+.faq p{padding:0 18px 14px;margin:0;font-size:14px;color:var(--ink-2)}
+.sitefoot{background:var(--navy);color:#D3DDEA;margin-top:52px;padding:34px 20px 22px}
+.sitefoot-in{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:26px}
+@media(max-width:860px){.sitefoot-in{grid-template-columns:1fr 1fr}}
+.sitefoot h4{color:var(--brand-l);font-size:12.5px;text-transform:uppercase;letter-spacing:.6px;margin-bottom:9px}
+.sitefoot a{display:block;color:#D3DDEA;text-decoration:none;font-size:12.5px;padding:3px 0}
+.sitefoot a:hover{color:var(--brand-l)}
+.sitefoot .cr{max-width:1180px;margin:22px auto 0;border-top:1px solid rgba(255,255,255,.15);padding-top:14px;font-size:11.5px;color:#9DAEC2}
+</style><script type="application/ld+json">
+{"@context":"https://schema.org","@type":"TechArticle","headline":"How to Select a Wire Rope Isolator - Complete Engineering Guide",
+"description":"Step-by-step wire rope isolator selection: static load, natural frequency, transmissibility, shock stroke and mounting axes, with worked naval example.",
+"author":{"@type":"Organization","name":"Adoni Tech"},
+"publisher":{"@type":"Organization","name":"Adoni Tech","url":"https://www.wireropeisolater.com/"},
+"mainEntityOfPage":"https://awri-selector.netlify.app/how-to-select-wire-rope-isolator.html"}
+</script><script type="application/ld+json">
+{"@context":"https://schema.org","@type":"FAQPage","mainEntity":[
+{"@type":"Question","name":"How many wire rope isolators should I use?","acceptedAnswer":{"@type":"Answer","text":"Minimum three for stability; four is standard. More isolators reduce the load each carries, which raises the system natural frequency, so adding mounts is not automatically better for isolation."}},
+{"@type":"Question","name":"What natural frequency should I target?","acceptedAnswer":{"@type":"Answer","text":"Aim for fn at or below one-third of the lowest frequency you must isolate, typically 8 to 15 Hz for naval and transport equipment."}},
+{"@type":"Question","name":"Can wire rope isolators be used outdoors or at sea?","acceptedAnswer":{"@type":"Answer","text":"Yes. All-metal stainless construction resists salt spray, oil, UV and temperatures from -100 C to +260 C with no ageing, unlike elastomeric mounts."}},
+{"@type":"Question","name":"What is the difference between AWRI and ACWRI?","acceptedAnswer":{"@type":"Answer","text":"AWRI is the standard range from about 47 N to 30,270 N across 12 cable families. ACWRI is the compact series for light payloads such as small electronics and sensors."}}]}
+</script></head><body>
+<div class="sitenav"><div class="sitenav-in">
+<a href="https://www.wireropeisolater.com/" target="_blank" rel="noopener">Home</a>
+<a href="https://www.wireropeisolater.com/wire-rope-isolator/" target="_blank" rel="noopener">Wire Rope Isolators</a>
+<a href="https://www.adonitech.co.in/industrial-shock-absorbers/" target="_blank" rel="noopener">Shock Absorbers</a>
+<a href="https://www.cranebuffer.com/" target="_blank" rel="noopener">Crane Buffers</a>
+<a href="knowledge.html">Knowledge Base</a>
+<a href="https://www.wireropeisolater.com/news-blog/" target="_blank" rel="noopener">Blog</a>
+<a href="https://www.wireropeisolater.com/download-2/" target="_blank" rel="noopener">3D Files &amp; Catalogue</a>
+<a href="https://www.wireropeisolater.com/dealer-network/" target="_blank" rel="noopener">Dealers</a>
+<span class="sp"></span><a href="download.html" class="cta">Android App</a>
+<a href="https://www.wireropeisolater.com/contact-us/" target="_blank" rel="noopener">Contact</a>
+</div></div>
+<div class="topbar"><div class="topbar-in">
+<a href="index.html" class="logo">adoniTech</a>
+<div class="tagline">AWRI Wire Rope Isolator<br><b>Selection &amp; RFQ Suite</b></div>
+<div class="ml"><a class="btn btn-o" href="knowledge.html">Knowledge Base</a><a class="btn btn-p" href="index.html">▶ Open the Selector</a></div>
+</div></div>
+<div class="wrap"><div class="crumbs"><a href="https://www.wireropeisolater.com/" target="_blank" rel="noopener">Adonitech</a> &rsaquo; <a href="knowledge.html">Knowledge Base</a> &rsaquo; How to Select a Wire Rope Isolator</div>
+<div class="hero"><h1>How to Select a Wire Rope Isolator</h1><p class="lead">The complete engineering procedure &mdash; from static load and natural frequency through shock stroke and mounting axes &mdash; with the formulas, a worked naval example and the seven mistakes that ruin selections.</p></div>
+<div class="layout"><article>
+<p>A <b>wire rope isolator</b> (also called a cable mount, wire rope mount or helical isolator) is an all-metal shock and vibration isolator built from stranded stainless-steel cable looped between two retainer bars. Because the cable flexes, slides and rubs against itself under load, it delivers high damping (&zeta; &asymp; 0.15) with no rubber, no oil and no ageing &mdash; which is why it dominates naval, defence, aerospace and heavy transport applications.</p>
+<p>This guide walks through the exact procedure Adonitech engineers use to size an <b>AWRI</b> or <b>ACWRI</b> isolator, the same chain of calculations built into our <a href="index.html">free online wire rope isolator selector</a>.</p>
+
+<div class="box"><h4>The short version</h4>
+<p style="margin:0">Work out the load each isolator carries &rarr; check it against the rated load with a safety factor &rarr; calculate the natural frequency and confirm it is well below the disturbing frequency &rarr; run the shock case and check both transmitted g and stroke &rarr; verify the mounting orientation uses the correct load axis. Every step is automated in the <a href="index.html">selector tool</a>.</p></div>
+
+<h2 id="step-1">Step 1 &mdash; Define the problem before touching a catalogue</h2>
+<p>Selection fails most often because the input data was never pinned down. Before opening any catalogue, establish:</p>
+<ul>
+<li><b>Equipment mass (kg)</b> &mdash; the full supported mass including brackets and cabling.</li>
+<li><b>Centre of gravity</b> &mdash; height above the mounting plane and any horizontal offset. An offset CG means one isolator carries more than its share.</li>
+<li><b>Number and layout of isolators</b> &mdash; minimum three for a stable platform; four is normal.</li>
+<li><b>Mounting orientation</b> &mdash; floor, wall/bulkhead, ceiling, 45&deg; or with stabilizers. This decides which isolator axis carries gravity.</li>
+<li><b>The disturbance</b> &mdash; vibration profile (sine bands, random PSD) and shock pulse (peak g, duration).</li>
+<li><b>Fragility limit (g)</b> &mdash; the maximum acceleration your equipment survives. This is the acceptance criterion everything is judged against.</li>
+<li><b>Space envelope</b> &mdash; available height and sway clearance. Isolators must be free to move.</li>
+</ul>
+
+<h2 id="static-load">Step 2 &mdash; Static load per isolator and the 2&times; design rule</h2>
+<p>Start with the load each mount carries under gravity:</p>
+<div class="formula">W = (M &times; g) / N &times; CG factor</div>
+<p>Where <b>M</b> is the supported mass in kg, <b>g</b> = 9.81 m/s&sup2;, <b>N</b> is the number of load-carrying isolators, and the <b>CG factor</b> accounts for an offset centre of gravity (1.0 for a central CG, typically 1.05&ndash;1.20 when offset).</p>
+<p>Adonitech engineering practice is then to apply a <b>2&times; design rule</b>: the design load must not exceed the catalogue rated load for the chosen axis.</p>
+<div class="formula">W_design = 2 &times; W &nbsp;&le;&nbsp; Rated load of the selected axis</div>
+<p>This margin covers dynamic load transfer, manufacturing tolerance and the load shift that occurs when a ship rolls or a vehicle corners.</p>
+
+<h2 id="utilization">Step 3 &mdash; Aim for the right utilization</h2>
+<p><b>Utilization</b> is the static load per isolator divided by its rated load. It is the single most useful number for judging whether a selection is sensible:</p>
+<div class="tw"><table><tr><th>Utilization</th><th>What it means</th><th>Verdict</th></tr>
+<tr><td>Below 20%</td><td>Isolator far too stiff for the load &mdash; natural frequency high, little isolation</td><td>Oversized</td></tr>
+<tr><td>30&ndash;70%</td><td>Low natural frequency with shock stroke still in reserve</td><td><b style="color:var(--ok)">Ideal window</b></td></tr>
+<tr><td>70&ndash;100%</td><td>Excellent isolation but limited shock margin &mdash; check stroke carefully</td><td>Acceptable with checks</td></tr>
+<tr><td>Above 100%</td><td>Overloaded &mdash; permanent set and cable damage</td><td>Reject</td></tr></table></div>
+<p>Counter-intuitively, a <i>softer</i> isolator loaded further up its range usually isolates better than a stiff one running at 10% utilization. The limit is shock stroke, not static strength.</p>
+
+<h2 id="natural-frequency">Step 4 &mdash; Natural frequency: the heart of the selection</h2>
+<p>The isolator and the payload form a spring-mass system with a natural frequency:</p>
+<div class="formula">fn = (1 / 2&pi;) &times; &radic;(k / m)</div>
+<p>Isolation only begins above <b>&radic;2 &times; fn</b>. Below that the isolator actually <i>amplifies</i> the input, peaking at resonance. So the rule is simple: <b>place fn well below the lowest frequency you need to isolate</b> &mdash; a ratio of 3:1 or better gives roughly 90% isolation.</p>
+<div class="box"><h4>Kv or Ks &mdash; use the right stiffness</h4>
+<p style="margin:0">Wire rope isolators are deliberately non-linear. Catalogues give two rates: <b>Kv</b>, the small-deflection <b>vibration</b> stiffness (use this for natural frequency and transmissibility) and <b>Ks</b>, the average large-deflection <b>shock</b> stiffness (use this for shock stroke and shock response). Using Kv for a shock calculation will badly under-predict stroke.</p></div>
+
+<h2 id="transmissibility">Step 5 &mdash; Check the vibration response</h2>
+<p>Transmissibility <b>T</b> is the ratio of output to input motion at a given frequency:</p>
+<div class="formula">T = &radic;[ (1 + (2&zeta;r)&sup2;) / ((1 &minus; r&sup2;)&sup2; + (2&zeta;r)&sup2;) ] , &nbsp; r = f / fn</div>
+<p>At resonance with &zeta; = 0.15, T peaks near 3.5 &mdash; the isolator amplifies by about 3.5&times;. High wire-rope damping is precisely what keeps this peak low; a lightly damped steel spring would peak above 20&times;. Above &radic;2&middot;fn, T drops steeply and isolation takes over.</p>
+<p>For random vibration, response is estimated at resonance with <b>Miles' equation</b>:</p>
+<div class="formula">G<sub>rms,response</sub> = &radic;[ (&pi;/2) &times; fn &times; Q &times; PSD(fn) ] , &nbsp; Q = 1 / (2&zeta;)</div>
+<p>Design practice is to compare the <b>3&sigma; value</b> (three times the rms response) against the fragility limit.</p>
+
+<h2 id="shock">Step 6 &mdash; The shock case, and why stroke usually decides</h2>
+<p>Shock is normally specified as a half-sine pulse: a peak acceleration and a duration (for example 50 g for 11 ms). The energy content is captured by the velocity change:</p>
+<div class="formula">&Delta;V = 2 &times; a &times; &tau; / &pi;</div>
+<p>Adonitech solves the full single-degree-of-freedom equation numerically through the pulse and reads two results: the <b>maximax transmitted acceleration</b> (must stay below fragility) and the <b>peak stroke</b> &mdash; how far the isolator actually deflects.</p>
+<div class="box"><h4>Stroke is the usual limiting factor</h4>
+<p style="margin:0">A softer isolator transmits less g but moves further. Push too soft and the isolator bottoms out, at which point the transmitted shock spikes far beyond the calculated value. Always confirm <b>stroke safety factor = rated deflection / peak stroke &ge; 1</b>, and confirm the equipment has that much clear sway space around it.</p></div>
+
+<h2 id="axes">Step 7 &mdash; Match the load axis to the mounting</h2>
+<p>Every wire rope isolator has three published load directions, and the mounting orientation decides which one carries gravity:</p>
+<div class="tw"><table><tr><th>Mounting</th><th>Gravity axis</th><th>Typical use</th></tr>
+<tr><td>Floor / base mounted</td><td><b>Compression</b></td><td>Cabinets, gensets, deck equipment</td></tr>
+<tr><td>Wall / bulkhead mounted</td><td><b>Shear / Roll</b></td><td>Bulkhead-hung electronics</td></tr>
+<tr><td>45&deg; mounting</td><td><b>45&deg; Roll</b></td><td>Transport frames needing balanced 3-axis response</td></tr>
+<tr><td>Ceiling / suspended</td><td>Tension (use compression data, confirm with factory)</td><td>Overhead assemblies</td></tr>
+<tr><td>Floor + stabilizers</td><td>Compression, with stabilizer axes adding stiffness</td><td>Tall cabinets prone to rocking</td></tr></table></div>
+<p>Reading compression data for a wall-mounted isolator is one of the most common and most expensive selection errors &mdash; shear ratings are typically less than half the compression rating. See the <a href="wire-rope-isolator-applications.html">applications and mounting guide</a> for detail.</p>
+
+<h2 id="worked-example">A worked example &mdash; 65 kg naval open-deck director</h2>
+<p>An electro-optical director weighing 65 kg is floor mounted on four isolators on an open deck. Requirements: JSS 55555 vibration, BR 3021 Grade 2 shock (50 g vertical / 22 g horizontal, 11 ms), fragility 20 g.</p>
+<ul>
+<li>Static load per isolator: W = 65 &times; 9.81 / 4 = <b>159 N</b>; design load = 319 N.</li>
+<li>Selecting AWRI-95-80 (rated 592 N compression): utilization 27%, static safety factor 1.86.</li>
+<li>Natural frequency from Kv = 94 N/mm gives <b>fn = 12.1 Hz</b>, comfortably below the 23&ndash;33 Hz band energy.</li>
+<li>Numerical SDOF shock solution: <b>13.8 g transmitted</b> (below the 20 g fragility) with <b>58.5 mm stroke</b> against 68 mm rated &mdash; stroke safety factor 1.16.</li>
+<li>Verdict: PASS on all axes, with 72% shock attenuation.</li>
+</ul>
+<p>The <a href="index.html">online selector</a> performs this entire chain across all 114 AWRI and ACWRI models in about a second and ranks the candidates for you.</p>
+
+<h2 id="mistakes">Seven mistakes that ruin isolator selections</h2>
+<ol>
+<li><b>Choosing on load capacity alone.</b> An isolator that merely holds the weight may isolate nothing. Frequency governs.</li>
+<li><b>Ignoring the CG offset.</b> One corner quietly carries 30% more than the average and fails first.</li>
+<li><b>Using Kv for shock.</b> Under-predicts stroke dramatically; use Ks.</li>
+<li><b>Forgetting sway space.</b> The calculation passes, then the equipment strikes a bulkhead at 40 mm of stroke.</li>
+<li><b>Reading the wrong axis.</b> Compression figures applied to a wall mount &mdash; usually a factor-of-two error.</li>
+<li><b>Over-stiffening "to be safe".</b> Raises fn into the excitation band and amplifies the very vibration you meant to remove.</li>
+<li><b>Ignoring the resonance dwell.</b> Qualification tests sweep <i>through</i> fn; the amplified response there must still sit below fragility.</li>
+</ol>
+
+<h2 id="faq">Frequently asked questions</h2>
+<details class="faq"><summary>How many wire rope isolators should I use?</summary><p>Minimum three for stability; four is standard and simplifies load sharing. More isolators reduce the load each carries, which raises the system natural frequency &mdash; so adding mounts is not automatically better for isolation. Tall equipment often uses four base mounts plus two stabilizers to control rocking.</p></details>
+<details class="faq"><summary>What natural frequency should I target?</summary><p>Aim for fn at or below one-third of the lowest frequency you must isolate. For naval and transport equipment this typically lands between 8 and 15 Hz. Going lower improves isolation but increases static deflection and shock stroke.</p></details>
+<details class="faq"><summary>Can wire rope isolators be used outdoors or at sea?</summary><p>Yes &mdash; that is their strongest advantage. All-metal construction (stainless cable and lugs) resists salt spray, oil, UV and temperature from &minus;100 &deg;C to +260 &deg;C with no ageing, unlike elastomeric mounts. Specify SS 316 lugs with SS 302/304 cable for marine duty.</p></details>
+<details class="faq"><summary>What is the difference between AWRI and ACWRI?</summary><p>AWRI is the standard Adonitech range spanning roughly 47 N to 30,270 N across 12 cable families. ACWRI is the compact series for light payloads &mdash; small electronics, instruments and sensors &mdash; with ratings from about 1 N upwards. Both are evaluated together in the selector.</p></details>
+<details class="faq"><summary>Do I need to qualify the isolator or the whole assembly?</summary><p>Standards qualify the equipment as installed, so the isolator, mounting plate and fasteners are tested as a system. The calculations here predict that behaviour and size the mount correctly; first-article testing then confirms it.</p></details>
+
+<div class="box"><h4>Ready to select?</h4><p style="margin:0">Open the <a href="index.html">free AWRI wire rope isolator selector</a> &mdash; enter your mass, standard and mounting, and get a ranked list with a full engineering report you can send to your customer. Or <a href="download.html">install the free Android app</a> to work offline on site.</p></div>
+</article><aside>
+<div class="side cta-side"><h4>Free selection tool</h4>
+<p>Select the right isolator in 2 minutes &mdash; 114 models, full shock &amp; vibration calculations, branded PDF report.</p>
+<a class="btn" href="index.html">Open the Selector &rarr;</a></div>
+<div class="side"><h4>Knowledge Base</h4>
+<a href="how-to-select-wire-rope-isolator.html">How to select a wire rope isolator</a>
+<a href="wire-rope-isolator-standards.html">Standards explained</a>
+<a href="vibration-isolation-glossary.html">Engineering glossary</a>
+<a href="wire-rope-isolator-applications.html">Applications &amp; mounting</a>
+<a href="download.html">Free Android app</a></div>
+<div class="side"><h4>Talk to an engineer</h4>
+<p style="font-size:13px;color:var(--ink-2);margin-bottom:10px">Custom builds, naval qualification support and volume pricing.</p>
+<a class="btn btn-o" style="width:100%;text-align:center" href="https://www.wireropeisolater.com/contact-us/" target="_blank" rel="noopener">Contact Adonitech</a></div>
+</aside></div></div>
+<div class="sitefoot"><div class="sitefoot-in">
+<div><div style="font-size:26px;font-weight:800;color:var(--brand)">adoniTech</div>
+<div style="font-size:12.5px;line-height:1.7;margin-top:8px">ISO certified Indian manufacturer of industrial shock absorbers, wire rope isolators and anti-vibration equipment. Serving naval, defence, aerospace, transport and industrial programmes.<br><br>MIDC Kodoli, Satara &amp; Pune, India<br><a href="mailto:sales@adonitech.co.in" style="display:inline;color:var(--brand-l)">sales@adonitech.co.in</a></div></div>
+<div><h4>Products</h4>
+<a href="https://www.wireropeisolater.com/wire-rope-isolator/" target="_blank" rel="noopener">Wire Rope Isolators</a>
+<a href="https://www.adonitech.co.in/industrial-shock-absorbers/" target="_blank" rel="noopener">Industrial Shock Absorbers</a>
+<a href="https://www.cranebuffer.com/" target="_blank" rel="noopener">Crane Buffers</a>
+<a href="https://www.adonitech.co.in/rotary-shock-absorbers/" target="_blank" rel="noopener">Rotary Shock Absorbers</a>
+<a href="https://www.adonitech.co.in/hydraulic-feed-rate-controllers/" target="_blank" rel="noopener">Feed Rate Controllers</a>
+<a href="https://www.adonitech.co.in/shock-absorbers-for-switchgear/" target="_blank" rel="noopener">Switchgear Shock Absorbers</a>
+<a href="https://www.adonitech.co.in/" target="_blank" rel="noopener">All products &mdash; adonitech.co.in</a></div>
+<div><h4>Knowledge</h4>
+<a href="knowledge.html">Knowledge Base</a>
+<a href="how-to-select-wire-rope-isolator.html">How to Select an Isolator</a>
+<a href="wire-rope-isolator-standards.html">Standards Explained</a>
+<a href="vibration-isolation-glossary.html">Engineering Glossary</a>
+<a href="wire-rope-isolator-applications.html">Applications &amp; Mounting</a>
+<a href="https://www.wireropeisolater.com/news-blog/" target="_blank" rel="noopener">Blog &amp; News</a></div>
+<div><h4>Tools &amp; Downloads</h4>
+<a href="index.html">Online Selector</a>
+<a href="download.html">▸ Android App (free)</a>
+<a href="AWRI_Selector.apk" download>▼ Download APK v1.0</a>
+<a href="https://www.wireropeisolater.com/download-2/" target="_blank" rel="noopener">3D Files &amp; Catalogue</a>
+<a href="https://calculation.wireropeisolater.com/" target="_blank" rel="noopener">Shock Absorber Calculator</a>
+<a href="https://calculation.cranebuffer.com/" target="_blank" rel="noopener">Crane Buffer Calculator</a>
+<a href="https://www.wireropeisolater.com/contact-us/" target="_blank" rel="noopener">Contact Us</a></div>
+</div><div class="cr">&copy; 2026 Adoni Tech &middot; AWRI Wire Rope Isolator Selection &amp; RFQ Suite &middot; <a href="privacy.html" style="display:inline;color:#8397AA">Privacy Policy</a> &middot; <a href="https://www.wireropeisolater.com/" target="_blank" rel="noopener" style="display:inline;color:#9DAEC2">www.wireropeisolater.com</a> &middot; <a href="https://www.adonitech.co.in/" target="_blank" rel="noopener" style="display:inline;color:#9DAEC2">www.adonitech.co.in</a></div></div></body></html>

@@ -1,0 +1,552 @@
+Hydraulic Buffer - ED series
+   Energy Absorption Vibration Control
+                                   ED Series
+
+
+FOCUSES ON COST-EFFECTIVE ENERGY
+   ABSORPTION AND VIBRATION
+      ISOLATION SOLUTIONS
+                                                                                               ED Series
+Formulae for selection model of Shock Absorber
+1.Symbols
+   Symbol                      Unit                               Description
+      EK                 kJ                  Kinetic Energy
+     EW                  kJ                  Work Energy
+      ET                 kJ                  Total Energy
+     ETC              kJ/h                   Total Energy Absorbed Per Hour
+      FS                 kN                  Maximum Buffer Force
+      V                  m/s                 Impact Velocity
+      VE                 m/s                 Effective Velocity
+      S                  m                   Buffer Stroke
+      SD              m/s2                   Deceleration
+      C              Cycle/h                 Cycle Per Hour
+      H                  m                   Drop Height
+      p                  bar                 Operation Pressure
+      P                  kW                  Motor Power
+      g           m/s (9.8m/s )
+                     2           2
+                                             Accelleration
+      n                   -                  Min. Efficiency
+
+
+1kgf = 9.81N, 1Nm = 1J, 1MPa = 10bar= 10.2kg/cm², lg = 9.8m/s²
+
+2. Formula
+
+EK = W V²     EKC=ET C EW = F X S, Et=EK + Ew FM=         EK         SD=     VE ²  SD > VE²
+      2                                                  S 0.8             2 S 0.8    -- 2 S 0.8
+
+
+for a faster assitance in selecting the product visit
+
+
+http://www.cranebuffer.com
+
+
+NOTE: Select buffers to get a deacelleratoin less than 5M/s2 and Velocity be cosidered
+a 50% of the rated Crane Speed
+                                                                                                             ED Series
+3. Calculation example
+
+                                             2                2
+                                W        V
+ a)         V=0.6m/s     EK =                    = 80 X 0.6 = 14.4kJ
+            W=80 ton
+                                    2                 2                            pre-       EI-80 X 100
+                         ET = EK
+                                                                                   selected   Stroke : 150
+                                   WT                14.4
+                         FS = S 0.8 = 0.15 X 0.8 = 120kN
+                         VE = 0
+                                         2
+                                    V                  0.6
+                         SD = 2 S 0.8 =
+                                                    2X0.15X0.8
+                                                               = 1.5m/s2           Final
+                                         2                    2                    selected   EI-80 X 100
+                               V         0.6
+                         S=          =           =0.15m = 150mm
+                            2 S D 0.8 2X0.15X0.8
+
+
+ b)         V=1.2m/s
+                                             2                        2
+                                W        V
+                                                 = 200 X 1.2 = 14.4kJ              pre-       EI-120 X 400
+            W=200 ton               2                     2
+            P=20kw              2.5 P   2.5 X 20                                   selected   Stroke : 300
+                         FS =      2
+                                      = 0.15 X 0.8 = 41.7kN
+
+                         EW = F S = 41.7 X 0.3 = 12.5kJ
+                         ET = EK ET = 144 X 12.5 = 156.5kJ                         Final
+                                 ET       156.5
+                         FS = S 0.8 = 0.3 X 0.8 = 652kN                            selected   EI-150 X 400
+
+
+            V=1.0m/s
+ c)
+                                                      2                    2
+
+            W1=180 ton   EK =
+                                W1 W2(V1 + V2) 180X250(0.1 + 0.6)
+                                              = 2(W1 + W2) = 133.95kJ              pre-       EI-120 X 400
+                                 2(W1 + W2)
+            V2=0.6m/s
+                         ET = EK                                                   selected   Stroke : 500
+            W2=250 ton
+                                    ET             133.95
+                         EK = S 0.8 = 0.5 X 0.8 = 334.88kN
+
+                         VE = V1+V2=1.0+0.6=1.6m/s
+                                             2                2
+                                                                                   Final      EI-120 X 400
+                                     VE                1.6
+                         SD = 2 S 0.8 =
+                                                    2X0.5X0.8
+                                                              = 3.2m/s 2           selected
+
+            V=1.0m/s
+ d)
+                                                          2                    2
+                                W1 W2(V1 + V2) 220X260(0.1 + 0.7)
+            W1=220 ton   EK =    4(W1 + W2)
+                                              = 4(220 + 260) = 86kJ                pre-       EI-120 X 600
+            P=0.7m/s
+            W2=260 ton
+                         ET = EK                                                   selected   Stroke : 500
+                                    ET                86
+                         EK = S 0.8 =0.25 X 0.8= 430.49kN
+
+                         VE = V1+V2=1+0.7=0.85m/s
+                                2 2 2                                              Final
+                                 VE         1.6
+                                                                  2
+                                                                                   selected   EI-120 X 600
+                         SD = 2 S 0.8 =            = 1.806m/s 2
+                                        2X0.25X0.8
+
+            W=2.5 ton
+ e)         H=0.4m        EK = g                                                   pre-       EI-80 X 100
+                          ET = W g                                                 selected   Stroke : 150
+                          EK = EK + EW = 9.81 + 3.67 = 13.48kJ
+
+                          V = √2 g H = √2 X 9.81 X 0.4 = 2.8m/s
+                                                                                   Final
+                                                                                              EI-80 X 100
+                            =
+                                     ET
+                                         = 13.48 = 112.33kN                        selected
+                                   S 0.8   0.15X0.8
+                                                                                                                                        ED Series
+                                                         Heavy Duty Shock Absorber is designed with internal air accumulator with
+                                                         compact structure. This series product provides very smooth damping force
+                                                         with high energy absorption capacity. They are designed for a wide variety
+                                                         of stroke lengths with super long working life, and widely used in Automated
+                                                         storage, Rail Equipments, Trolley Cranes, Automatic Production Lines which
+                                                         have high requirements for deceleration and smooth damping force.
+
+                                                         Custom-orificed design accommodates specific damping requirements.
+                                                         Computer generated output performance simulation is used to optimize
+                                                         the orifice configuration. Available in standard bore dimensions of up to
+                                                         200mm and strokes over 1524mm
+
+                                                         Available in the latest model with galvanized surface finishes to enhance
+                                                         corrosion resistant capability.
+
+
+
+
+Designed with environmentally friendly materials and fluids
+
+Compact design, decelerates smoothly and safely, large energy capacity loads up to 3,000,000 in-lbs. per cycle(330 000 Nm)
+
+Internal charged air/oil accumulator replaces mechanical return springs, providing shorter overall length and reduced weight.
+
+Optional Bladder Accumulator (BA) for higher cycle rates also
+available.
+
+Wide variety of optional configurations including bellows,
+clevis mounts and safety cable.
+
+Painted external components provide excellent corrosion
+protection. Galvanized surface finishes is also available.
+
+Epoxy painting and special rod materials are available for use
+in highly corrosive environments.
+
+All sizes are fully field repairable.
+
+Piston rod extension sensor systems available for re-use safety
+requirements.
+
+Incorporating optional fluids and seal package can expand standard operating temperature range from (-10°C to 60°C) to
+(-35°C to 100°C)
+                                                                                                                                            EI Series
+ ED 1.5X 2             ED 1.5 X 32 Series
+
+
+
+
+                                                                Nominal                                      With BA
+                                              (Fp)   Nominal    w/o BA
+                        (ET)      (ETC)      Max.     Return       N                                                        CP**
+   Catalog      (S)     Max.       Max.      Shock    Force       mm                                        CP     FP       w/o
+    No./      Stroke   Energy     Energy     Force     BA        Return     A       F       Y       Z       BA     BA       BA *   Weight
+   Model       mm      Nm/C        Nm/h        N        N        Force     mm      mm      mm      mm       mm     mm        mm     kg
+
+ED 1.5 x 2    50       3 200     189 000    70 060    220        320       310     208     240      86     139         86   41      10
+ED 1.5 x 4    100      6 100     368 000    70 060    220        410       410     258     290      136    139         86   41      12
+ED 1.5 x 6    150      9 100     546 700    70 060    220        450       510     308     340      186    139         86   41      12
+ED 1.5 x 8    200      12 200    732 500    70 060    220        525       613     360     392      237    139         86   41      13
+ED 1.5 x 10   250      15 200    781 000    70 060    220        600       715     411     443      288    139         86   41      14
+ED 1.5 x 12   300      18 300    877,900    70 060    220        920       817     462     494      339    139         86   41      16
+ED 1.5 x 14   350      20 900    972,900    70 060    220       1 120      918     512     544      390    139         86   41      17
+ED 1.5 x 16   400      23 300   1 069 800   60 060    220       1 120     1019     563     595      440    139         86   41      18
+ED 1.5 x 18   450      25 300   1 166 700   47 820    220       1 120     1 121    614     646      491    139         86   41      19
+ED 1.5 x 20   500      27 200   1 263 600   38 920    220       1 120     1 223    665     697      542    139         86   41      20
+ED 1.5 x 24   600      30 500   1 457 400   27 800    220       1 120     1 427    767     799      644    139         86   41      23
+ED 1.5 x 28   713      33 600   1 649 300   21,130    220       1 120     1 629    868     900      745    139         86   41      20
+ED 1.5 x 32   813      36 500   1 839 300   16 460     220       1 120    1 830    968     1000     846    139         86   41      23
+
+
+
+Notes:
+1.ED shock absorbers will function satisfactorily at 5% of their maximum rated energy per cycle. If less than these values, a smaller
+model should be specified.
+2.It is recommended that the customer consult company for safety-related overhead crane applications.
+3.The energy data listed is for ideal linear impacts only. If side load conditions exist in the application, contact company for sizing
+assistance.
+4. Rear flange mounting of 300 mm strokes and longer not recommended. Front and rear flange or foot mount configurations are
+recommended.
+5.Maximum cycle rate is 60 cycles/hr. for ED with BA(Bladder Accumulator) option and 30 cycles/hr. without BA option.
+6. For impact velocities over 4.5m/s,consult factory.
+                                                                                                                                           EI Series
+ED 2.6 X 6              ED 2.0 X 56 Series
+
+
+
+
+                                                               Nominal                                      With BA
+                                             (Fp)    Nominal   w/o BA
+                         (ET)     (ETC)     Max.      Return      N                                                        CP**
+   Catalog      (S)      Max.      Max.     Shock     Force      mm                                        CP     FP       w/o
+    No./      Stroke    Energy    Energy    Force      BA       Return     A        F      Y       Z       BA     BA       BA *   Weight
+   Model       mm       Nm/C       Nm/h       N         N       Force     mm       mm     mm      mm       mm     mm        mm     kg
+
+ED 2.0 x 6    152      17 200    17 200    111 200    535       870       553     339     379      194    176         96   46      23
+ED 2.0 x 8    203      23 000    23 000    111 200    535       1040      655     390     430      245    176         96   46      25
+ED 2.0 x 10   250      28 800    28 800    111 200    535       1 340     757     441     481      296    176         96   46      23
+ED 2.0 x 12   300      34 300    34 300    111 200    535       2 290     859     492     532      347    176         96   46      25
+ED 2.0 x 14   350      38 700    38 700    111 200    535       2 290     960     543     583      397    176         96   46      27
+ED 2.0 x 16   400      43 200    43 200    111 200    535       2 290    1062     594     634      448    176         96   46      29
+ED 2.0 x 18   450      47 600    47 600    111 200    535       2 290    1164     645     685      499    176         96   46      31
+ED 2.0 x 20   500      51 900    51 900    111 200    535       2 290    1 265    695     735      550    176         96   46      33
+ED 2.0 x 24   600      60 800    60 800    111 200    535       2 290    1 469    797     837      652    176         96   46      36
+ED 2.0 x 28   700      69 800    69 800    111 200    535       2 290    1672     899     939      753    176         96   46      42
+ED 2.0 x 32   800      70 700    70 700    111 200    535       2 290    1953    1079     1119     854    256     176      46      49
+ED 2.0 x 36   900      101 200   101 200   100 000    535       2 290    2151    1179     1 219    952    256     176      46      53
+ED 2.0 x 40 1000       101 400   101 400   84 500     535       2.290    2 351   1 279    1319    1 052   256     176      46      56
+ED 2.0 x 48 1 200      114 500   114 500   60 000     535       2.290    2751    1 479    1519    1 252   256     176      46      64
+ED 2.0 x 56 1 400      125 000   125 000    35 100     535      2 290    3 171    1689    1729    1 462 256/975   176      46      73
+
+
+Notes:
+1.ED shock absorbers will function satisfactorily at 5% of their maximum rated energy per cycle. If less than these values, a smaller
+model should be specified.
+2.It is recommended that the customer consult company for safety-related overhead crane applications.
+3.The energy data listed is for ideal linear impacts only. If side load conditions exist in the application, contact company for sizing
+assistance.
+4. Rear flange mounting of 300 mm strokes and longer not recommended. Front and rear flange or foot mount configurations are
+recommended.
+5. Maximum cycle rate is 60 cycles/hr. for ED with BA(Bladder Accumulator) option and 30 cycles/hr. without BA option.
+6. For impact velocities over 4.5m/s,consult factory.
+7.ED2.0 x 56 has two charge ports.
+                                                                                                                                           EI Series
+ED 3.5 X 2              ED 3.5 X 56 Series
+
+
+
+
+                                                                 Nominal                                    With BA
+                                               (Fp)    Nominal   w/o BA
+                        (ET)       (ETC)      Max.      Return      N                                                      CP**
+   Catalog      (S)     Max.        Max.      Shock     Force      mm                                       CP        FP   w/o
+    No./      Stroke   Energy      Energy     Force      BA       Return     A       F      Y        Z      BA        BA   BA *   Weight
+   Model       mm      Nm/C         Nm/h        N         N       Force     mm      mm     mm       mm      mm        mm    mm     kg
+
+ED 3.0 x 2      50       9 600    578 500    222 400    670      1 130      336     203     253     108    128    111      46      21
+ED 3.0 x 3      75      14 600    659 000    222 400    710      1810       387     229     279     133    128    111      46      22
+ED 3.0 x 5     125      24 200    805 700    222 400    735      2.895      489     280     330     184    128    111      46      25
+ED 3.0 x 8     200      35 700   1 021 500   222 400    755      2895       640     355     405     260    128    111      46      29
+ED 3.0 x 10    250      43 200   1 168 300   222 400    780      2895       742     406     456     311    128    111      46      32
+ED 3.0 x 12    300      50 700   1 315 000   222 400    780      2895       844     457     507     362    128    111      46      35
+ED 3.0 x 14    350      62 900   1 605 700   222 400    800      2895       995     558     608     412    178    161      46      43
+ED 3.0 x 16    400      70 400   1 752 400   222 400    800      2.895     1097     609     659     463    178    161      46      45
+ED 3.0 x 18    450      77 900   1 899 200   222 400    800      2895      1199     660     710     514    178    161      46      48
+ED 3.0 x 20    500      85 400   2 046 000   222 400    800      2895      1 301    711     761     565    178    161      46      51
+ED 3.0 x 24    600     100 300   2 336 600   222 400    800      2895      1 504    812     862     667    178    161      46      57
+ED 3.0 x 28    700     115 300   2 630 100   222 400    800      2895      1707     914     964     768    178    161      46      62
+ED 3.0 x 32    800     130 200   2 920 700   180 200    800      2895      1910    1015    1065     870    178    260      46      68
+ED 3.0 x 36    900     147 700   3 349 500   160 100    800      2895      2156    1164    1 214    967    228    260      46      77
+ED 3.0 x 40   1000     159 600   3 637 200   140 000    800      2895      2 356   1 264   1314    1067    228     19      46      85
+ED 3.0 x 48   1 200    179 700   4 212 800    95 600    825      2895      2756    1 464   1514    1 267   228     19      46      94
+ED 3.0 x 56   1 400    196 700   4 788 300    55 600    825      2895      3156    1 664   1714    1 467 228/947 61        46     106
+ED 3.0 x 60   1 500    206 800   5 116 300    53 200    825      2.895     3 384   1778    1828    1 581 228/1004 19       46     106
+ED 3.0 x 64   1 629    217 100   5 210 400    53 200    825      2895      3 688   1980    2030    1683 439/1 527 19       46     110
+ED 3.0 x 72   1 830    238 000   6 242 000    53 200    825      2895      4 012   2 092   2142    1895 439/1727 19        46     118
+
+
+Notes:
+1.ED shock absorbers will function satisfactorily at 5% of their maximum rated energy per cycle. If less than these values, a smaller
+model should be specified.
+2.It is recommended that the customer consult company for safety-related overhead crane applications.
+3.The energy data listed is for ideal linear impacts only. If side load conditions exist in the application, contact company for sizing
+assistance.
+4. Rear flange mounting of 300 mm strokes and longer not recommended. Front and rear flange or foot mount configurations are
+recommended.
+5. Maximum cycle rate is 60 cycles/hr. for ED with BA(Bladder Accumulator) option and 30 cycles/hr. without BA option.
+6. For impact velocities over 4.5m/s,consult factory.
+7.ED3.0 x 72 has two charge ports.
+                                                                                                                                              EI Series
+ED 3.0 X 2              ED 3.0 X 72 Series
+
+
+
+
+                                                                  Nominal                                     With BA
+                                                (Fp)    Nominal   w/o BA
+                         (ET)       (ETC)      Max.      Return      N                                                        CP**
+   Catalog       (S)     Max.        Max.      Shock     Force      mm                                       CP         FP    w/o
+    No./       Stroke   Energy      Energy     Force      BA       Return    A        F      Y        Z      BA         BA    BA *   Weight
+   Model        mm      Nm/C         Nm/h        N         N       Force    mm       mm     mm       mm      mm         mm     mm     kg
+
+ ED 3.5 x 2     50      13 000    781 000     300 250    960       2020     354     244     294      85      134        77            33
+                                                                                                                              52
+ ED 3.5 x 4    100      26 000    993 500     300 250    1020      2710     456     295     345     136      134        77            37
+                                                                                                                              52
+ ED 3.5 x 6    150      38 800    1 161 900   300 250    1160      4 480    556     345     395     186      134        77            41
+                                                                                                                              52
+ ED 3.5 x 8    200      50 900    1 333 600   300 250    1 180     4 480    658     396     446     237      134        77            45
+                                                                                                                              52
+ ED 3.5 x 10   250      60 800    1 505 400   300 250    1 200     4 480    760     447     497     288      134        77            49
+                                                                                                                              52
+ ED 3.5 x 12   300      70 800    1 677 200   300 250    1 200     4 480    862     498     548     339      134        77            53
+                                                                                                                              52
+ ED 3.5 x 16   400      90 500    2017 300    300 250    1 225     4 480    1064    599     649     440      134        77            60
+                                                                                                                              52
+ ED 3.5 x 20   500      118 800   2 546 100   300 250    1 225     4 480    1 323   756     806     542      189        132           74
+                                                                                                                              52
+ ED 3.5 x 24   600      138 700   2 889 600   300 250    1 250     4 480    1 527   858     908     644      189        132           81
+                                                                                                                              52
+ ED 3.5 x 28   700      158 500   3 229 700   300 250    1 250     4 480    1729    959     1009    745      189        132           89
+                                                                                                                              52
+ ED 3.5 x 32   800      178 400   3 573 200   300 250    1 250     4 480    1933    1061    1111    847      189        132           97
+                                                                                                                              52
+ ED 3.5 x 36   900      198 300   3 916 800   260 200    1 250     4 480    2137    1 163   1 213   949      189        132           105
+                                                                                                                              52
+ ED 3.5 x 40   1 000    216 800   4 256 900   215 700    1 250     4 480    2 339   1 264   1314    1050     189        132           112
+                                                                                                                              52
+ ED 3.5 x 48   1 200    247 200   4 930 500   155 700    1 250     4 480    2739    1 464   1514    1 250    189        132           128
+                                                                                                                              52
+ ED 3.5 x 56   1 400    273 300   5 604 000   112 500    2100      4 480    2739    1 464   1514    1 250   189/908     132           128
+                                                                                                                              52
+
+
+Notes:
+1.ED shock absorbers will function satisfactorily at 5% of their maximum rated energy per cycle. If less than these values, a smaller
+model should be specified.
+2.It is recommended that the customer consult company for safety-related overhead crane applications.
+3.The energy data listed is for ideal linear impacts only. If side load conditions exist in the application, contact company for sizing
+assistance.
+4. Rear flange mounting of 300 mm strokes and longer not recommended. Front and rear flange or foot mount configurations are
+recommended.
+5.Maximum cycle rate is 60 cycles/hr. for ED with BA(Bladder Accumulator) option and 30 cycles/hr. without BA option.
+6. For impact velocities over 4.5m / s consult factory.
+7. ED * 3.5 * 56 has two charge ports.
+                                                                                                                                          EI Series
+ED 4.0 X 2              ED 4.0 X 48 Series
+
+
+
+
+                                                                  Nominal                                   With BA
+                                                (Fp)    Nominal   w/o BA
+                         (ET)       (ETC)      Max.      Return      N                                                      CP**
+   Catalog       (S)     Max.        Max.      Shock     Force      mm                                      CP        FP    w/o
+    No./       Stroke   Energy      Energy     Force      BA       Return    A        F      Y       Z      BA        BA    BA *   Weight
+   Model        mm      Nm/C         Nm/h        N         N       Force    mm       mm     mm      mm      mm        mm     mm     kg
+
+ ED 4.0 x 2     50      15 700    943 700     355 900    1 100     1 100    430     294     344     111     206       108   64      64
+ ED 4.0 x 4    100      31 200    1 534 300   355 900    1 200     1 200    532     345     395     162     206       108   64      70
+ ED 4.0 x 6    150      46 279    1756 700    355 900    1 200     1 200    632     395     445     212     206       108   64      76
+ ED 4.0 x 8    200      62 000    1 987 900   355 900    1 200     1 200    735     447     497     263     206       108   64      82
+ ED 4.0 x 10   250      77,100    2 210 300   355 900    1 200     1 200    836     497     547     314     206       108   64      87
+ ED 4.0 x 12   300      92 600    1 855 100   355 900    1 225     1 225    1032    642     692     365     300       202   64      108
+ ED 4.0 x 16   400      123,100   3 304 300   355 900    1 225     1 225    1 234   743     793     466     300       202   64      120
+ ED 4.0 x 20   500      154 000   3757 900    355 900    1 245     1 245    1 438   845     895     568     300       202   64      131
+ ED 4.0 x 24   600      184 800   4 211 500   355 900    1 245     1 245    1 642   947     997     670     300       202   64      144
+ ED 4.0 x 28   700      215 100   4 660 700   355 900    1 245     1 245    1844    1 048   1098    771     300       202   64      157
+ ED 4.0 x 32   800      240 500   5 114 300   355 900    1 245     1 245    2048    1150    1 200   873     300       202   64      170
+ ED 4.0 x 36   900      265 900   5 567 900   355 900    1 245     1 245    2252    1 252   1 302   975     300       202   64      183
+ ED 4.0 x 40   1 000    289 900   6 017 100   355 900    1 245     1 245    2454    1 353   1 403   1076    300       202   64      195
+ ED 4.0 x 48   1 200    329 300   6 919 900   200 000    1 245     1 245    2854    1556    1606    1 273   300       202   64      220
+
+
+Notes:
+1.ED shock absorbers will function satisfactorily at 5% of their maximum rated energy per cycle. If less than these values, a smaller
+model should be specified.
+2.It is recommended that the customer consult company for safety-related overhead crane applications.
+3.The energy data listed is for ideal linear impacts only. If side load conditions exist in the application, contact company for sizing
+assistance.
+4. Rear flange mounting of 12 inch (300 mm) strokes and longer not recommended. Front and rear flange or foot mount
+configurations are recommended.
+5.Maximum cycle rate is 60 cycles/hr. for ED with BA(Bladder Accumulator) option and 30 cycles/hr. without BA option.
+6. For impact velocities over 4.5m/s, consult factory.
+                                                                                                                                               EI Series
+   Typical mounting methods are shown below. Special mounting requirements can be
+                           accommodated upon request.
+
+
+
+
+        TM: Rear Flange Front Foot Mount                            FM: Front and Rear Foot Mount. Also shown is optional safety
+                                                                           cable, typically used in overhead applications.
+
+
+
+
+              TF: Front and Rear Flanges                                                   FF: Front Flange
+
+
+
+
+                                                                                             FR: Rear Flange
+                                                                           Note: Rear flange mounting not recommended for
+                  CM: Clevis Mount                                              stroke lengths above 12 inches.(300mm)
+
+  ED 3.0 X 2    ED 4.0 X 10 Series
+  Clevis Mounts(CM)
+
+
+
+
+  Catalog                                        HD/ED   HDA
+   No./            A       B       D        E      F      F    CA    CB        CC    CD     CE      CF        FA    FB   FC        FD     FE
+  Model           mm      mm      mm       mm     mm     mm    mm    mm        mm    mm     mm      mm        mm    mm   mm        mm    mm
+
+ED 3.0 x 2        432     130     38       90    202     235   60     38       25     30     37     65        69    32    25       150   50
+ED 3.0 x 3        483     130     38       90    229     261   60     38       25     30     37     65        69    32    25       150   50
+ED 3.0 x 5        585     130     38       90    280     312   60     38       25     30     37     65        69    32    25       150   50
+ED 3.0 x 8        736     130     38       90    355     387   60     38       25     30     37     65        69    32    25       150   50
+ED 3.0 x 10       838     130     38       90    406     438   60     38       25     30     37     65        69    32    25       150   50
+ED 3.0 x 12       940     130     38       90    457     489   60     38       25     30     37     65        69    32    25       66    50
+ED 4.0 x 2        570     200     65       140   294     304                                        90        100   60    50       66    100
+ED 4.0 x 4        672     200     65       140   345     355                                        90        100   60    50       66    100
+ED 4.0 x 6        772     200     65       140   395     405                                        90        100   60    50       66    100
+ED 4.0 x 8        875     200     65       140   477     457                                        90        100   60    50       66    100
+ED 4.0 x 10       976     200     65       140   497     507                                        90        100   60    50       66    100
+                                                                                                                         EI Series
+                                                                                        Sensor Specification
+Optional Piston Rod Return Sensor
+
+Magnetic proximity sensor indicates complete piston rod return with 10-foot(3m)
+long cable.
+If complete piston rod does not return the circuit remains open. This can be used
+to trigger a system shut-off.                                                           Voltage10-30V
+Contact company for other sensor types.                                                 Load Current< 200 mA
+                                                                                        Leakage Current ≤ 80 mA
+Sensor port in line with charge port on models ED 1.5,2.0 and 4.0. Location offset
+                                                                                        Load Capacitance ≤ 1.0 mF
+90°for models ED3.0 and 3.5.                                                            Ambient Temperature: -26°~71°C
+
+
+
+                                                                                                     Sensor     Height
+                                                                             Catalog No./Model        mm         mm
+                                                                             ED 1.5                    86        20
+                                                                             ED 2.0 x 6-28             96         16
+                                                                             ED 2.0 x 32-56           176         16
+                                                                             ED 4.0 x 2-10            108         9
+                                                                             ED 4.0 x 12-48           202         9
+
+                                                                                                     Sensor     Height
+                                                                             Catalog No./Model        mm         mm
+                                                                             ED 3.0 x 2-12             61        15
+                                                                             ED 3.0 x 14-32           111         15
+                                                                             ED 3.0 x 36-60           161         15
+                                                                             ED 3.5 x 2-16            77.4        9
+                                                                             ED 3.5 x 20-56           132.4       9
+
+                                                                                                     Sensor     Height
+                                                                             Catalog No./Model        mm         mm
+                                                                             ED 1.5                    86        20
+                                                                             ED 2.0 x 6-28             96         16
+                                                                             ED 2.0 x 32-56           176         16
+                                                                             ED 3.0 x 2-12             61         15
+                                                                             ED 3.0 x 14-32           111         15
+                                                                             ED 3.0 x 36-60           161         15
+                                                                             ED 3.5 x 2-16            77.4        9
+                                                                             ED 3.5 x 20-56           132.4       9
+                                                                             ED 4.0 x 2-10            108         9
+                                                                             ED 4.0 x 12-48           202         9
+Urethane cap
+                                                                                                     Sensor     Height
+                                                                             Catalog No./Model        mm         mm
+                                                                             ED 1.5                    60         4
+                                                                             ED 2.0                    65         4
+                                                                             ED 3.0                    70         4
+                                                                                                                           EI Series
+Note: ED models are custom-orificed, therefore all information must be provided to company
+for unique part number assignment.
+
+
+                                                                                                        APPLICATION DATA
+
+
+
+           Ordering Code Example for Heavy Duty Shock Absorbers
+
+
+
+  1 - Quantity
+
+  2 - Model Selection
+  ED (Non-adjustable)
+
+
+  3 - Model Size
+  Select Size from Engineering Data Chart
+  ED-1.5, 2.0, 3.0,3.5,4.0 Bore Sizes (pages9-13)                          APPLICATION DATA
+                                                                           (Required for EI/ED Models)
+  4 - Mounting Method                                                      Vertical or horizontal motion
+                                                                           Weight
+  TM (Rear flange front foot mount)
+                                                                           Impact velocity
+  FM (Front and rear foot mount)
+                                                                           Propelling force (if any)
+  TF (Front and rear flanges)
+                                                                           Cycles/Hr
+  FF (Front flange)
+                                                                           Other (temperature or other environ-mental
+  FR (Rear flange)
+                                                                           conditions, safety standards, etc)
+  CM (Metric clevis mount)
+
+ 5 - Options
+ C (Sensor Cable)
+ B (Dust Guard)
+ SC (Safety Cable)
+ BA (Bladder Accumulator)
+ UC (Urethane Cap)
+
+
+
+ADONI TECH - Sharda 1st Floor, Jeevan Chaya Hsg. Soc., Opp. Civil Hospital, Satara - 415004. India. |
+TEL- (02162)-232 169
+WORKS -SLU/39, Addl. MIDC, Satara - 415 004. India.
+TELEFAX - (02162) 240 695 |
+CELL - +91 989 085 2663
+INTERNET - www.adonitech.co.in |
+EMAIL- sales@adonitech.co.in
+

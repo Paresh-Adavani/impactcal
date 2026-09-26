@@ -1,0 +1,29 @@
+<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ImpactCal — Login | ADONI TECH</title><link rel="icon" href="favicon.png">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"><link rel="stylesheet" href="style.css?v=2">
+</head><body>
+<header><div class="wrap"></div></header>
+<div class="wrap" style="max-width:480px">
+  <section class="card">
+    <h3 data-t="login_title">Sign in</h3>
+    <p class="hint" data-t="login_hint">Enter your email — we send a 6-digit code. Sales team addresses see prices and lead times; the admin address opens the admin panel. Customers can use the selectors without signing in.</p>
+    <div id="s1"><label data-t="f_email">Email</label><input id="email" type="email" autocomplete="email" inputmode="email"><div class="row" style="margin-top:12px"><button class="btn" id="send" data-t="send_code">Send code</button></div></div>
+    <div id="s2" class="hidden"><label data-t="f_code">6-digit code</label><input id="code" inputmode="numeric" maxlength="6" style="font-size:26px;letter-spacing:8px;text-align:center"><div class="row" style="margin-top:12px"><button class="btn" id="verify" data-t="verify">Verify</button><button class="btn ghost" id="again" data-t="send_again">Send again</button></div></div>
+    <div id="msg"></div>
+  </section>
+</div>
+<script src="common.js?v=6"></script>
+<script>
+const next = new URLSearchParams(location.search).get('next') || 'index.html';
+const say = (cls, m) => $('#msg').innerHTML = `<div class="note ${cls}">${esc(m)}</div>`;
+$('#send').onclick = $('#again').onclick = async () => { try { const r = await api('auth/request-otp', { method: 'POST', body: { email: $('#email').value } });
+  $('#s1').classList.add('hidden'); $('#s2').classList.remove('hidden'); $('#code').focus();
+  say(r.sent ? 'ok' : 'warn', r.sent ? t('code_sent') : (t('code_not_sent') + (r.dev_code ? ' — dev code: ' + r.dev_code : '') + (r.reason ? ' (' + r.reason + ')' : ''))); } catch (e) { say('bad', e.message); } };
+$('#verify').onclick = async () => { try { const r = await api('auth/verify', { method: 'POST', body: { email: $('#email').value, code: $('#code').value } }); AUTH.token = r.token; AUTH.user = r.user;
+  location.href = next !== 'index.html' ? next : r.user.role === 'admin' ? 'admin.html' : r.user.role === 'dealer' ? 'portal.html' : next; } catch (e) { say('bad', e.message); } };
+$('#code').addEventListener('keydown', e => { if (e.key === 'Enter') $('#verify').click(); });
+$('#email').addEventListener('keydown', e => { if (e.key === 'Enter') $('#send').click(); });
+bootCommon('nav_login');
+</script>
+</body></html>

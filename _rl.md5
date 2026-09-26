@@ -1,0 +1,14 @@
+c62987f380a71ee6fc1236b692b47e92  lib/quality.js
+a526b02ee3db68cf4a68cfea2eb1e578  lib/app.js
+ce33b88ffd7908f4ee8e2c61ef2deb25  lib/notify.js
+99a784f77acbc82f81a99984b8cc2384  lib/crm.js
+0e788d81436a748d4ba7a4353f49b691  site/selector.html
+7aba5e92b6e9baa87517acb633b080bf  site/selector.js
+0a18eec2b6e9112133c3b39510fafe33  site/style.css
+d2a73968a602cf113cc02cba388236e6  site/rubber.html
+d4db804b71d360786f28bc336327184d  site/admin.html
+67fbf41b05001e48a911b1462ec587ba  site/admin.js
+5f1f5cf69d89fea34dc4c17a9d533338  data/translations.csv
+34ce3ed1fd0df7c3f58e86c153f1df3b  test/run.js
+ca15a7bc5fef98e4c14e2a985fc3799c  CHANGELOG.md
+3b474668af1fecbe332851cb4ee069ca  docs/ADMIN-GUIDE.md

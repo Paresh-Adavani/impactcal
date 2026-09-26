@@ -1,0 +1,468 @@
+                                                                     AKHG Series
+      Hydraulic Buffers- AKHG SERIES
+Deaceleration technology for Grantry , Cranes , Girders , Trolleys
+                                                                                              AKHG Series
+             SIZE         STROKE                    MOUNTING   OPTION ACCESSORIES
+
+
+   AKHG      100          100                       RS         B
+
+
+
+                    RS: Rear Flange Mount                             Bellow
+
+                                                                      Ureathane Striker Cap
+                    FS-Front Flange Mount
+
+
+                    SS: Front and Rear Flange Mount
+
+
+                    RC: Rod Clevis
+
+
+                    TM: Front Flange and foot, Rear Flange
+
+
+                    FM: Front and Rear Foot Mount
+
+
+
+
+• Working Tempratures: 10 degrees to 50 degress Celcius
+• Stainless Steel Options available on request
+• Special Sensors can be mounted for additional Saftey
+• Normal Working Temperature's: 10 degrees to 50 degrees Celsius
+• For Extreme working temperature write to factory regarding the actual temperatures.
+• Stainless Steel Options available on request
+• Special Sensors can be mounted for additional Saftey
+                                                                                               AKHG Series
+Formulae for selection model of Shock Absorber
+1.Symbols
+   Symbol                      Unit                               Description
+      EK                 kJ                  Kinetic Energy
+     EW                  kJ                  Work Energy
+      ET                 kJ                  Total Energy
+     ETC              kJ/h                   Total Energy Absorbed Per Hour
+      FS                 kN                  Maximum Buffer Force
+      V                  m/s                 Impact Velocity
+      VE                 m/s                 Effective Velocity
+      S                  m                   Buffer Stroke
+      SD              m/s      2
+                                             Deceleration
+      C              Cycle/h                 Cycle Per Hour
+      H                  m                   Drop Height
+      p                  bar                 Operation Pressure
+      P                  kW                  Motor Power
+      g           m/s (9.8m/s )
+                     2             2
+                                             Accelleration
+      n                   -                  Min. Efficiency
+
+
+1kgf = 9.81N, 1Nm = 1J, 1MPa = 10bar= 10.2kg/cm², lg = 9.8m/s²
+
+2. Formula
+
+EK = W V²     EKC=ET C EW = F X S, Et=EK + Ew FM=         EK         SD=     VE ²  SD > VE²
+      2                                                  S 0.8             2 S 0.8    -- 2 S 0.8
+
+
+for a faster assitance in selecting the product visit
+
+
+http://www.cranebuffer.com
+
+
+NOTE: Select buffers to get a deacelleratoin less than 5M/s2 and Velocity be cosidered
+a 50% of the rated Crane Speed
+                                                                                                            AKHG Series
+3. Calculation example
+
+                                             2                2
+                                W        V
+ a)         V=0.6m/s     EK =                    = 80 X 0.6 = 14.4kJ
+            W=80 ton
+                                    2                 2                            pre-       AKHG140-300
+                         ET = EK
+                                                                                   selected   Stroke: 300
+                                   WT                14.4
+                         FS = S 0.8 = 0.15 X 0.8 = 120kN
+                         VE = 0
+                                         2
+                                    V                  0.6
+                         SD = 2 S 0.8 =
+                                                    2X0.15X0.8
+                                                               = 1.5m/s2           Final
+                                         2                    2                    selected   AKHG140-300
+                               V         0.6
+                         S=          =           =0.15m = 150mm
+                            2 S D 0.8 2X0.15X0.8
+
+
+ b)         V=1.2m/s
+                                             2                        2
+                                W        V
+                                                 = 200 X 1.2 = 14.4kJ              pre-       AKHG130-400
+            W=200 ton               2                     2
+            P=20kw              2.5 P   2.5 X 20                                   selected   Stroke: 400
+                         FS =      2
+                                      = 0.15 X 0.8 = 41.7kN
+
+                         EW = F S = 41.7 X 0.3 = 12.5kJ
+                         ET = EK ET = 144 X 12.5 = 156.5kJ                         Final
+                                 ET       156.5
+                         FS = S 0.8 = 0.3 X 0.8 = 652kN                            selected   AKHG130-400
+
+
+            V=1.0m/s
+ c)
+                                                      2                    2
+
+            W1=180 ton   EK =
+                                W1 W2(V1 + V2) 180X250(0.1 + 0.6)
+                                              = 2(W1 + W2) = 133.95kJ              pre-       AKHG120-500
+                                 2(W1 + W2)
+            V2=0.6m/s
+                         ET = EK                                                   selected   Stroke: 500
+            W2=250 ton
+                                    ET             133.95
+                         EK = S 0.8 = 0.5 X 0.8 = 334.88kN
+
+                         VE = V1+V2=1.0+0.6=1.6m/s
+                                             2                2
+                                                                                   Final      AKHG120-500
+                                     VE                1.6
+                         SD = 2 S 0.8 =
+                                                    2X0.5X0.8
+                                                              = 3.2m/s 2           selected
+
+            V=1.0m/s
+ d)
+                                                          2                    2
+                                W1 W2(V1 + V2) 220X260(0.1 + 0.7)
+            W1=220 ton   EK =    4(W1 + W2)
+                                              = 4(220 + 260) = 86kJ                pre-       AKHG120-250
+            P=0.7m/s
+            W2=260 ton
+                         ET = EK                                                   selected   Stroke: 250
+                                    ET                86
+                         EK = S 0.8 =0.25 X 0.8= 430.49kN
+
+                         VE = V1+V2=1+0.7=0.85m/s
+                                2 2 2                                              Final
+                                 VE         1.6
+                                                                  2
+                                                                                   selected   AKHG120-250
+                         SD = 2 S 0.8 =            = 1.806m/s 2
+                                        2X0.25X0.8
+
+            W=2.5 ton
+ e)         H=0.4m        EK = g                                                   pre-       AKHG85-150
+                          ET = W g                                                 selected   Stroke: 150
+                          EK = EK + EW = 9.81 + 3.67 = 13.48kJ
+
+                          V = √2 g H = √2 X 9.81 X 0.4 = 2.8m/s
+                                                                                   Final
+                                                                                              AKHG85-150
+                            =
+                                     ET
+                                         = 13.48 = 112.33kN                        selected
+                                   S 0.8   0.15X0.8
+                                                                                                                                  AKHG Series
+AKHG 65 Series
+Engineering Data
+
+                                                                               Recoil
+                               Max.Energy   Max.Energy/     MaxBuffer                             Max Side Load
+                     Stroke                                                     Force               Angle (°)            Weight
+      Model                     / Cycle     Hour (kJ/h)       Force
+                     (mm) S                                                      (kN)                                     (kg)
+                                 (kJ)ET        ETC           (kN)FS
+                                                                              Ext    Comp     R Type      F Type
+    AKHG65-25          25          2            100           100                    3.2          3.5       3.5            6
+       -50             50          4            200           100                    4.7          3.5       3.5            7
+       -75             75          6            300           100                    5.3              3     3              8
+      -100            100          8            400           100                    6.6              3     3              9
+                                                                             2.4
+      -125            125          10           500           100                    6.6          2.5       2.5           10
+      -150            150          12           600           100                    6.6              2     2             11
+      -200            200          16           800           100                    9.0              2     2             12
+
+
+
+
+                              Stroke (mm)      Rear Type                       Front Type                         Mounting
+             Model
+                                    S              A                     B                        C               Bolt Size
+         AKHG65-25                25                  262               250                 126
+              -50                 50                  312               300                 151
+              -75                 75                  372               360                 176
+              -100                100                 432               420                 231                     14
+              -125                125                 497               485                 256
+              -150                150                 552               540                 281
+              -200                200                 682               670                 371
+                                                                                                                                  AKHG Series
+AKHG 85 Series
+Engineering Data
+
+                                                                                Recoil
+                               Max.Energy   Max.Energy/     MaxBuffer                             Max Side Load
+                     Stroke                                                     Force               Angle (°)            Weight
+      Model                     / Cycle     Hour (kJ/h)       Force
+                     (mm) S                                                       (kN)                                    (kg)
+                                 (kJ)ET        ETC           (kN)FS
+                                                                              Ext    Comp     R Type      F Type
+    AKHG65-50          50          8            600           200                    10               4     3.5           12
+      -100            100          16          1200           200                    13               3     3             15
+      -150            150          24          1800           200            1.5     17               2     2             18
+      -200            200          32          2400           200                    19           1.8       1.5           20
+      -250            250          40          2850           200                    20           1.5       1.2           22
+
+
+
+
+                              Stroke (mm)      Rear Type                       Front Type                         Mounting
+             Model
+                                    S              A                     B                        C               Bolt Size
+         AKHG65-50                50                  323               310                 183
+              -100                100                 463               450                 242
+              -150                150                 603               590                 305
+              -200                200                 743               730                 367                     16
+              -250                250                 883               870                 430
+                                                                                                                                     AKHG Series
+AKHG 100 Series
+Engineering Data
+
+                                                                                   Recoil
+                                Max.Energy   Max.Energy/     MaxBuffer                               Max Side Load
+                      Stroke                                                       Force               Angle (°)            Weight
+       Model                     / Cycle     Hour (kJ/h)       Force
+                      (mm) S                                                         (kN)                                    (kg)
+                                  (kJ)ET        ETC           (kN)FS
+                                                                                 Ext    Comp       R Type    F Type
+    AKHG100-50          50          11           750           280                      16           16        5             17
+       -80              80          18          1,200          280                      16           16        4.5           20
+       -100            100          23          1,600          280                      16           16        5             25
+       -120            120          27          1,800          280                      20           20        4.5           27
+       -150            150          34          2,300          280                      20           20        4.5           28
+       -200            200          46          3,100          280                      20           20        4             34
+       -250            250          58          3,600          280                      25           25        3.5           39
+                                                                               2.4
+       -300            300          69          4,200          280                      25           25        3             43
+       -400            400          90          5,400          280                      25           25        2.5           49
+       -500            500         110          6,600          275                      25           25        2.5           55
+       -600            600         125          7,200          260                      25           25        2             62
+      -800 -50
+   AKHG100             800         140          7,900          210                      25           25        2             73
+
+
+
+
+                               Stroke (mm)      Rear Type                         Front Type                         Mounting
+              Model
+                                    S               A                      B                    C                    Bolt Size
+         AKHG100-50                 50                 332               312                 175
+                -80                 80                 423               403                 215
+               -100                100                 450               430                 252
+               -120                120                 529               509                 270
+               -150                150                 580               560                 315
+               -200                200                 720               700                 377
+               -250                250                 865               845                 440                       16
+               -300                300             1,010                 990                 502
+               -400                400             1,349                 1,329               645
+               -500                500                  -                1,616               890
+               -600                600                  -                1,888               1,010
+               -800                 800                 -                2,426               1,345
+                                                                                                                                        AKHG Series
+AKHG 120 Series
+Engineering Data
+
+                                                                                   Recoil
+                                Max.Energy   Max.Energy/      MaxBuffer                                 Max Side Load
+                      Stroke                                                        Force                 Angle (°)            Weight
+      Model                      / Cycle     Hour (kJ/h)        Force
+                      (mm) S                                                         (kN)                                       (kg)
+                                  (kJ)ET        ETC            (kN)FS
+                                                                                  Ext   Comp        R Type      F Type
+   AKHG120-100         100         45           2,900           570                      38             4        4.5            41
+      -150             150         70           4,400           570                      38             4        3.5            48
+      -200             200         92           5,800           570                      38           3.5        3.5            58
+      -250             250         114          7,200           570                      40             3         3             65
+      -300             300         130          8,500           450                      40             3        2.5            72
+                                                                                3.5
+      -400             400         160         10,000           450                      40           2.5         2             78
+      -500             500         180         11,500           450                      40             2        1.5            86
+      -600             600         200         12,800           450                      40             2        1.5            95
+      -800             800         240         13,600           375                      40             2        1.3            112
+      -1000           1,000        280         14,500           350                      40             2         1.3           118
+
+
+
+
+                               Stroke (mm)      Rear Type                          Front Type                           Mounting
+             Model
+                                     S              A                       B                       C                   Bolt Size
+        AKHG120-100                100              470                   450                 277
+              -150                 150              610                   590                 340
+              -200                 200                  760               740                 402
+              -250                 250                  900               880                 465
+              -300                 300              1,050                 1,030               527                         24
+              -400                 400              1,340                 1,320               680
+              -500                 500              1,620                 1,600               815
+              -600                 600              1,920                 1,900               950
+              -800                 800                   -                2,400               1,290
+              -1000               1,000                  -                2,960               1,360
+                                                                                                                                 AKHG Series
+AKHG 130 Series
+Engineering Data
+
+                                                                               Recoil
+                             Max.Energy   Max.Energy/    MaxBuffer                               Max Side Load
+                  Stroke                                                       Force               Angle (°)            Weight
+   Model                      / Cycle     Hour (kJ/h)      Force
+                  (mm) S                                                         (kN)                                    (kg)
+                               (kJ)ET        ETC          (kN)FS
+                                                                             Ext    Comp     R Type      F Type
+
+ KHG130-250        250          120          8,200         550                      40             4.5      4            85
+    -300           300          140          9,600         550                      40             4.5      4            92
+    -400           400          180         12,000         550                      50             4       3.5          106
+    -500           500          220         15,000         550               4.5    50             3.5     3.5          118
+    -600           600          260         17,800         550                      50             2       1.5          127
+    -800           800          300         19,000         460                      50              2       1.5          148
+
+
+
+
+                           Stroke (mm)       Rear Type                        Front Type                         Mounting
+       Model
+                                 S               A                    B                      C                   Bolt Size
+   AKHG130-250                250               897                  877                   545
+       -300                   300              1,029                 1,009                 605
+       -400                   400              1,293                 1,273                 735
+                                                                                                                   24
+       -500                   500              1,602                 1,582                 820
+       -600                   600                -                   1,917                 1,060
+           -800                800               -                   2,445                 1,350
+                                                                                                                                       AKHG Series
+AKHG 140 Series
+Engineering Data
+
+                                                                                  Recoil
+                                Max.Energy   Max.Energy/    MaxBuffer                                  Max Side Load
+                      Stroke                                                      Force                  Angle (°)            Weight
+       Model                     / Cycle     Hour (kJ/h)      Force
+                      (mm) S                                                        (kN)                                       (kg)
+                                  (kJ)ET        ETC          (kN)FS
+                                                                                Ext     Comp       R Type      F Type
+   AKHG 140-100        100          62          3,800         760                       38           4.5         4             60
+       -150            150          91          5,800         760                       65           4.5         4             72
+       -200            200         124          9,800         730                       70             4        3.5            85
+       -300            300         175         12,000         730                       70           3.5        2.5           110
+       -400            400         234         15,000         730             5.5       78           2.5        1.5           135
+       -500            500         270         17,000         680                       78             2        1.3           150
+       -600            600         300         20,000         630                       78             2        1.3           160
+       -800            800         325         25,000         510                       78             2        1.3           185
+      -1000           1,000        360         27,500         450                       78           1.6         1.2           200
+
+
+
+
+                               Stroke (mm)      Rear Type                        Front Type                            Mounting
+              Model
+                                     S              A                     B                        C                   Bolt Size
+        AKHG120-100                100              480                 460                  297
+               -150                150              620                 600                  360
+               -200                200              770                 750                  422
+               -300                300              1,060               1,040                547
+               -400                400              1,350               1,330                712                         24
+               -500                500              1,630               1,610                847
+               -600                600              1,930               1,910                982
+               -800                800              2,350               2,330                1,252
+              -1000               1,000                 -               2,880                1,595
+                                                                                                                                          AKHG Series
+   AKHG 150 Series
+   Engineering Data
+
+                                                                                     Recoil
+                                   Max.Energy   Max.Energy/    MaxBuffer                                  Max Side Load
+                         Stroke                                                      Force                  Angle (°)            Weight
+          Model                     / Cycle     Hour (kJ/h)      Force
+                         (mm) S                                                        (kN)                                       (kg)
+                                     (kJ)ET        ETC          (kN)FS
+                                                                                   Ext     Comp       R Type      F Type
+      AKHG 150-100        100          70          4,000         880                       45             4        4.5            77
+          -200            200         136          7,200         850                       75             4        3.5            90
+          -300            300         183         13,000         770                       75           3.5        3.5           135
+          -400            400         243         13,500         760                       75             3         3            146
+          -500            500         285         17,400         710             6.2       85             3        2.5           166
+          -600            600         323         21,000         670                       85           2.5         2            176
+          -800            800         367         25,600         580                       85             2        1.5           220
+         -1000           1,000        410         28,000         510                       85             2         1.5           253
+
+
+
+
+                                  Stroke (mm)      Rear Type                        Front Type                            Mounting
+                 Model
+                                        S              A                     B                        C                   Bolt Size
+           AKHG120-100                100              510                 490                  327
+                  -200                200              800                 780                  452
+                  -300                300              1,090               1,070                577
+                  -400                400              1,280               1,260                740
+                  -500                500              1,660               1,640                800                         24
+                  -600                600              1,960               1,940                905
+                  -800                800              2,360               2,340                1,270
+                 -1000               1,000             2,910               2,890                1,625
+
+
+
+
+Custom Built Possibilities
+Sealing design to Suit
+Extreme temprature
+Weather Bellows ,
+Sensors on Request
+                                                                                                                                       AKHG Series
+AKHG 180 Series
+Engineering Data
+
+                                                                                  Recoil
+                                Max.Energy   Max.Energy/    MaxBuffer                                  Max Side Load
+                      Stroke                                                      Force                  Angle (°)            Weight
+       Model                     / Cycle     Hour (kJ/h)      Force
+                      (mm) S                                                       (kN)                                        (kg)
+                                  (kJ)ET        ETC          (kN)FS
+                                                                                Ext    Comp        R Type      F Type
+   AKHG 180-100        100          80          4,500         980                      75            4.5        4.5           110
+       -200            200         160         10,000         980                      80            4.5        3.5           126
+       -250            250         200         12,800         980                      80            4.5        3.5           140
+       -400            400         280         14,500         880                      90            4.5         3            168
+       -500            500         350         18,000         880               8      100             4        2.5           198
+       -600            600         430         23,000         890                      100           3.5         2            235
+       -800            800         570         27,000         890                      100             3        1.5           295
+      -1000           1,000        720         29,000         890                      110           2.5         1.5           360
+
+
+
+
+                               Stroke (mm)      Rear Type                        Front Type                            Mounting
+              Model
+                                     S              A                     B                        C                   Bolt Size
+        AKHG120-100                100              491                 471                  350
+               -200                200              760                 740                  450
+               -250                250              850                 830                  550
+               -400                400              1,486               1,466                804                         30
+               -500                500              1,766               1,746                939
+               -600                600              2,066               2,046                1,074
+               -800                800              2,666               2,646                1,344
+              -1000               1,000             3,226               3,206                1,614
+
+
+
+
+                                                                                               http:\\www.cranebuffer.com
+                                                                                               email -ceo@cranebuffer.com
+                                                                                                   insales@adonitech.co.in
+

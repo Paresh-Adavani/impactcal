@@ -6,8 +6,8 @@ company.state_name,Maharashtra,
 company.addr1,"Sharda, 1st Floor, Jeevan Chaya Hsg. Soc.",
 company.addr2,Opp. Civil Hospital,
 company.city,Satara,
-company.pincode,415001,
-company.works,"SLU-W-39, Suvarna Laghu Udyog, Addl. MIDC, Kodoli, Satara 415004",
+company.pincode,415004,
+company.works,"SLU/39, Addl. MIDC, Satara - 415004",
 company.phone,+91 98908 52663,
 company.phone2,+91 93074 46007,
 company.tel,(02162) 232169,
@@ -57,50 +57,3 @@ sales.people,adonitechpune@gmail.com=Krishnakant Harpale; adonisatara@gmail.com=
 crm.enabled,1,Push every RFQ as a lead to UnitePro CRM (needs env UNITEPRO_TOKEN on Netlify). 0 = off
 crm.source,ImpactCal Web,Lead source name shown in UnitePro
 pricing.users,adonitechpune@gmail.com,"E-mails (besides admin) allowed to download / upload the price & costing workbook, comma separated"
-company.iec,3106020261,"Importer-Exporter Code, printed on every export (non-INR) quotation"
-company.pan,AHAPA3555B,
-quote.max_discount_pct,25,Max discount below list a sales person may give without a special-price approval
-quote.sales_self_send,1,1 = sales may send their own quotations within the limit; 0 = every sales quotation needs Paresh approval
-quote.default_office,satara,Office for web RFQs and sales persons not listed in sales.office
-quote.approver_name,Paresh Adavani,Name printed when a quotation is approved from the signed link
-sales.office,adonitechpune@gmail.com=pune; adonisatara@gmail.com=satara; vidyaadavani1@gmail.com=satara; adonitech@gmail.com=satara,email=office id; the office address goes on that person's quotations
-office.satara.label,Satara office,
-office.satara.addr1,"Sharada, 1st Floor, Jeevan Chaya Hsg. Soc.",GST certificate: additional place of business
-office.satara.addr2,Opp. Civil Hospital,
-office.satara.city,Satara,
-office.satara.pincode,415001,
-office.pune.label,Pune office,
-office.pune.addr1,"Flat No. 105, Raghukul Housing Society, JSPM College Road",
-office.pune.addr2,"Near Nakshatra Housing Society, Mokarwadi",
-office.pune.city,Pune,
-office.pune.pincode,411041,
-office.pune.phone,,
-dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
-dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
-freight.rate_per_kg,35,"Packing & freight to the dealer's godown (resale) or the customer's site (direct supply), Rs per kg of estimated product weight. India only - export stays ex-works"
-dealer.markup,Free — as you decide,Dealer policy standard: markup rule
-dealer.routes,both,Dealer policy standard: both | resale | direct
-dealer.rule_resale,"Quotation in your own name, letterhead, GSTIN and bank. ADONI TECH invoices you at list price less your dealer discount, plus packing & freight to your godown and GST.",Dealer policy standard text
-dealer.rule_commission,"Quotation on ADONI TECH letterhead with you as channel partner. Your commission = your dealer discount less the discount you pass on, on your quoted price (list or marked-up), on the basic value (no GST, no freight). Paid after the customer has paid ADONI TECH in full, against your commission invoice; TDS as per law. Only on quotations you issue yourself.",Dealer policy standard text
-dealer.rule_export,"Ex-works Satara, quoted in USD at the day's exchange rate; freight and insurance by the buyer.",Dealer policy standard text
-dealer.payment_terms,"30% advance with PO, balance against proforma invoice before dispatch",Dealer policy standard: payment terms for dealer purchases
-dealer.rule_price_list,"ADONI TECH list prices as shown in your portal, revised from time to time; the list price on the date of your order applies.",Dealer policy standard text
-dealer.rule_lead_time,"As shown per product in the portal and on each quotation, from receipt of a technically and commercially clear order.",Dealer policy standard text
-dealer.rule_territory,Non-exclusive,Dealer policy standard territory (a dealer's own territory from his application is shown instead when he gave one)
-dealer.rule_special,,Dealer policy standard: other conditions
-leadtime.users,adonisatara@gmail.com,Who may update lead times in Admin -> Lead times besides admin (e-mails separated by ;)
-quote.terms_delivery_direct,"Door delivery to your site; packing & freight as per the quotation line. Lead time as stated per line, from receipt of technically & commercially clear PO",Delivery term printed on direct-supply quotations (ADONI TECH letterhead via a dealer)
-mail.dealer_cc,adonitech@gmail.com,Copied on every dealer quotation sent to a customer
-mail.dealer_from,,"Optional neutral sender address for dealer quotations (must be a verified ""Send mail as"" alias of SMTP_USER); blank = SMTP address. Dealers can also download the PDF and send it themselves."
-dealer.cities,,Cities where ADONI TECH is appointing dealers - shown on the dealer sign-up page (separate with ;)
-dealer.cities_note,Not in the list? We still want to hear from you - strong partners anywhere in India and abroad are welcome.,Line under the city list on the dealer page
-analytics.ga_id,,"Google Analytics 4 measurement ID (G-XXXXXXX) - when set, every page loads Google tag and dealer sign-ups are tracked as a conversion"
-assistant.enabled,0,1 = DAMPA chat on every page (needs ANTHROPIC_API_KEY in Netlify environment variables)
-assistant.name,DAMPA,Name of the AI assistant shown to users
-assistant.tagline,Your impact & vibration engineer,Line under the name
-assistant.model,claude-sonnet-5,"Claude model: claude-sonnet-5 (best), claude-haiku-4-5-20251001 (cheaper, faster), claude-opus-5-5 (deepest)"
-assistant.daily_limit_visitor,25,Messages per day for a website visitor who is not signed in
-assistant.daily_limit_user,120,Messages per day for a signed-in user
-assistant.monthly_cap_usd,40,DAMPA stops for the month when API usage reaches this many US dollars
-wri.lug_options,EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5,Wire rope isolator lug materials: label=surcharge % on list price; the first is the standard build (Admin -> Pricing & costing)
-wri.wire_options,SS 304; SS 302; Galvanised steel,Wire rope materials offered; the first is the standard

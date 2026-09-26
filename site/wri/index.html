@@ -185,7 +185,6 @@ tr:hover td{background:var(--blue-xl)}
 #report td{padding:4px 8px}
 .rp-foot{margin-top:18px;border-top:1.5px solid var(--line);padding-top:8px;font-size:9.5px;color:var(--ink-3);display:flex;justify-content:space-between}
 </style>
-<script>/* ImpactCal: Google tag when configured */(function(){window.dataLayer=window.dataLayer||[];window.gtag=window.gtag||function(){dataLayer.push(arguments);};fetch('/api/public/config').then(function(r){return r.json();}).then(function(c){if(!c.ga_id)return;var s=document.createElement('script');s.async=true;s.src='https://www.googletagmanager.com/gtag/js?id='+encodeURIComponent(c.ga_id);document.head.appendChild(s);gtag('js',new Date());gtag('config',c.ga_id);}).catch(function(){});})();</script>
 </head>
 <body>
 <!-- ============ SITE NAV ============ -->
@@ -343,11 +342,11 @@ tr:hover td{background:var(--blue-xl)}
   </div>
   <div class="card">
     <h2>Build options — for your RFQ</h2>
-    <div class="sub">Material combination for the quoted AWRI build. Standard: EN8D lugs, Arkor treated, with SS 304 wire rope. Marine duty (open deck / salt spray): SS 304 lugs recommended.</div>
+    <div class="sub">Material combination for the quoted AWRI build. Marine duty = open deck / salt spray — all-stainless build recommended.</div>
     <div class="grid4">
-      <div class="f"><label>Lugs / retainer material</label><select id="o_lugs"><option>EN8D + Arkor treated</option><option>EN8D + Zinc plated</option><option>Aluminium alloy</option><option>SS 304</option></select></div>
-      <div class="f"><label>Wire rope</label><select id="o_wire"><option>SS 304</option><option>SS 302</option><option>Galvanised steel</option></select></div>
-      <div class="f"><label>Duty</label><select id="o_duty"><option>Normal duty</option><option>Marine duty</option></select></div>
+      <div class="f"><label>Lugs / retainer material</label><select id="o_lugs"><option>Stainless Steel (SS 316)</option><option>Aluminium alloy</option><option>EN8 (zinc plated)</option></select></div>
+      <div class="f"><label>Wire rope</label><select id="o_wire"><option>SS 302</option><option>SS 304</option><option>Galvanised steel</option></select></div>
+      <div class="f"><label>Duty</label><select id="o_duty"><option>Marine duty</option><option>Normal duty</option></select></div>
       <div class="f"><label>RFQ quantity <span class="qm" title="Defaults to isolators + stabilizers. Edit for spares / batch quantity.">?</span></label><input id="o_qty" type="number" min="1" placeholder="auto = N + stabilizers"></div>
     </div>
     <div class="hint" id="dutyHint"></div>
@@ -432,7 +431,7 @@ const DATA = (function(){
   try {
     var tok=''; try{ tok=localStorage.getItem('ic_token')||''; }catch(e){}
     var x=new XMLHttpRequest(); x.open('GET','/api/wri/data',false); if(tok) x.setRequestHeader('authorization','Bearer '+tok); x.send();
-    if(x.status===200){ var j=JSON.parse(x.responseText); if(j.awri&&j.awri.length) return Object.assign({}, DATA_FALLBACK, {awri:j.awri, prices:j.prices||{}, fx:j.fx, prices_visible:!!j.prices_visible, lug_options:j.lug_options||[], wire_options:j.wire_options||[]}); }
+    if(x.status===200){ var j=JSON.parse(x.responseText); if(j.awri&&j.awri.length) return Object.assign({}, DATA_FALLBACK, {awri:j.awri, prices:j.prices||{}, fx:j.fx, prices_visible:!!j.prices_visible}); }
   } catch(e) { console.warn('wri data', e); }
   return Object.assign({}, DATA_FALLBACK, {prices:{}, prices_visible:false});
 })();
@@ -874,7 +873,6 @@ function loadSelectedProject(){
   if(p.sine&&p.sine.length)setSine(p.sine);
   /* re-apply saved field values that presets overwrote */
   Object.entries(p.fields).forEach(([id,v])=>{if($(id))$(id).value=v;});
-  fixBuildSelects(p.fields);
   S.project=n;S.projSnapshot=instrumentSig(p);
   $('projChipName').value=n; recompute(); toast('Loaded "'+n+'"');
 }
@@ -892,7 +890,7 @@ function loadSample(){
   $('m_n').value=4;$('m_cgf').value=1.0;$('m_hcg').value=300;$('m_pitch').value=300;$('m_hmax').value=120;
   $('l_mass').value=65;$('l_frag').value=20;$('l_zeta').value=0.15;$('l_sfrule').value='2';
   $('sh_roll').value=12;$('sh_pitch').value=2;
-  $('o_lugs').value='SS 304';$('o_wire').value='SS 302';$('o_duty').value='Marine duty';$('o_qty').value=4;
+  $('o_lugs').value='Stainless Steel (SS 316)';$('o_wire').value='SS 302';$('o_duty').value='Marine duty';$('o_qty').value=4;
   recompute(); toast('Worked example loaded — expected result: 4 × AWRI-95-80 PASS');
 }
 </script>
@@ -1023,7 +1021,7 @@ function renderResults(){
       <div class="kpi ${best.shV.tg<=inp.frag?'ok':'bad'}"><div class="v">${fmt(best.shV.tg,1)} g</div><div class="l">Transmitted shock (≤ ${inp.frag} g)</div></div>
       <div class="kpi ${best.strokeSFv>=1?'ok':'bad'}"><div class="v">${fmt(best.strokeSFv,2)}</div><div class="l">Stroke SF vertical</div></div>
       <div class="kpi ok"><div class="v">${fmt(best.attV,0)}%</div><div class="l">Shock attenuation</div></div>
-      ${price&&price.price?`<div class="kpi"><div class="v">₹${lugPrice(price.price).toLocaleString('en-IN')}</div><div class="l">Unit price${lugOpt($('o_lugs').value)&&lugOpt($('o_lugs').value).pct?' incl. '+$('o_lugs').value+' lugs (+'+lugOpt($('o_lugs').value).pct+' %)':''} · set ₹${(lugPrice(price.price)*(inp.N+inp.Ns)).toLocaleString('en-IN')}</div></div>`:''}
+      ${price&&price.price?`<div class="kpi"><div class="v">₹${price.price}</div><div class="l">Unit price · set ₹${(price.price*(inp.N+inp.Ns)).toLocaleString('en-IN')}</div></div>`:''}
     </div>
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-p btn-sm" onclick="showDetail(${bi})">Full engineering detail</button>
@@ -1137,12 +1135,10 @@ async function postLead(payload){
       project:{ name:payload.Project, equipment:payload.Equipment, prepared_by:(document.getElementById('p_eng')||{}).value||'' },
       selection:{ case_id:'WRI', standard:S.std, inputs:{ app:S.app, mnt:S.mnt, mass:inp.mass, N:inp.N, Ns:inp.Ns, frag:inp.frag, gv:inp.gv, gh:inp.gh, tau:inp.tau }, chosen:best.m, summary },
       formats:['PDF'], message:payload.RFQ||'',
-      items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:$('o_duty').value, lug:$('o_lugs').value, wire:$('o_wire').value }] };
+      items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:(payload.RFQ||'').replace(/^.*?· /,'') }] };
     const r=await fetch('/api/rfq',{method:'POST',headers:Object.assign({'content-type':'application/json'},tok?{authorization:'Bearer '+tok}:{}),body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
-    if(r.ok){ const me=(function(){try{return JSON.parse(localStorage.getItem('ic_user')||'null');}catch(e){return null;}})();
-      if(j.quotation_id&&me&&(me.role==='dealer'||me.role==='sales')){ flashSent(j.number,'Draft quotation '+j.quotation+' is ready — opening it now.'); setTimeout(()=>{location.href='/approve.html?id='+encodeURIComponent(j.quotation_id);},1500); return true; }
-      flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. We normally reply within one working day.':'We have it. Our engineer will come back to you, normally within one working day.'); return true; }
+    if(r.ok){ flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. We normally reply within one working day.':'We have it. Our engineer will come back to you, normally within one working day.'); return true; }
     if(typeof toast==='function') toast('Could not send: '+(j.error||r.statusText)); return false;
   }catch(e){ return false; }
 }
@@ -1175,28 +1171,17 @@ function sendLeadCopy(best,inp){
     }
   })();
 }
-function lugOpt(label){return (DATA.lug_options||[]).find(o=>o.label===label)||null;}
-function fillBuildOptions(){
-  const lugs=(DATA.lug_options&&DATA.lug_options.length)?DATA.lug_options:null, wires=(DATA.wire_options&&DATA.wire_options.length)?DATA.wire_options:null;
-  [['o_lugs',lugs],['x_lugs',lugs]].forEach(([id,L])=>{const el=$(id);if(!el||!L)return;const cur=el.value;el.innerHTML=L.map(o=>'<option value="'+o.label.replace(/"/g,'&quot;')+'">'+o.label+(o.default?' (standard)':o.pct?' (+'+o.pct+' %)':o.pct===0?' (list price)':'')+'</option>').join('');el.value=L.some(o=>o.label===cur)?cur:L[0].label;});
-  [['o_wire',wires],['x_wire',wires]].forEach(([id,W])=>{const el=$(id);if(!el||!W)return;const cur=el.value;el.innerHTML=W.map(w=>'<option>'+w+'</option>').join('');el.value=W.includes(cur)?cur:W[0];});
-}
-function fixBuildSelects(saved){['o_lugs','x_lugs','o_wire','x_wire'].forEach(id=>{const el=$(id);if(!el||el.selectedIndex>=0)return;const old=String((saved||{})[id]||'');const m=[...el.options].find(o=>/^SS|stainless/i.test(o.value)&&/SS|stainless/i.test(old)&&!/wire/.test(id))||[...el.options].find(o=>/^EN8/i.test(o.value)&&/EN8/i.test(old))||[...el.options].find(o=>/^Alu/i.test(o.value)&&/^Alu/i.test(old));el.value=m?m.value:el.options[0].value;});dutyHint();}
-function lugPrice(base){const o=lugOpt($('o_lugs').value);if(!base||!o||!o.pct)return base;const p=base*(1+o.pct/100),st=p<10000?50:100;return Math.ceil(p/st)*st;}
 function rfqQty(){const q=+$('o_qty').value; if(q>0)return q; const i=gather(); return i.N+(i.Ns||0);}
 /* ---------- duty hint ---------- */
 function dutyHint(){
   const marine=$('o_duty').value.indexOf('Marine')===0;
   const galv=$('o_wire').value.indexOf('Galv')===0;
-  const lug=$('o_lugs').value, alu=/^Alu/i.test(lug), ss=/^SS|stainless/i.test(lug), en8=/^EN8/i.test(lug);
-  const o=lugOpt(lug), pct=o&&o.pct?(' Price: +'+o.pct+' % on the list price.'):'';
+  const alu=$('o_lugs').value.indexOf('Alu')===0, en8=$('o_lugs').value.indexOf('EN8')===0;
   let h='';
-  if(marine&&galv)h='⚠ Marine duty: galvanised wire is not recommended for salt-spray exposure — choose SS 304 or SS 302 wire rope.';
-  else if(marine&&en8)h='⚠ Marine duty: '+lug+' lugs suit indoor and sheltered use — for open deck / salt spray choose SS 304 lugs.';
-  else if(marine&&alu)h='ℹ Marine duty with aluminium alloy lugs: acceptable for sheltered decks; SS 304 lugs recommended for open deck.';
+  if(marine&&(galv||en8))h='⚠ Marine duty: galvanised wire / EN8 lugs are not recommended for salt-spray exposure — consider SS 302/304 wire with SS 316 lugs.';
+  else if(marine&&alu)h='ℹ Marine duty with aluminium retainers: acceptable for sheltered decks; SS 316 recommended for open deck.';
   else if(marine)h='✔ All-stainless build — correct choice for marine / open-deck duty.';
-  else if(en8)h='✔ '+(/arkor/i.test(lug)?'Standard build: EN8D lugs, Arkor treated.':lug+' lugs — list price.');
-  $('dutyHint').textContent=h+pct;
+  $('dutyHint').textContent=h;
 }
 /* ================= CROSS-REFERENCE & RFQ TOOL ================= */
 function normCode(x){return (x||'').toUpperCase().replace(/[^A-Z0-9]/g,'');}
@@ -1236,9 +1221,9 @@ function openXref(){
      <div class="f"><label>Quantity</label><input id="x_qty" type="number" value="4" min="1"></div>
    </div>
    <div class="grid3">
-     <div class="f"><label>Lugs / retainer material</label><select id="x_lugs"><option>EN8D + Arkor treated</option><option>EN8D + Zinc plated</option><option>Aluminium alloy</option><option>SS 304</option></select></div>
-     <div class="f"><label>Wire rope</label><select id="x_wire"><option>SS 304</option><option>SS 302</option><option>Galvanised steel</option></select></div>
-     <div class="f"><label>Duty</label><select id="x_duty"><option>Normal duty</option><option>Marine duty</option></select></div>
+     <div class="f"><label>Lugs / retainer material</label><select id="x_lugs"><option>Stainless Steel (SS 316)</option><option>Aluminium alloy</option><option>EN8 (zinc plated)</option></select></div>
+     <div class="f"><label>Wire rope</label><select id="x_wire"><option>SS 302</option><option>SS 304</option><option>Galvanised steel</option></select></div>
+     <div class="f"><label>Duty</label><select id="x_duty"><option>Marine duty</option><option>Normal duty</option></select></div>
    </div>
    <div class="grid2">
      <div class="f"><label>Your email</label><input id="x_email" value="${$('p_email').value}"></div>
@@ -1404,7 +1389,6 @@ function makeReport(){
 renderApps();renderMnts();renderStds(null);
 setSine(STDS.JSS55555.sine);
 applyTheme(LS.getItem('atwri_theme')||'dark');
-fillBuildOptions();refreshProjList();recompute();flushMailQueue();['o_lugs','o_wire','o_duty'].forEach(id=>$(id).addEventListener('change',()=>{dutyHint();if(S.results)try{renderResults();}catch(e){}}));dutyHint();window.addEventListener('online',flushMailQueue);
+refreshProjList();recompute();flushMailQueue();['o_lugs','o_wire','o_duty'].forEach(id=>$(id).addEventListener('change',dutyHint));dutyHint();window.addEventListener('online',flushMailQueue);
 </script>
-<script src="/dampa.js?v=1" defer data-dampa="1"></script>
 </body></html>

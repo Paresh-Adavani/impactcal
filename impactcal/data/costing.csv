@@ -1,0 +1,766 @@
+﻿table,key,series,model,basis,file_price,file_source,estimate,margin_pct,list_inr,dealer_inr,lead_time_days,cavities,rubber_kg,rubber_cost,moulding,metal_kg,hardware,mould_cost,mould_amort,unit_cost,note
+shock_absorbers,AC86,AC,AC-8-6,file,1680,product_list:market,1680,0.0,1700,1400,21,,,,,,,,,,"stroke 6 mm, Fs 417 N"
+shock_absorbers,AC105,AC,AC-10-5,file,1440,product_list:b2b,1441,0.0,1450,1200,21,,,,,,,,,,"stroke 5 mm, Fs 750 N"
+shock_absorbers,AC108,AC,AC-10-8,file,1500,product_list:market,1499,0.0,1500,1200,21,,,,,,,,,,"stroke 8 mm, Fs 625 N"
+shock_absorbers,AC1210,AC,AC-12-10,file,1320,product_list:b2b,1320,0.0,1350,1100,21,,,,,,,,,,"stroke 10 mm, Fs 625 N"
+shock_absorbers,AC1410,AC,AC-14-10,file,1100,price list 2019 (Price List India 2022-23.pdf),893,0.0,1100,900,21,,,,,,,,,,"stroke 10 mm, Fs 625 N"
+shock_absorbers,AC1412,AC,AC-14-12,file,1320,product_list:b2b,1463,0.0,1350,1100,21,,,,,,,,,,"stroke 12 mm, Fs 1562 N"
+shock_absorbers,AC1613,AC,AC-16-13,file,1800,product_list:market,1800,0.0,1800,1450,21,,,,,,,,,,"stroke 13 mm, Fs 1635 N"
+shock_absorbers,AC2020,AC,AC-20-20,file,3456,product_list:b2b,2917,0.0,3500,2800,21,,,,,,,,,,"stroke 20 mm, Fs 1562 N"
+shock_absorbers,AC2220,AC,AC-22-20,file,2765,product_list:market,2765,0.0,2800,2250,21,,,,,,,,,,"stroke 20 mm, Fs 1562 N"
+shock_absorbers,AC2050,AC,AC-20-50,model,,,3669,25.0,4600,3700,21,,,,,,,,,,"stroke 50 mm, Fs 1500 N"
+shock_absorbers,AC2525,AC,AC-25-25,file,4300,product_list:market,4624,0.0,4300,3450,21,,,,,,,,,,"stroke 25 mm, Fs 4250 N"
+shock_absorbers,AC2625,AC,AC-26-25,file,4700,product_list:b2b,4700,0.0,4700,3800,21,,,,,,,,,,"stroke 25 mm, Fs 4250 N"
+shock_absorbers,AC3025,AC,AC-30-25,file,4600,product_list:market,4412,0.0,4600,3700,21,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AC3325,AC,AC-33-25,file,5000,product_list:market,4612,0.0,5000,4000,21,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AC3625,AC,AC-36-25,file,4800,product_list:market,4877,0.0,4800,3850,21,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AC3725,AC,AC-37-25,file,5200,product_list:market,5200,0.0,5200,4200,21,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AC2540,AC,AC-25-40,file,5500,product_list:market,5140,0.0,5500,4400,21,,,,,,,,,,"stroke 40 mm, Fs 4062 N"
+shock_absorbers,AC4225,AC,AC-42-25,file,6600,product_list:b2b,6600,0.0,6600,5300,21,,,,,,,,,,"stroke 25 mm, Fs 12500 N"
+shock_absorbers,AC3050,AC,AC-30-50,file,5200,product_list:market,5432,0.0,5200,4200,21,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AC3350,AC,AC-33-50,file,5200,product_list:b2b,5678,0.0,5200,4200,21,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AC3650,AC,AC-36-50,file,6100,product_list:b2b,6005,0.0,6100,4900,21,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AC3750,AC,AC-37-50,file,6600,product_list:market,6402,0.0,6600,5300,21,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AC3775,AC,AC-37-75,file,6900,product_list:b2b,7193,0.0,6900,5550,21,,,,,,,,,,"stroke 75 mm, Fs 6333 N"
+shock_absorbers,AC4250,AC,AC-42-50,file,7800,product_list:market,7967,0.0,7800,6250,21,,,,,,,,,,"stroke 50 mm, Fs 12500 N"
+shock_absorbers,AC4275,AC,AC-42-75,file,9000,product_list:b2b,8894,0.0,9000,7200,21,,,,,,,,,,"stroke 75 mm, Fs 12500 N"
+shock_absorbers,AC6450,AC,AC-64-50,file,11000,additional models 2018 (Price List India 2022-23.pdf),13156,0.0,11000,8800,21,,,,,,,,,,"stroke 50 mm, Fs 30000 N"
+shock_absorbers,AC64100,AC,AC-64-100,file,12500,additional models 2018 (Price List India 2022-23.pdf),15556,0.0,12500,10000,21,,,,,,,,,,"stroke 100 mm, Fs 28750 N"
+shock_absorbers,AC85125,AC,AC-85-125,model,,,22637,25.0,28300,22700,21,,,,,,,,,,"stroke 125 mm, Fs 55000 N"
+shock_absorbers,AC85150,AC,AC-85-150,model,,,22711,25.0,28400,22800,21,,,,,,,,,,"stroke 150 mm, Fs 50000 N"
+shock_absorbers,AC115150,AC,AC-115-150,model,,,30472,25.0,38100,30500,21,,,,,,,,,,"stroke 150 mm, Fs 91667 N"
+shock_absorbers,AC115200,AC,AC-115-200,model,,,32765,25.0,41000,32800,21,,,,,,,,,,"stroke 200 mm, Fs 90625 N"
+shock_absorbers,AC115250,AC,AC-115-250,model,,,35158,25.0,44000,35200,21,,,,,,,,,,"stroke 250 mm, Fs 92500 N"
+shock_absorbers,ACX3325,ACX,ACX-33-25,model,,,4638,25.0,5800,4650,21,,,,,,,,,,"stroke 23 mm, Fs 9783 N"
+shock_absorbers,ACX3625,ACX,ACX-36-25,model,,,4638,25.0,5800,4650,21,,,,,,,,,,"stroke 23 mm, Fs 9783 N"
+shock_absorbers,ACX4525,ACX,ACX-45-25,model,,,6578,25.0,7800,6250,21,,,,,,,,,,"stroke 23 mm, Fs 20109 N · capped at the next larger priced model"
+shock_absorbers,ACX4550,ACX,ACX-45-50,file,7800,product_list:market,7800,0.0,7800,6250,21,,,,,,,,,,"stroke 50 mm, Fs 18500 N"
+shock_absorbers,ACX4575,ACX,ACX-45-75,model,,,8783,25.0,11000,8800,21,,,,,,,,,,"stroke 75 mm, Fs 18833 N"
+shock_absorbers,ACX6450,ACX,ACX-64-50,model,,,12227,25.0,15300,12300,21,,,,,,,,,,"stroke 50 mm, Fs 46750 N"
+shock_absorbers,ACX64100,ACX,ACX-64-100,model,,,14740,25.0,18500,14800,21,,,,,,,,,,"stroke 100 mm, Fs 46625 N"
+shock_absorbers,ACX64150,ACX,ACX-64-150,model,,,16533,25.0,20700,16600,21,,,,,,,,,,"stroke 150 mm, Fs 47083 N"
+shock_absorbers,AD1410,AD,AD 14-10,file,1400,price list 2019 (Price List India 2022-23.pdf),1300,0.0,1400,1150,28,,,,,,,,,,"stroke 10 mm, Fs 625 N"
+shock_absorbers,AD1613,AD,AD 16-13,file,2400,price list 2019 (Price List India 2022-23.pdf),2200,0.0,2400,1950,28,,,,,,,,,,"stroke 13 mm, Fs 1635 N"
+shock_absorbers,AD2020,AD,AD 20-20,file,3600,product_list:market,3368,0.0,3600,2900,28,,,,,,,,,,"stroke 20 mm, Fs 1562 N"
+shock_absorbers,AD2220,AD,AD 22-20,file,2880,product_list:market,2880,0.0,2900,2350,28,,,,,,,,,,"stroke 20 mm, Fs 1562 N"
+shock_absorbers,AD2050,AD,AD 20-50,model,,,4235,25.0,5300,4250,28,,,,,,,,,,"stroke 50 mm, Fs 1500 N"
+shock_absorbers,AD2525,AD,AD 25-25,file,4560,product_list:b2b,4871,0.0,4600,3700,28,,,,,,,,,,"stroke 25 mm, Fs 4250 N"
+shock_absorbers,AD2625,AD,AD 26-25,file,4920,product_list:b2b,4920,0.0,4950,4000,28,,,,,,,,,,"stroke 25 mm, Fs 4250 N"
+shock_absorbers,AD3025,AD,AD 30-25,file,4800,product_list:b2b,4593,0.0,4800,3850,28,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AD3325,AD,AD 33-25,file,5280,product_list:market,4833,0.0,5300,4250,28,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AD3625,AD,AD 36-25,file,5040,product_list:market,5103,0.0,5050,4050,28,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AD3725,AD,AD 37-25,file,5400,product_list:market,5400,0.0,5400,4350,28,,,,,,,,,,"stroke 25 mm, Fs 6000 N"
+shock_absorbers,AD2540,AD,AD 25-40,file,5760,product_list:b2b,5414,0.0,5800,4650,28,,,,,,,,,,"stroke 40 mm, Fs 4062 N"
+shock_absorbers,AD3050,AD,AD 30-50,file,5400,product_list:b2b,5655,0.0,5400,4350,28,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AD3350,AD,AD 33-50,file,5400,product_list:b2b,5950,0.0,5400,4350,28,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AD3650,AD,AD 36-50,file,6360,product_list:market,6283,0.0,6400,5150,28,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AD3750,AD,AD 37-50,file,6960,product_list:market,6648,0.0,7000,5600,28,,,,,,,,,,"stroke 50 mm, Fs 6250 N"
+shock_absorbers,AD4225,AD,AD 42-25,file,8500,additional models 2018 (Price List India 2022-23.pdf),7701,0.0,8500,6800,28,,,,,,,,,,"stroke 25 mm, Fs 12500 N"
+shock_absorbers,AD3775,AD,AD 37-75,file,7200,product_list:market,7470,0.0,7200,5800,28,,,,,,,,,,"stroke 75 mm, Fs 6333 N"
+shock_absorbers,AD4250,AD,AD 42-50,file,11800,additional models 2018 (Price List India 2022-23.pdf),9296,0.0,11800,9450,28,,,,,,,,,,"stroke 50 mm, Fs 12500 N"
+shock_absorbers,AD4275,AD,AD 42-75,file,12000,additional models 2018 (Price List India 2022-23.pdf),10378,0.0,12000,9600,28,,,,,,,,,,"stroke 75 mm, Fs 12500 N"
+shock_absorbers,AD6450,AD,AD 64-50,file,15000,additional models 2018 (Price List India 2022-23.pdf),14212,0.0,15000,12000,28,,,,,,,,,,"stroke 50 mm, Fs 30000 N"
+shock_absorbers,AD64100,AD,AD 64-100,file,17500,additional models 2018 (Price List India 2022-23.pdf),16805,0.0,17500,14000,28,,,,,,,,,,"stroke 100 mm, Fs 28750 N"
+shock_absorbers,AD85125,AD,AD 85-125,file,40000,product_list:market,40000,0.0,40000,32000,28,,,,,,,,,,"stroke 125 mm, Fs 55000 N"
+shock_absorbers,AD85150,AD,AD 85-150,model,,,40131,25.0,50200,40200,28,,,,,,,,,,"stroke 150 mm, Fs 50000 N"
+shock_absorbers,AD115150,AD,AD 115-150,file,44000,additional models 2018 (Price List India 2022-23.pdf),32918,0.0,44000,35200,28,,,,,,,,,,"stroke 150 mm, Fs 91667 N"
+shock_absorbers,AD115200,AD,AD 115-200,file,50000,additional models 2018 (Price List India 2022-23.pdf),35395,0.0,50000,40000,28,,,,,,,,,,"stroke 200 mm, Fs 90625 N"
+shock_absorbers,AD115250,AD,AD 115-250,file,55000,additional models 2018 (Price List India 2022-23.pdf),37981,0.0,55000,44000,28,,,,,,,,,,"stroke 250 mm, Fs 92500 N"
+shock_absorbers,AKHG6525,AKHG,AKHG 65-25,file,18000,akhg_pricelist,15086,0.0,18000,14400,42,,,,,,,,,,"stroke 25 mm, Fs 100000 N"
+shock_absorbers,AKHG6550,AKHG,AKHG 65-50,file,18900,akhg_pricelist,17799,0.0,18900,15200,42,,,,,,,,,,"stroke 50 mm, Fs 100000 N"
+shock_absorbers,AKHG6575,AKHG,AKHG 65-75,file,19800,akhg_pricelist,19607,0.0,19800,15900,42,,,,,,,,,,"stroke 75 mm, Fs 100000 N"
+shock_absorbers,AKHG65100,AKHG,AKHG 65-100,file,21000,akhg_pricelist,21000,0.0,21000,16800,42,,,,,,,,,,"stroke 100 mm, Fs 100000 N"
+shock_absorbers,AKHG8550,AKHG,AKHG 85-50,model,,,20689,25.0,25900,20800,42,,,,,,,,,,"stroke 50 mm, Fs 200000 N"
+shock_absorbers,AKHG65125,AKHG,AKHG 65-125,file,22000,akhg_pricelist,22148,0.0,22000,17600,42,,,,,,,,,,"stroke 125 mm, Fs 100000 N"
+shock_absorbers,AKHG10050,AKHG,AKHG 100-50,file,37700,hydraulic_pricelist,30915,0.0,37700,30200,42,,,,,,,,,,"stroke 50 mm, Fs 275000 N"
+shock_absorbers,AKHG65150,AKHG,AKHG 65-150,file,23100,hydraulic_pricelist,23133,0.0,23100,18500,42,,,,,,,,,,"stroke 150 mm, Fs 100000 N"
+shock_absorbers,AKHG65200,AKHG,AKHG 65-200,file,24400,hydraulic_pricelist,24777,0.0,24400,19600,42,,,,,,,,,,"stroke 200 mm, Fs 100000 N"
+shock_absorbers,AKHG85100,AKHG,AKHG 85-100,file,29000,product_list:b2b,24410,0.0,29000,23200,42,,,,,,,,,,"stroke 100 mm, Fs 200000 N"
+shock_absorbers,AKHG10080,AKHG,AKHG 100-80,file,38600,product_list:b2b,34991,0.0,38600,30900,42,,,,,,,,,,"stroke 80 mm, Fs 281250 N"
+shock_absorbers,AKHG100100,AKHG,AKHG 100-100,file,38700,akhg_pricelist,37330,0.0,38700,31000,42,,,,,,,,,,"stroke 100 mm, Fs 287500 N"
+shock_absorbers,AKHG85150,AKHG,AKHG 85-150,model,,,26890,25.0,30400,24400,42,,,,,,,,,,"stroke 150 mm, Fs 200000 N · capped at the next larger priced model"
+shock_absorbers,AKHG100120,AKHG,AKHG 100-120,file,39500,product_list:market,38546,0.0,39500,31600,42,,,,,,,,,,"stroke 120 mm, Fs 281250 N"
+shock_absorbers,AKHG85200,AKHG,AKHG 85-200,file,30400,product_list:market,28800,0.0,30400,24400,42,,,,,,,,,,"stroke 200 mm, Fs 200000 N"
+shock_absorbers,AKHG100150,AKHG,AKHG 100-150,file,39800,hydraulic_pricelist,40810,0.0,39800,31900,42,,,,,,,,,,"stroke 150 mm, Fs 283333 N"
+shock_absorbers,AKHG85250,AKHG,AKHG 85-250,file,30400,product_list:b2b,30375,0.0,30400,24400,42,,,,,,,,,,"stroke 250 mm, Fs 200000 N"
+shock_absorbers,AKHG120100,AKHG,AKHG 120-100,file,48200,hydraulic_pricelist,47017,0.0,48200,38600,42,,,,,,,,,,"stroke 100 mm, Fs 562500 N"
+shock_absorbers,AKHG100200,AKHG,AKHG 100-200,file,48000,product_list:market,44044,0.0,48000,38400,42,,,,,,,,,,"stroke 200 mm, Fs 287500 N"
+shock_absorbers,AKHG100250,AKHG,AKHG 100-250,file,42500,product_list:b2b,46663,0.0,42500,34000,42,,,,,,,,,,"stroke 250 mm, Fs 290000 N"
+shock_absorbers,AKHG140100,AKHG,AKHG 140-100,file,58900,akhg_pricelist,58900,0.0,58900,47200,42,,,,,,,,,,"stroke 100 mm, Fs 775000 N"
+shock_absorbers,AKHG100300,AKHG,AKHG 100-300,file,43800,hydraulic_pricelist,48518,0.0,43800,35100,42,,,,,,,,,,"stroke 300 mm, Fs 287500 N"
+shock_absorbers,AKHG120150,AKHG,AKHG 120-150,model,,,52785,25.0,54200,43400,42,,,,,,,,,,"stroke 150 mm, Fs 583333 N · capped at the next larger priced model"
+shock_absorbers,AKHG150100,AKHG,AKHG 150-100,model,,,60795,25.0,76000,60800,42,,,,,,,,,,"stroke 100 mm, Fs 875000 N"
+shock_absorbers,AKHG180100,AKHG,AKHG 180-100,model,,,68832,25.0,86100,68900,42,,,,,,,,,,"stroke 100 mm, Fs 1e+06 N"
+shock_absorbers,AKHG100400,AKHG,AKHG 100-400,file,47300,product_list:market,51374,0.0,47300,37900,42,,,,,,,,,,"stroke 400 mm, Fs 281250 N"
+shock_absorbers,AKHG140150,AKHG,AKHG 140-150,file,61200,product_list:b2b,64152,0.0,61200,49000,42,,,,,,,,,,"stroke 150 mm, Fs 758333 N"
+shock_absorbers,AKHG120200,AKHG,AKHG 120-200,file,54200,product_list:market,56113,0.0,54200,43400,42,,,,,,,,,,"stroke 200 mm, Fs 575000 N"
+shock_absorbers,AKHG100500,AKHG,AKHG 100-500,file,50000,product_list:b2b,53552,0.0,50000,40000,42,,,,,,,,,,"stroke 500 mm, Fs 275000 N"
+shock_absorbers,AKHG120250,AKHG,AKHG 120-250,model,,,58913,25.0,54300,43500,42,,,,,,,,,,"stroke 250 mm, Fs 570000 N · capped at the next larger priced model"
+shock_absorbers,AKHG130250,AKHG,AKHG 130-250,model,,,69090,25.0,67200,53800,42,,,,,,,,,,"stroke 250 mm, Fs 600000 N · capped at the next larger priced model"
+shock_absorbers,AKHG140200,AKHG,AKHG 140-200,file,65800,akhg_pricelist,69494,0.0,65800,52700,42,,,,,,,,,,"stroke 200 mm, Fs 775000 N"
+shock_absorbers,AKHG100600,AKHG,AKHG 100-600,file,52400,hydraulic_pricelist,54366,0.0,52400,42000,42,,,,,,,,,,"stroke 600 mm, Fs 260417 N"
+shock_absorbers,AKHG120300,AKHG,AKHG 120-300,file,54300,akhg_pricelist,59918,0.0,54300,43500,42,,,,,,,,,,"stroke 300 mm, Fs 541667 N"
+shock_absorbers,AKHG150200,AKHG,AKHG 150-200,model,,,70653,25.0,78600,62900,42,,,,,,,,,,"stroke 200 mm, Fs 850000 N · capped at the next larger priced model"
+shock_absorbers,AKHG100800,AKHG,AKHG 100-800,file,57300,product_list:market,53167,0.0,57300,45900,42,,,,,,,,,,"stroke 800 mm, Fs 218750 N"
+shock_absorbers,AKHG130300,AKHG,AKHG 130-300,file,67200,akhg_pricelist,71110,0.0,67200,53800,42,,,,,,,,,,"stroke 300 mm, Fs 583333 N"
+shock_absorbers,AKHG120400,AKHG,AKHG 120-400,file,56700,product_list:b2b,61551,0.0,56700,45400,42,,,,,,,,,,"stroke 400 mm, Fs 500000 N"
+shock_absorbers,AKHG180200,AKHG,AKHG 180-200,model,,,81211,25.0,101600,81300,42,,,,,,,,,,"stroke 200 mm, Fs 1e+06 N"
+shock_absorbers,AKHG140300,AKHG,AKHG 140-300,file,72100,akhg_pricelist,74157,0.0,72100,57700,42,,,,,,,,,,"stroke 300 mm, Fs 729167 N"
+shock_absorbers,AKHG120500,AKHG,AKHG 120-500,file,59900,akhg_pricelist,61446,0.0,59900,48000,42,,,,,,,,,,"stroke 500 mm, Fs 450000 N"
+shock_absorbers,AKHG130400,AKHG,AKHG 130-400,file,73000,hydraulic_pricelist,74732,0.0,73000,58400,42,,,,,,,,,,"stroke 400 mm, Fs 562500 N"
+shock_absorbers,AKHG150300,AKHG,AKHG 150-300,model,,,73543,25.0,78600,62900,42,,,,,,,,,,"stroke 300 mm, Fs 762500 N · capped at the next larger priced model"
+shock_absorbers,AKHG120600,AKHG,AKHG 120-600,file,63800,product_list:b2b,61653,0.0,63800,51100,42,,,,,,,,,,"stroke 600 mm, Fs 416667 N"
+shock_absorbers,AKHG180250,AKHG,AKHG 180-250,model,,,85653,25.0,107100,85700,42,,,,,,,,,,"stroke 250 mm, Fs 1e+06 N"
+shock_absorbers,AKHG130500,AKHG,AKHG 130-500,file,77900,akhg_pricelist,77900,0.0,77900,62400,42,,,,,,,,,,"stroke 500 mm, Fs 550000 N"
+shock_absorbers,AKHG140400,AKHG,AKHG 140-400,file,78600,akhg_pricelist,79545,0.0,78600,62900,42,,,,,,,,,,"stroke 400 mm, Fs 731250 N"
+shock_absorbers,AKHG120800,AKHG,AKHG 120-800,file,69400,product_list:market,62503,0.0,69400,55600,42,,,,,,,,,,"stroke 800 mm, Fs 375000 N"
+shock_absorbers,AKHG150400,AKHG,AKHG 150-400,file,78600,product_list:b2b,78600,0.0,78600,62900,42,,,,,,,,,,"stroke 400 mm, Fs 759375 N"
+shock_absorbers,AKHG130600,AKHG,AKHG 130-600,file,81200,product_list:b2b,80718,0.0,81200,65000,42,,,,,,,,,,"stroke 600 mm, Fs 541667 N"
+shock_absorbers,AKHG140500,AKHG,AKHG 140-500,file,84200,product_list:market,80464,0.0,84200,67400,42,,,,,,,,,,"stroke 500 mm, Fs 675000 N"
+shock_absorbers,AKHG1201000,AKHG,AKHG 120-1000,file,75300,hydraulic_pricelist,63591,0.0,75300,60300,42,,,,,,,,,,"stroke 1000 mm, Fs 350000 N"
+shock_absorbers,AKHG180400,AKHG,AKHG 180-400,model,,,89371,25.0,111800,89500,42,,,,,,,,,,"stroke 400 mm, Fs 875000 N"
+shock_absorbers,AKHG150500,AKHG,AKHG 150-500,model,,,80189,25.0,100300,80300,42,,,,,,,,,,"stroke 500 mm, Fs 712500 N"
+shock_absorbers,AKHG130800,AKHG,AKHG 130-800,file,95300,akhg_pricelist,80174,0.0,95300,76300,42,,,,,,,,,,"stroke 800 mm, Fs 468750 N"
+shock_absorbers,AKHG140600,AKHG,AKHG 140-600,file,90000,hydraulic_pricelist,80735,0.0,90000,72000,42,,,,,,,,,,"stroke 600 mm, Fs 625000 N"
+shock_absorbers,AKHG150600,AKHG,AKHG 150-600,model,,,81294,25.0,101700,81400,42,,,,,,,,,,"stroke 600 mm, Fs 672917 N"
+shock_absorbers,AKHG140800,AKHG,AKHG 140-800,file,97800,hydraulic_pricelist,77596,0.0,97800,78300,42,,,,,,,,,,"stroke 800 mm, Fs 507812 N"
+shock_absorbers,AKHG180500,AKHG,AKHG 180-500,model,,,94259,25.0,117900,94400,42,,,,,,,,,,"stroke 500 mm, Fs 875000 N"
+shock_absorbers,AKHG1401000,AKHG,AKHG 140-1000,file,109100,akhg_pricelist,76840,0.0,109100,87300,42,,,,,,,,,,"stroke 1000 mm, Fs 450000 N"
+shock_absorbers,AKHG150800,AKHG,AKHG 150-800,model,,,80100,25.0,101700,81400,42,,,,,,,,,,"stroke 800 mm, Fs 573438 N · raised to keep price rising with stroke"
+shock_absorbers,AKHG1501000,AKHG,AKHG 150-1000,model,,,79673,25.0,101700,81400,42,,,,,,,,,,"stroke 1000 mm, Fs 512500 N · raised to keep price rising with stroke"
+shock_absorbers,AKHG180600,AKHG,AKHG 180-600,model,,,99666,25.0,124600,99700,42,,,,,,,,,,"stroke 600 mm, Fs 895833 N"
+shock_absorbers,AKHG180800,AKHG,AKHG 180-800,model,,,106423,25.0,133100,106500,42,,,,,,,,,,"stroke 800 mm, Fs 890625 N"
+shock_absorbers,AKHG1801000,AKHG,AKHG 180-1000,model,,,112858,25.0,141100,112900,42,,,,,,,,,,"stroke 1000 mm, Fs 900000 N"
+shock_absorbers,AKHS13070,AKHS,AKHS 130-70,file,28500,product_list:b2b,28500,0.0,28500,22800,42,,,,,,,,,,"stroke 70 mm, Fs 214286 N"
+shock_absorbers,AKHS130100,AKHS,AKHS 130-100,model,,,29935,25.0,37500,30000,42,,,,,,,,,,"stroke 100 mm, Fs 200000 N"
+shock_absorbers,AKHS130150,AKHS,AKHS 130-150,model,,,31513,25.0,39400,31600,42,,,,,,,,,,"stroke 150 mm, Fs 183333 N"
+shock_absorbers,AKHS16080,AKHS,AKHS 160-80,model,,,42694,25.0,53400,42800,42,,,,,,,,,,"stroke 80 mm, Fs 437500 N"
+shock_absorbers,AKHS190100,AKHS,AKHS 190-100,model,,,49521,25.0,62000,49600,42,,,,,,,,,,"stroke 100 mm, Fs 525000 N"
+shock_absorbers,AKHS160150,AKHS,AKHS 160-150,model,,,45237,25.0,56600,45300,42,,,,,,,,,,"stroke 150 mm, Fs 366667 N"
+shock_absorbers,AKHS190150,AKHS,AKHS 190-150,model,,,55448,25.0,69400,55600,42,,,,,,,,,,"stroke 150 mm, Fs 541667 N"
+shock_absorbers,ED1.5X2,ED,ED 1.5 x 2,model,,,15625,25.0,19600,15700,42,,,,,,,,,,"stroke 50 mm, Fs 80000 N"
+shock_absorbers,ED1.5X4,ED,ED 1.5 x 4,model,,,17980,25.0,22500,18000,42,,,,,,,,,,"stroke 100 mm, Fs 76250 N"
+shock_absorbers,ED1.5X6,ED,ED 1.5 x 6,model,,,19750,25.0,24700,19800,42,,,,,,,,,,"stroke 150 mm, Fs 75833 N"
+shock_absorbers,ED3.0X2,ED,ED 3.0 x 2,model,,,27713,25.0,34700,27800,42,,,,,,,,,,"stroke 50 mm, Fs 240000 N"
+shock_absorbers,ED1.5X8,ED,ED 1.5 x 8,model,,,21214,25.0,26600,21300,42,,,,,,,,,,"stroke 200 mm, Fs 76250 N"
+shock_absorbers,ED3.5X2,ED,ED 3.5 x 2,model,,,32461,25.0,40600,32500,42,,,,,,,,,,"stroke 50 mm, Fs 325000 N"
+shock_absorbers,ED3.0X3,ED,ED 3.0 x 3,model,,,30749,25.0,38500,30800,42,,,,,,,,,,"stroke 75 mm, Fs 243333 N"
+shock_absorbers,ED1.5X10,ED,ED 1.5 x 10,model,,,22335,25.0,28000,22400,42,,,,,,,,,,"stroke 250 mm, Fs 76000 N"
+shock_absorbers,ED4.0X2,ED,ED 4.0 x 2,model,,,35819,25.0,44800,35900,42,,,,,,,,,,"stroke 50 mm, Fs 392500 N"
+shock_absorbers,ED2.0X6,ED,ED 2.0 x 6,model,,,27425,25.0,34300,27500,42,,,,,,,,,,"stroke 152 mm, Fs 141447 N"
+shock_absorbers,ED1.5X12,ED,ED 1.5 x 12,model,,,23369,25.0,29300,23500,42,,,,,,,,,,"stroke 300 mm, Fs 76250 N"
+shock_absorbers,ED1.5X14,ED,ED 1.5 x 14,model,,,23976,25.0,30000,24000,42,,,,,,,,,,"stroke 350 mm, Fs 74643 N"
+shock_absorbers,ED2.0X8,ED,ED 2.0 x 8,model,,,29404,25.0,36800,29500,42,,,,,,,,,,"stroke 203 mm, Fs 141626 N"
+shock_absorbers,ED1.5X16,ED,ED 1.5 x 16,model,,,24434,25.0,30600,24500,42,,,,,,,,,,"stroke 400 mm, Fs 72812 N"
+shock_absorbers,ED3.0X5,ED,ED 3.0 x 5,model,,,34635,25.0,43300,34700,42,,,,,,,,,,"stroke 125 mm, Fs 242000 N"
+shock_absorbers,ED1.5X18,ED,ED 1.5 x 18,model,,,24670,25.0,30900,24800,42,,,,,,,,,,"stroke 450 mm, Fs 70278 N"
+shock_absorbers,ED3.5X4,ED,ED 3.5 x 4,model,,,38300,25.0,47900,38400,42,,,,,,,,,,"stroke 100 mm, Fs 325000 N"
+shock_absorbers,ED1.5X20,ED,ED 1.5 x 20,model,,,24867,25.0,31100,24900,42,,,,,,,,,,"stroke 500 mm, Fs 68000 N"
+shock_absorbers,ED2.0X10,ED,ED 2.0 x 10,model,,,31172,25.0,39000,31200,42,,,,,,,,,,"stroke 250 mm, Fs 144000 N"
+shock_absorbers,ED1.5X24,ED,ED 1.5 x 24,model,,,25070,25.0,31400,25200,42,,,,,,,,,,"stroke 600 mm, Fs 63542 N"
+shock_absorbers,ED4.0X4,ED,ED 4.0 x 4,model,,,42121,25.0,52700,42200,42,,,,,,,,,,"stroke 100 mm, Fs 390000 N"
+shock_absorbers,ED1.5X28,ED,ED 1.5 x 28,model,,,25112,25.0,31400,25200,42,,,,,,,,,,"stroke 713 mm, Fs 58906 N"
+shock_absorbers,ED2.0X12,ED,ED 2.0 x 12,model,,,32430,25.0,40600,32500,42,,,,,,,,,,"stroke 300 mm, Fs 142917 N"
+shock_absorbers,ED3.0X8,ED,ED 3.0 x 8,model,,,37139,25.0,46500,37200,42,,,,,,,,,,"stroke 200 mm, Fs 223125 N"
+shock_absorbers,ED1.5X32,ED,ED 1.5 x 32,model,,,25264,25.0,31600,25300,42,,,,,,,,,,"stroke 813 mm, Fs 56119 N"
+shock_absorbers,ED2.0X14,ED,ED 2.0 x 14,model,,,33063,25.0,41400,33200,42,,,,,,,,,,"stroke 350 mm, Fs 138214 N"
+shock_absorbers,ED3.5X6,ED,ED 3.5 x 6,model,,,42077,25.0,52600,42100,42,,,,,,,,,,"stroke 150 mm, Fs 323333 N"
+shock_absorbers,ED2.0X16,ED,ED 2.0 x 16,model,,,33717,25.0,42200,33800,42,,,,,,,,,,"stroke 400 mm, Fs 135000 N"
+shock_absorbers,ED3.0X10,ED,ED 3.0 x 10,model,,,38513,25.0,48200,38600,42,,,,,,,,,,"stroke 250 mm, Fs 216000 N"
+shock_absorbers,ED4.0X6,ED,ED 4.0 x 6,model,,,46129,25.0,57700,46200,42,,,,,,,,,,"stroke 150 mm, Fs 385658 N"
+shock_absorbers,ED2.0X18,ED,ED 2.0 x 18,model,,,34304,25.0,42900,34400,42,,,,,,,,,,"stroke 450 mm, Fs 132222 N"
+shock_absorbers,ED3.0X12,ED,ED 3.0 x 12,model,,,39761,25.0,49800,39900,42,,,,,,,,,,"stroke 300 mm, Fs 211250 N"
+shock_absorbers,ED3.5X8,ED,ED 3.5 x 8,model,,,44687,25.0,55900,44800,42,,,,,,,,,,"stroke 200 mm, Fs 318125 N"
+shock_absorbers,ED2.0X20,ED,ED 2.0 x 20,model,,,34832,25.0,43600,34900,42,,,,,,,,,,"stroke 500 mm, Fs 129750 N"
+shock_absorbers,ED2.0X24,ED,ED 2.0 x 24,model,,,35928,25.0,45000,36000,42,,,,,,,,,,"stroke 600 mm, Fs 126667 N"
+shock_absorbers,ED3.5X10,ED,ED 3.5 x 10,model,,,46027,25.0,57600,46100,42,,,,,,,,,,"stroke 250 mm, Fs 304000 N"
+shock_absorbers,ED4.0X8,ED,ED 4.0 x 8,model,,,49530,25.0,62000,49600,42,,,,,,,,,,"stroke 200 mm, Fs 387500 N"
+shock_absorbers,ED3.0X14,ED,ED 3.0 x 14,model,,,42595,25.0,53300,42700,42,,,,,,,,,,"stroke 350 mm, Fs 224643 N"
+shock_absorbers,ED2.0X28,ED,ED 2.0 x 28,model,,,36962,25.0,46300,37100,42,,,,,,,,,,"stroke 700 mm, Fs 124643 N"
+shock_absorbers,ED3.0X16,ED,ED 3.0 x 16,model,,,43498,25.0,54400,43600,42,,,,,,,,,,"stroke 400 mm, Fs 220000 N"
+shock_absorbers,ED2.0X32,ED,ED 2.0 x 32,model,,,35830,25.0,46300,37100,42,,,,,,,,,,"stroke 800 mm, Fs 110469 N · raised to keep price rising with stroke"
+shock_absorbers,ED3.5X12,ED,ED 3.5 x 12,model,,,47326,25.0,59200,47400,42,,,,,,,,,,"stroke 300 mm, Fs 295000 N"
+shock_absorbers,ED4.0X10,ED,ED 4.0 x 10,model,,,52098,25.0,65200,52200,42,,,,,,,,,,"stroke 250 mm, Fs 385500 N"
+shock_absorbers,ED3.0X18,ED,ED 3.0 x 18,model,,,44353,25.0,55500,44400,42,,,,,,,,,,"stroke 450 mm, Fs 216389 N"
+shock_absorbers,ED3.0X20,ED,ED 3.0 x 20,model,,,45164,25.0,56500,45200,42,,,,,,,,,,"stroke 500 mm, Fs 213500 N"
+shock_absorbers,ED3.5X16,ED,ED 3.5 x 16,model,,,49586,25.0,62000,49600,42,,,,,,,,,,"stroke 400 mm, Fs 282812 N"
+shock_absorbers,ED4.0X12,ED,ED 4.0 x 12,model,,,54439,25.0,68100,54500,42,,,,,,,,,,"stroke 300 mm, Fs 385833 N"
+shock_absorbers,ED3.0X24,ED,ED 3.0 x 24,model,,,46646,25.0,58400,46800,42,,,,,,,,,,"stroke 600 mm, Fs 208958 N"
+shock_absorbers,ED2.0X36,ED,ED 2.0 x 36,model,,,41784,25.0,52300,41900,42,,,,,,,,,,"stroke 900 mm, Fs 140556 N"
+shock_absorbers,ED2.0X40,ED,ED 2.0 x 40,model,,,40599,25.0,52300,41900,42,,,,,,,,,,"stroke 1000 mm, Fs 126750 N · raised to keep price rising with stroke"
+shock_absorbers,ED2.0X48,ED,ED 2.0 x 48,model,,,41080,25.0,52300,41900,42,,,,,,,,,,"stroke 1200 mm, Fs 119271 N · raised to keep price rising with stroke"
+shock_absorbers,ED3.0X28,ED,ED 3.0 x 28,model,,,48023,25.0,60100,48100,42,,,,,,,,,,"stroke 700 mm, Fs 205893 N"
+shock_absorbers,ED3.5X20,ED,ED 3.5 x 20,model,,,53650,25.0,67100,53700,42,,,,,,,,,,"stroke 500 mm, Fs 297000 N"
+shock_absorbers,ED4.0X16,ED,ED 4.0 x 16,model,,,58216,25.0,72800,58300,42,,,,,,,,,,"stroke 400 mm, Fs 384688 N"
+shock_absorbers,ED2.0X56,ED,ED 2.0 x 56,model,,,41168,25.0,52300,41900,42,,,,,,,,,,"stroke 1400 mm, Fs 111607 N · raised to keep price rising with stroke"
+shock_absorbers,ED3.0X32,ED,ED 3.0 x 32,model,,,49268,25.0,61600,49300,42,,,,,,,,,,"stroke 800 mm, Fs 203438 N"
+shock_absorbers,ED3.5X24,ED,ED 3.5 x 24,model,,,55239,25.0,69100,55300,42,,,,,,,,,,"stroke 600 mm, Fs 288958 N"
+shock_absorbers,ED3.0X36,ED,ED 3.0 x 36,model,,,50893,25.0,63700,51000,42,,,,,,,,,,"stroke 900 mm, Fs 205139 N"
+shock_absorbers,ED4.0X20,ED,ED 4.0 x 20,model,,,61426,25.0,76800,61500,42,,,,,,,,,,"stroke 500 mm, Fs 385000 N"
+shock_absorbers,ED3.5X28,ED,ED 3.5 x 28,model,,,56693,25.0,70900,56800,42,,,,,,,,,,"stroke 700 mm, Fs 283036 N"
+shock_absorbers,ED3.0X40,ED,ED 3.0 x 40,model,,,51435,25.0,64300,51500,42,,,,,,,,,,"stroke 1000 mm, Fs 199500 N"
+shock_absorbers,ED3.5X32,ED,ED 3.5 x 32,model,,,58064,25.0,72600,58100,42,,,,,,,,,,"stroke 800 mm, Fs 278750 N"
+shock_absorbers,ED3.0X48,ED,ED 3.0 x 48,model,,,51967,25.0,65000,52000,42,,,,,,,,,,"stroke 1200 mm, Fs 187188 N"
+shock_absorbers,ED4.0X24,ED,ED 4.0 x 24,model,,,64157,25.0,80200,64200,42,,,,,,,,,,"stroke 600 mm, Fs 385000 N"
+shock_absorbers,ED3.0X56,ED,ED 3.0 x 56,model,,,52150,25.0,65200,52200,42,,,,,,,,,,"stroke 1400 mm, Fs 175625 N"
+shock_absorbers,ED3.5X36,ED,ED 3.5 x 36,model,,,59346,25.0,74200,59400,42,,,,,,,,,,"stroke 900 mm, Fs 275417 N"
+shock_absorbers,ED3.0X60,ED,ED 3.0 x 60,model,,,52495,25.0,65700,52600,42,,,,,,,,,,"stroke 1500 mm, Fs 172333 N"
+shock_absorbers,ED4.0X28,ED,ED 4.0 x 28,model,,,66481,25.0,83200,66600,42,,,,,,,,,,"stroke 700 mm, Fs 384107 N"
+shock_absorbers,ED3.5X40,ED,ED 3.5 x 40,model,,,60346,25.0,75500,60400,42,,,,,,,,,,"stroke 1000 mm, Fs 271000 N"
+shock_absorbers,ED3.0X64,ED,ED 3.0 x 64,model,,,52676,25.0,65900,52800,42,,,,,,,,,,"stroke 1629 mm, Fs 167050 N"
+shock_absorbers,ED3.0X72,ED,ED 3.0 x 72,model,,,53397,25.0,66800,53500,42,,,,,,,,,,"stroke 1830 mm, Fs 162568 N"
+shock_absorbers,ED4.0X32,ED,ED 4.0 x 32,model,,,67853,25.0,84900,68000,42,,,,,,,,,,"stroke 800 mm, Fs 375781 N"
+shock_absorbers,ED3.5X48,ED,ED 3.5 x 48,model,,,61371,25.0,76800,61500,42,,,,,,,,,,"stroke 1200 mm, Fs 257500 N"
+shock_absorbers,ED4.0X36,ED,ED 4.0 x 36,model,,,69157,25.0,86500,69200,42,,,,,,,,,,"stroke 900 mm, Fs 369306 N"
+shock_absorbers,ED3.5X56,ED,ED 3.5 x 56,model,,,61909,25.0,77400,62000,42,,,,,,,,,,"stroke 1400 mm, Fs 244018 N"
+shock_absorbers,ED4.0X40,ED,ED 4.0 x 40,model,,,70220,25.0,87800,70300,42,,,,,,,,,,"stroke 1000 mm, Fs 362375 N"
+shock_absorbers,ED4.0X48,ED,ED 4.0 x 48,model,,,71273,25.0,89100,71300,42,,,,,,,,,,"stroke 1200 mm, Fs 343021 N"
+shock_absorbers,EI50X50,EI,EI 50 x 50,model,,,16373,25.0,20500,16400,42,,,,,,,,,,"stroke 50 mm, Fs 87500 N"
+shock_absorbers,EI50X100,EI,EI 50 x 100,model,,,19173,25.0,24000,19200,42,,,,,,,,,,"stroke 100 mm, Fs 86250 N"
+shock_absorbers,EI80X50,EI,EI 80 x 50,model,,,24869,25.0,31100,24900,42,,,,,,,,,,"stroke 50 mm, Fs 195000 N"
+shock_absorbers,EI100X50,EI,EI 100 x 50,model,,,30450,25.0,38100,30500,42,,,,,,,,,,"stroke 50 mm, Fs 287500 N"
+shock_absorbers,EI80X100,EI,EI 80 x 100,model,,,29342,25.0,36700,29400,42,,,,,,,,,,"stroke 100 mm, Fs 195000 N"
+shock_absorbers,EI100X100,EI,EI 100 x 100,model,,,35927,25.0,45000,36000,42,,,,,,,,,,"stroke 100 mm, Fs 287500 N"
+shock_absorbers,EI100X150,EI,EI 100 x 150,model,,,39577,25.0,49500,39600,42,,,,,,,,,,"stroke 150 mm, Fs 287500 N"
+shock_absorbers,EI120X100,EI,EI 120 x 100,model,,,46038,25.0,57600,46100,42,,,,,,,,,,"stroke 100 mm, Fs 462500 N"
+shock_absorbers,EI100X200,EI,EI 100 x 200,model,,,42389,25.0,53000,42400,42,,,,,,,,,,"stroke 200 mm, Fs 287500 N"
+shock_absorbers,EI120X150,EI,EI 120 x 150,model,,,50476,25.0,63100,50500,42,,,,,,,,,,"stroke 150 mm, Fs 458333 N"
+shock_absorbers,EI150X115,EI,EI 150 x 115,model,,,62169,25.0,77800,62300,42,,,,,,,,,,"stroke 115 mm, Fs 771739 N"
+shock_absorbers,EI120X200,EI,EI 120 x 200,model,,,54318,25.0,67900,54400,42,,,,,,,,,,"stroke 200 mm, Fs 462500 N"
+shock_absorbers,EI100X400,EI,EI 100 x 400,model,,,50013,25.0,62600,50100,42,,,,,,,,,,"stroke 400 mm, Fs 287500 N"
+shock_absorbers,EI150X150,EI,EI 150 x 150,model,,,66756,25.0,83500,66800,42,,,,,,,,,,"stroke 150 mm, Fs 783333 N"
+shock_absorbers,EI130X250,EI,EI 130 x 250,model,,,62080,25.0,77700,62200,42,,,,,,,,,,"stroke 250 mm, Fs 539500 N"
+shock_absorbers,EI120X300,EI,EI 120 x 300,model,,,58987,25.0,73800,59100,42,,,,,,,,,,"stroke 300 mm, Fs 450000 N"
+shock_absorbers,EI100X500,EI,EI 100 x 500,model,,,51073,25.0,63900,51200,42,,,,,,,,,,"stroke 500 mm, Fs 270250 N"
+shock_absorbers,EI100X600,EI,EI 100 x 600,model,,,53189,25.0,66500,53200,42,,,,,,,,,,"stroke 600 mm, Fs 268750 N"
+shock_absorbers,EI130X300,EI,EI 130 x 300,model,,,67032,25.0,83800,67100,42,,,,,,,,,,"stroke 300 mm, Fs 575000 N"
+shock_absorbers,EI120X400,EI,EI 120 x 400,model,,,63178,25.0,79000,63200,42,,,,,,,,,,"stroke 400 mm, Fs 450000 N"
+shock_absorbers,EI100X800,EI,EI 100 x 800,model,,,54140,25.0,67700,54200,42,,,,,,,,,,"stroke 800 mm, Fs 243750 N"
+shock_absorbers,EI130X400,EI,EI 130 x 400,model,,,71795,25.0,89800,71900,42,,,,,,,,,,"stroke 400 mm, Fs 575000 N"
+shock_absorbers,EI120X600,EI,EI 120 x 600,model,,,69596,25.0,87000,69600,42,,,,,,,,,,"stroke 600 mm, Fs 450000 N"
+shock_absorbers,EI130X600,EI,EI 130 x 600,model,,,73847,25.0,92400,74000,42,,,,,,,,,,"stroke 600 mm, Fs 504167 N"
+shock_absorbers,EI150X400,EI,EI 150 x 400,model,,,84767,25.0,106000,84800,42,,,,,,,,,,"stroke 400 mm, Fs 790625 N"
+shock_absorbers,EI120X800,EI,EI 120 x 800,model,,,70527,25.0,88200,70600,42,,,,,,,,,,"stroke 800 mm, Fs 404688 N"
+shock_absorbers,EI120X1000,EI,EI 120 x 1000,model,,,71362,25.0,89300,71500,42,,,,,,,,,,"stroke 1000 mm, Fs 373750 N"
+shock_absorbers,EI130X800,EI,EI 130 x 800,model,,,77589,25.0,97000,77600,42,,,,,,,,,,"stroke 800 mm, Fs 485938 N"
+shock_absorbers,EI150X500,EI,EI 150 x 500,model,,,89366,25.0,111800,89500,42,,,,,,,,,,"stroke 500 mm, Fs 790000 N"
+shock_absorbers,EI150X600,EI,EI 150 x 600,model,,,93443,25.0,116900,93600,42,,,,,,,,,,"stroke 600 mm, Fs 791667 N"
+shock_absorbers,EI150X800,EI,EI 150 x 800,model,,,100937,25.0,126200,101000,42,,,,,,,,,,"stroke 800 mm, Fs 804688 N"
+shock_absorbers,EI150X1000,EI,EI 150 x 1000,model,,,101454,25.0,126900,101600,42,,,,,,,,,,"stroke 1000 mm, Fs 733750 N"
+shock_absorbers,JHQC1,JHQC,JHQ-C-1,file,739.2,pu_pricelist:inr,822,0.0,750,600,21,,,,,,,,,,"stroke 60 mm, Fs 27954 N"
+shock_absorbers,JHQC2,JHQC,JHQ-C-2,file,802.56,pu_pricelist:inr,1000,0.0,850,700,21,,,,,,,,,,"stroke 60 mm, Fs 41929 N"
+shock_absorbers,JHQC3,JHQC,JHQ-C-3,file,887.0400000000002,pu_pricelist:inr,1065,0.0,900,750,21,,,,,,,,,,"stroke 75 mm, Fs 42096 N"
+shock_absorbers,JHQC4,JHQC,JHQ-C-4,file,950.4,pu_pricelist:inr,1245,0.0,1000,800,21,,,,,,,,,,"stroke 60 mm, Fs 65828 N"
+shock_absorbers,JHQC5,JHQC,JHQ-C-5,file,992.6400000000002,pu_pricelist:inr,1323,0.0,1000,800,21,,,,,,,,,,"stroke 75 mm, Fs 65828 N"
+shock_absorbers,JHQC6,JHQC,JHQ-C-6,file,1056,pu_pricelist:inr,1408,0.0,1100,900,21,,,,,,,,,,"stroke 94 mm, Fs 65984 N"
+shock_absorbers,JHQC7,JHQC,JHQ-C-7,file,1161.6,pu_pricelist:inr,1643,0.0,1200,1000,21,,,,,,,,,,"stroke 75 mm, Fs 102893 N"
+shock_absorbers,JHQC8,JHQC,JHQ-C-8,file,1267.2,pu_pricelist:inr,1749,0.0,1300,1050,21,,,,,,,,,,"stroke 94 mm, Fs 103218 N"
+shock_absorbers,JHQC9,JHQC,JHQ-C-9,file,1372.8000000000002,pu_pricelist:inr,1865,0.0,1400,1150,21,,,,,,,,,,"stroke 120 mm, Fs 102725 N"
+shock_absorbers,JHQC10,JHQC,JHQ-C-10,file,3500,product_list:b2b,2223,0.0,3500,2800,21,,,,,,,,,,"stroke 94 mm, Fs 169135 N"
+shock_absorbers,JHQC11,JHQC,JHQ-C-11,file,2027.52,pu_pricelist:inr,2375,0.0,2050,1650,21,,,,,,,,,,"stroke 120 mm, Fs 169102 N"
+shock_absorbers,JHQC12,JHQC,JHQ-C-12,file,2280.9600000000005,pu_pricelist:inr,2519,0.0,2300,1850,21,,,,,,,,,,"stroke 150 mm, Fs 168512 N"
+shock_absorbers,JHQC13,JHQC,JHQ-C-13,file,2724.4800000000005,pu_pricelist:inr,2953,0.0,2750,2200,21,,,,,,,,,,"stroke 120 mm, Fs 264979 N"
+shock_absorbers,JHQC14,JHQC,JHQ-C-14,file,3379.2000000000003,pu_pricelist:inr,3137,0.0,3400,2750,21,,,,,,,,,,"stroke 150 mm, Fs 264979 N"
+shock_absorbers,JHQC15,JHQC,JHQ-C-15,file,3886.08,pu_pricelist:inr,3331,0.0,3900,3150,21,,,,,,,,,,"stroke 188 mm, Fs 264274 N"
+shock_absorbers,JHQC16,JHQC,JHQ-C-16,file,6547.200000000001,pu_pricelist:inr,3894,0.0,6550,5250,21,,,,,,,,,,"stroke 150 mm, Fs 413924 N"
+shock_absorbers,JHQC17,JHQC,JHQ-C-17,file,12500,product_list:b2b,4136,0.0,12500,10000,21,,,,,,,,,,"stroke 188 mm, Fs 412941 N"
+shock_absorbers,JHQC18,JHQC,JHQ-C-18,file,12500,product_list:market,4425,0.0,12500,10000,21,,,,,,,,,,"stroke 240 mm, Fs 414030 N"
+shock_absorbers,JHQC19,JHQC,JHQ-C-19,file,10876.8,pu_pricelist:inr,5254,0.0,10900,8750,21,,,,,,,,,,"stroke 188 mm, Fs 676542 N"
+shock_absorbers,JHQC20,JHQC,JHQ-C-20,file,15523.2,pu_pricelist:inr,5606,0.0,15600,12500,21,,,,,,,,,,"stroke 240 mm, Fs 674319 N"
+shock_absorbers,JHQC21,JHQC,JHQ-C-21,file,17698.56,pu_pricelist:inr,5955,0.0,17700,14200,21,,,,,,,,,,"stroke 300 mm, Fs 674088 N"
+shock_absorbers,JHQC22,JHQC,JHQ-C-22,file,24921.6,pu_pricelist:inr,6150,0.0,25000,20000,21,,,,,,,,,,"stroke 337 mm, Fs 675028 N"
+shock_absorbers,JHQC24,JHQC,JHQ-C-24,file,28000,pu_pricelist:inr,6840,0.0,28000,22400,21,,,,,,,,,,"stroke 225 mm, Fs 1.05381e+06 N"
+shock_absorbers,JHQC23,JHQC,JHQ-C-23,file,25600,pu_pricelist:inr,7635,0.0,25600,20500,21,,,,,,,,,,"stroke 337 mm, Fs 1.05444e+06 N"
+shock_absorbers,SB1204A,SB,SB-1204A,file,2800,product_list:market,3457,0.0,2800,2250,28,,,,,,,,,,"stroke 55 mm, Fs 5091 N"
+shock_absorbers,SB1204B,SB,SB-1204B,file,3800,spring_pricelist,5317,0.0,3800,3050,28,,,,,,,,,,"stroke 75 mm, Fs 10400 N"
+shock_absorbers,SB1204C,SB,SB-1204C,file,4800,product_list:market,10210,0.0,4800,3850,28,,,,,,,,,,"stroke 100 mm, Fs 34000 N"
+shock_absorbers,SB1204D,SB,SB-1204D,file,7650,product_list:b2b,11851,0.0,7650,6150,28,,,,,,,,,,"stroke 125 mm, Fs 40800 N"
+shock_absorbers,SB1204E,SB,SB-1204E,file,15500,spring_pricelist,14350,0.0,15500,12400,28,,,,,,,,,,"stroke 150 mm, Fs 54667 N"
+shock_absorbers,SB1204F,SB,SB-1204F,file,16500,spring_pricelist,16881,0.0,16500,13200,28,,,,,,,,,,"stroke 110 mm, Fs 90909 N"
+shock_absorbers,SB1204G,SB,SB-1204G,file,15800,product_list:market,15800,0.0,15800,12700,28,,,,,,,,,,"stroke 150 mm, Fs 66667 N"
+shock_absorbers,SB1220A,SB,SB-1220-A,file,22000,product_list:market,19760,0.0,22000,17600,28,,,,,,,,,,"stroke 170 mm, Fs 83647 N"
+shock_absorbers,SB1220C,SB,SB-1220-C,file,22000,product_list:b2b,20279,0.0,22000,17600,28,,,,,,,,,,"stroke 170 mm, Fs 88235 N"
+shock_absorbers,SB1220E,SB,SB-1220-E,file,22000,product_list:b2b,20574,0.0,22000,17600,28,,,,,,,,,,"stroke 200 mm, Fs 83000 N"
+shock_absorbers,SB1220L,SB,SB-1220-L,file,21800,product_list:b2b,20574,0.0,21800,17500,28,,,,,,,,,,"stroke 200 mm, Fs 83000 N"
+shock_absorbers,SB1220D,SB,SB-1220-D,file,23000,spring_pricelist,21854,0.0,23000,18400,28,,,,,,,,,,"stroke 200 mm, Fs 94000 N"
+shock_absorbers,SB1220B,SB,SB-1220-B,file,23200,product_list:b2b,21885,0.0,23200,18600,28,,,,,,,,,,"stroke 250 mm, Fs 83200 N"
+shock_absorbers,SB1220K,SB,SB-1220-K,file,19800,product_list:b2b,24745,0.0,19800,15900,28,,,,,,,,,,"stroke 150 mm, Fs 142667 N"
+shock_absorbers,SB1220H,SB,SB-1220-H,file,24000,product_list:market,23926,0.0,24000,19200,28,,,,,,,,,,"stroke 250 mm, Fs 100000 N"
+shock_absorbers,SB1220M,SB,SB-1220-M,file,22800,product_list:b2b,25093,0.0,22800,18300,28,,,,,,,,,,"stroke 200 mm, Fs 125000 N"
+shock_absorbers,SB1220P,SB,SB-1220-P,file,21800,product_list:b2b,26682,0.0,21800,17500,28,,,,,,,,,,"stroke 150 mm, Fs 166667 N"
+shock_absorbers,SB1220G,SB,SB-1220-G,file,25200,product_list:b2b,25278,0.0,25200,20200,28,,,,,,,,,,"stroke 250 mm, Fs 112000 N"
+shock_absorbers,SB1220N,SB,SB-1220-N,file,21800,product_list:b2b,28190,0.0,21800,17500,28,,,,,,,,,,"stroke 150 mm, Fs 186667 N"
+shock_absorbers,SB1220F,SB,SB-1220-F,file,26500,product_list:b2b,27205,0.0,26500,21200,28,,,,,,,,,,"stroke 240 mm, Fs 133333 N"
+shock_absorbers,SB1220J,SB,SB-1220-J,file,28000,product_list:b2b,35082,0.0,28000,22400,28,,,,,,,,,,"stroke 260 mm, Fs 215385 N"
+shock_absorbers,YSR88,YSRA,YSR-8-8,file,2500,price list 2019 (Price List India 2022-23.pdf),1205,0.0,2500,2000,35,,,,,,,,,,"stroke 10 mm, Fs 625 N"
+shock_absorbers,YSR1212,YSRA,YSR-12-12,file,2200,price list 2019 (Price List India 2022-23.pdf),1800,0.0,2200,1800,35,,,,,,,,,,"stroke 13 mm, Fs 962 N"
+shock_absorbers,YSR1620,YSRA,YSR-16-20,file,2800,product_list:b2b,2800,0.0,2800,2250,35,,,,,,,,,,"stroke 20 mm, Fs 3125 N"
+shock_absorbers,YSR2025,YSRA,YSR-20-25,file,3800,product_list:market,3800,0.0,3800,3050,35,,,,,,,,,,"stroke 25 mm, Fs 4000 N"
+shock_absorbers,ACX3350,ACX,ACX-33-50,model,,,5461,25.0,6850,5500,21,,,,,,,,,,"stroke 48.5 mm, Fs 9021 N"
+shock_absorbers,ACX3650,ACX,ACX-36-50,model,,,5461,25.0,6850,5500,21,,,,,,,,,,"stroke 48.5 mm, Fs 9021 N"
+shock_absorbers,AKHG85300,AKHG,AKHG 85-300,file,31700,product_list:market,31726,0.0,31700,25400,42,,,,,,,,,,"stroke 300 mm, Fs 200000 N"
+shock_absorbers,AKHG85400,AKHG,AKHG 85-400,file,33000,product_list:market,33980,0.0,33000,26400,42,,,,,,,,,,"stroke 400 mm, Fs 200000 N"
+shock_absorbers,AKHG85500,AKHG,AKHG 85-500,file,34500,akhg_pricelist,35838,0.0,34500,27600,42,,,,,,,,,,"stroke 500 mm, Fs 200000 N"
+shock_absorbers,AKHG130100,AKHG,AKHG 130-100,file,57500,product_list:market,55522,0.0,57500,46000,42,,,,,,,,,,"stroke 100 mm, Fs 600000 N"
+shock_absorbers,AKHG130150,AKHG,AKHG 130-150,file,57400,akhg_pricelist,61162,0.0,57400,46000,42,,,,,,,,,,"stroke 150 mm, Fs 600000 N"
+shock_absorbers,AKHG130200,AKHG,AKHG 130-200,file,61600,akhg_pricelist,65508,0.0,61600,49300,42,,,,,,,,,,"stroke 200 mm, Fs 600000 N"
+shock_absorbers,AKHG1301000,AKHG,AKHG 130-1000,file,105200,product_list:b2b,84559,0.0,105200,84200,42,,,,,,,,,,"stroke 1000 mm, Fs 468750 N"
+shock_absorbers,AC2015,AC,AC-20-15,file,2200,product_list:market,2698,0.0,2200,1800,21,,,,,,,,,,"stroke 15 mm, Fs 1562 N"
+shock_absorbers,AD2015,AD,AD 20-15,file,2900,product_list:market,3115,0.0,2900,2350,28,,,,,,,,,,"stroke 15 mm, Fs 1562 N"
+shock_absorbers,AC2725,AC,AC-27-25,file,4700,product_list:market,4700,0.0,4700,3800,21,,,,,,,,,,"stroke 25 mm, Fs 4250 N"
+shock_absorbers,AD2725,AD,AD 27-25,file,5200,product_list:market,5200,0.0,5200,4200,28,,,,,,,,,,"stroke 25 mm, Fs 4250 N"
+shock_absorbers,AD4550,AD,AD 45-50,file,22500,product_list:market,22500,0.0,22500,18000,21,,,,,,,,,,"stroke 50 mm, Fs 18500 N"
+wire_rope_isolators,AWRI-16-10,AWRI-16,AWRI-16-10,file,1800,product list / AWRI selector,1479,0.0,1800,1450,21,,,,,,,,,,18x25 mm
+wire_rope_isolators,AWRI-16-20,AWRI-16,AWRI-16-20,file,1850,product list / AWRI selector,1530,0.0,1850,1500,21,,,,,,,,,,20x28 mm
+wire_rope_isolators,AWRI-16-40,AWRI-16,AWRI-16-40,file,2000,product list / AWRI selector,1602,0.0,2000,1600,21,,,,,,,,,,25x30 mm
+wire_rope_isolators,AWRI-16-60,AWRI-16,AWRI-16-60,file,2050,product list / AWRI selector,1655,0.0,2050,1650,21,,,,,,,,,,28x33 mm
+wire_rope_isolators,AWRI-16-80,AWRI-16,AWRI-16-80,file,2100,product list / AWRI selector,1696,0.0,2100,1700,21,,,,,,,,,,30x36 mm
+wire_rope_isolators,AWRI-16-71,AWRI-16,AWRI-16-71,file,2150,product list / AWRI selector,1736,0.0,2150,1750,21,,,,,,,,,,33x38 mm
+wire_rope_isolators,AWRI-24-10,AWRI-24,AWRI-24-10,file,2150,product list / AWRI selector,2186,0.0,2150,1750,21,,,,,,,,,,23x28 mm
+wire_rope_isolators,AWRI-24-20,AWRI-24,AWRI-24-20,file,2300,product list / AWRI selector,2239,0.0,2300,1850,21,,,,,,,,,,25x30 mm
+wire_rope_isolators,AWRI-24-40,AWRI-24,AWRI-24-40,file,2400,product list / AWRI selector,2313,0.0,2400,1950,21,,,,,,,,,,28x33 mm
+wire_rope_isolators,AWRI-24-60,AWRI-24,AWRI-24-60,file,2500,product list / AWRI selector,2426,0.0,2500,2000,21,,,,,,,,,,33x38 mm
+wire_rope_isolators,AWRI-24-70,AWRI-24,AWRI-24-70,file,2650,product list / AWRI selector,2489,0.0,2650,2150,21,,,,,,,,,,36x41 mm
+wire_rope_isolators,AWRI-24-80,AWRI-24,AWRI-24-80,file,2750,product list / AWRI selector,2529,0.0,2750,2200,21,,,,,,,,,,38x43 mm
+wire_rope_isolators,AWRI-32-10,AWRI-32,AWRI-32-10,file,2900,product list / AWRI selector,2973,0.0,2900,2350,21,,,,,,,,,,28x36 mm
+wire_rope_isolators,AWRI-32-20,AWRI-32,AWRI-32-20,file,3000,product list / AWRI selector,3031,0.0,3000,2400,21,,,,,,,,,,30x38 mm
+wire_rope_isolators,AWRI-32-40,AWRI-32,AWRI-32-40,file,3100,product list / AWRI selector,3114,0.0,3100,2500,21,,,,,,,,,,33x41 mm
+wire_rope_isolators,AWRI-32-50,AWRI-32,AWRI-32-50,file,3250,product list / AWRI selector,3180,0.0,3250,2600,21,,,,,,,,,,36x43 mm
+wire_rope_isolators,AWRI-32-60,AWRI-32,AWRI-32-60,file,3350,product list / AWRI selector,3241,0.0,3350,2700,21,,,,,,,,,,38x46 mm
+wire_rope_isolators,AWRI-32-70,AWRI-32,AWRI-32-70,file,3500,product list / AWRI selector,3302,0.0,3500,2800,21,,,,,,,,,,41x48 mm
+wire_rope_isolators,AWRI-32-80,AWRI-32,AWRI-32-80,file,3600,product list / AWRI selector,3358,0.0,3600,2900,21,,,,,,,,,,43x51 mm
+wire_rope_isolators,AWRI-40-20,AWRI-40,AWRI-40-20,file,3700,product list / AWRI selector,3688,0.0,3700,3000,21,,,,,,,,,,30x41 mm
+wire_rope_isolators,AWRI-40-40,AWRI-40,AWRI-40-40,file,3850,product list / AWRI selector,3771,0.0,3850,3100,21,,,,,,,,,,33x43 mm
+wire_rope_isolators,AWRI-40-60,AWRI-40,AWRI-40-60,file,3950,product list / AWRI selector,3923,0.0,3950,3200,21,,,,,,,,,,38x48 mm
+wire_rope_isolators,AWRI-40-80,AWRI-40,AWRI-40-80,file,4100,product list / AWRI selector,4105,0.0,4100,3300,21,,,,,,,,,,46x53 mm
+wire_rope_isolators,AWRI-40-90,AWRI-40,AWRI-40-90,file,4200,product list / AWRI selector,4323,0.0,4200,3400,21,,,,,,,,,,53x64 mm
+wire_rope_isolators,AWRI-48-20,AWRI-48,AWRI-48-20,file,3600,product list / AWRI selector,4200,0.0,3600,2900,21,,,,,,,,,,30x36 mm
+wire_rope_isolators,AWRI-48-30,AWRI-48,AWRI-48-30,file,3700,product list / AWRI selector,4300,0.0,3700,3000,21,,,,,,,,,,33x38 mm
+wire_rope_isolators,AWRI-48-40,AWRI-48,AWRI-48-40,file,5400,product list / AWRI selector,4411,0.0,5400,4350,21,,,,,,,,,,36x41 mm
+wire_rope_isolators,AWRI-48-50,AWRI-48,AWRI-48-50,file,3900,product list / AWRI selector,4482,0.0,3900,3150,21,,,,,,,,,,38x43 mm
+wire_rope_isolators,AWRI-48-60,AWRI-48,AWRI-48-60,file,4000,product list / AWRI selector,4584,0.0,4000,3200,21,,,,,,,,,,41x46 mm
+wire_rope_isolators,AWRI-48-70,AWRI-48,AWRI-48-70,file,4100,product list / AWRI selector,4649,0.0,4100,3300,21,,,,,,,,,,43x48 mm
+wire_rope_isolators,AWRI-48-80,AWRI-48,AWRI-48-80,file,4200,product list / AWRI selector,4918,0.0,4200,3400,21,,,,,,,,,,51x58 mm
+wire_rope_isolators,AWRI-48-85,AWRI-48,AWRI-48-85,file,4300,product list / AWRI selector,5166,0.0,4300,3450,21,,,,,,,,,,54x75 mm
+wire_rope_isolators,AWRI-48-90,AWRI-48,AWRI-48-90,file,4400,product list / AWRI selector,5413,0.0,4400,3550,21,,,,,,,,,,62x88 mm
+wire_rope_isolators,AWRI-48-95,AWRI-48,AWRI-48-95,file,4500,product list / AWRI selector,5820,0.0,4500,3600,21,,,,,,,,,,81x107 mm
+wire_rope_isolators,AWRI-64-20,AWRI-64,AWRI-64-20,file,4250,product list / AWRI selector,6144,0.0,4250,3400,21,,,,,,,,,,48x56 mm
+wire_rope_isolators,AWRI-64-40,AWRI-64,AWRI-64-40,file,4550,product list / AWRI selector,6390,0.0,4550,3650,21,,,,,,,,,,54x64 mm
+wire_rope_isolators,AWRI-64-50,AWRI-64,AWRI-64-50,file,4750,product list / AWRI selector,6586,0.0,4750,3800,21,,,,,,,,,,59x71 mm
+wire_rope_isolators,AWRI-64-60,AWRI-64,AWRI-64-60,file,4800,product list / AWRI selector,6796,0.0,4800,3850,21,,,,,,,,,,64x80 mm
+wire_rope_isolators,AWRI-64-70,AWRI-64,AWRI-64-70,file,4850,product list / AWRI selector,6910,0.0,4850,3900,21,,,,,,,,,,64x89 mm
+wire_rope_isolators,AWRI-64-80,AWRI-64,AWRI-64-80,file,4950,product list / AWRI selector,7032,0.0,4950,4000,21,,,,,,,,,,67x95 mm
+wire_rope_isolators,AWRI-64-85,AWRI-64,AWRI-64-85,file,5200,product list / AWRI selector,7088,0.0,5200,4200,21,,,,,,,,,,67x100 mm
+wire_rope_isolators,AWRI-64-90,AWRI-64,AWRI-64-90,file,6200,product list / AWRI selector,7419,0.0,6200,5000,21,,,,,,,,,,83x108 mm
+wire_rope_isolators,AWRI-95-20,AWRI-95,AWRI-95-20,file,9300,product list / AWRI selector,9644,0.0,9300,7450,21,,,,,,,,,,71x84 mm
+wire_rope_isolators,AWRI-95-30,AWRI-95,AWRI-95-30,file,9500,product list / AWRI selector,9795,0.0,9500,7600,21,,,,,,,,,,74x89 mm
+wire_rope_isolators,AWRI-95-26,AWRI-95,AWRI-95-26,file,9200,product list / AWRI selector,9644,0.0,9200,7400,21,,,,,,,,,,71x84 mm
+wire_rope_isolators,AWRI-95-40,AWRI-95,AWRI-95-40,file,9850,product list / AWRI selector,10094,0.0,9850,7900,21,,,,,,,,,,76x105 mm
+wire_rope_isolators,AWRI-95-36,AWRI-95,AWRI-95-36,file,9300,product list / AWRI selector,9795,0.0,9300,7450,21,,,,,,,,,,74x89 mm
+wire_rope_isolators,AWRI-95-50,AWRI-95,AWRI-95-50,file,10200,product list / AWRI selector,10279,0.0,10200,8200,21,,,,,,,,,,83x108 mm
+wire_rope_isolators,AWRI-95-60,AWRI-95,AWRI-95-60,file,10300,product list / AWRI selector,10392,0.0,10300,8250,21,,,,,,,,,,89x108 mm
+wire_rope_isolators,AWRI-95-46,AWRI-95,AWRI-95-46,file,9700,product list / AWRI selector,10094,0.0,9700,7800,21,,,,,,,,,,76x105 mm
+wire_rope_isolators,AWRI-95-56,AWRI-95,AWRI-95-56,file,9900,product list / AWRI selector,10279,0.0,9900,7950,21,,,,,,,,,,83x108 mm
+wire_rope_isolators,AWRI-95-66,AWRI-95,AWRI-95-66,file,10100,product list / AWRI selector,10392,0.0,10100,8100,21,,,,,,,,,,89x108 mm
+wire_rope_isolators,AWRI-95-70,AWRI-95,AWRI-95-70,file,10500,product list / AWRI selector,10856,0.0,10500,8400,21,,,,,,,,,,105x121 mm
+wire_rope_isolators,AWRI-95-80,AWRI-95,AWRI-95-80,file,10800,product list / AWRI selector,11156,0.0,10800,8650,21,,,,,,,,,,108x140 mm
+wire_rope_isolators,AWRI-95-76,AWRI-95,AWRI-95-76,file,10200,product list / AWRI selector,10856,0.0,10200,8200,21,,,,,,,,,,105x121 mm
+wire_rope_isolators,AWRI-95-86,AWRI-95,AWRI-95-86,file,10600,product list / AWRI selector,11156,0.0,10600,8500,21,,,,,,,,,,108x140 mm
+wire_rope_isolators,AWRI-127-20,AWRI-127,AWRI-127-20,file,12800,product list / AWRI selector,12564,0.0,12800,10300,21,,,,,,,,,,76x92 mm
+wire_rope_isolators,AWRI-127-30,AWRI-127,AWRI-127-30,file,13200,product list / AWRI selector,12946,0.0,13200,10600,21,,,,,,,,,,83x102 mm
+wire_rope_isolators,AWRI-127-40,AWRI-127,AWRI-127-40,file,13300,product list / AWRI selector,13148,0.0,13300,10700,21,,,,,,,,,,89x105 mm
+wire_rope_isolators,AWRI-127-26,AWRI-127,AWRI-127-26,file,12600,product list / AWRI selector,12564,0.0,12600,10100,21,,,,,,,,,,76x92 mm
+wire_rope_isolators,AWRI-127-60,AWRI-127,AWRI-127-60,file,15500,"Paresh 25-09-2026, from WR costing sheets",13581,0.0,15500,12400,21,,,,,,,,,,95x121 mm
+wire_rope_isolators,AWRI-127-36,AWRI-127,AWRI-127-36,file,13000,product list / AWRI selector,12946,0.0,13000,10400,21,,,,,,,,,,83x102 mm
+wire_rope_isolators,AWRI-127-46,AWRI-127,AWRI-127-46,file,13100,product list / AWRI selector,13148,0.0,13100,10500,21,,,,,,,,,,89x105 mm
+wire_rope_isolators,AWRI-127-70,AWRI-127,AWRI-127-70,file,13700,product list / AWRI selector,14064,0.0,13700,11000,21,,,,,,,,,,108x133 mm
+wire_rope_isolators,AWRI-127-66,AWRI-127,AWRI-127-66,file,13200,product list / AWRI selector,13581,0.0,13200,10600,21,,,,,,,,,,95x121 mm
+wire_rope_isolators,AWRI-127-85,AWRI-127,AWRI-127-85,file,14000,product list / AWRI selector,14966,0.0,14000,11200,21,,,,,,,,,,137x156 mm
+wire_rope_isolators,AWRI-127-76,AWRI-127,AWRI-127-76,file,13400,product list / AWRI selector,14064,0.0,13400,10800,21,,,,,,,,,,108x133 mm
+wire_rope_isolators,AWRI-127-86,AWRI-127,AWRI-127-86,file,13800,product list / AWRI selector,14551,0.0,13800,11100,21,,,,,,,,,,124x144 mm
+wire_rope_isolators,AWRI-127-90,AWRI-127,AWRI-127-90,file,14200,product list / AWRI selector,15604,0.0,14200,11400,21,,,,,,,,,,155x180 mm
+wire_rope_isolators,AWRI-127-89,AWRI-127,AWRI-127-89,file,13900,product list / AWRI selector,14966,0.0,13900,11200,21,,,,,,,,,,137x156 mm
+wire_rope_isolators,AWRI-127-96,AWRI-127,AWRI-127-96,file,14000,product list / AWRI selector,15604,0.0,14000,11200,21,,,,,,,,,,155x180 mm
+wire_rope_isolators,AWRI-127-80,AWRI-127,AWRI-127-80,file,13800,product list / AWRI selector,14551,0.0,13800,11100,21,,,,,,,,,,124x144 mm
+wire_rope_isolators,AWRI-159-20,AWRI-159,AWRI-159-20,file,16200,product list / AWRI selector,15756,0.0,16200,13000,21,,,,,,,,,,89x102 mm
+wire_rope_isolators,AWRI-159-30,AWRI-159,AWRI-159-30,file,16400,product list / AWRI selector,16258,0.0,16400,13200,21,,,,,,,,,,99x112 mm
+wire_rope_isolators,AWRI-159-40,AWRI-159,AWRI-159-40,file,16600,product list / AWRI selector,16533,0.0,16600,13300,21,,,,,,,,,,102x121 mm
+wire_rope_isolators,AWRI-159-60,AWRI-159,AWRI-159-60,file,16800,product list / AWRI selector,16994,0.0,16800,13500,21,,,,,,,,,,109x135 mm
+wire_rope_isolators,AWRI-159-70,AWRI-159,AWRI-159-70,file,17000,product list / AWRI selector,17552,0.0,17000,13600,21,,,,,,,,,,119x152 mm
+wire_rope_isolators,AWRI-159-80,AWRI-159,AWRI-159-80,file,17200,product list / AWRI selector,17961,0.0,17200,13800,21,,,,,,,,,,127x165 mm
+wire_rope_isolators,AWRI-159-90,AWRI-159,AWRI-159-90,file,19200,product list / AWRI selector,18351,0.0,19200,15400,21,,,,,,,,,,135x178 mm
+wire_rope_isolators,AWRI-222-20,AWRI-222,AWRI-222-20,file,26000,product list / AWRI selector,23226,0.0,26000,20800,21,,,,,,,,,,133x140 mm
+wire_rope_isolators,AWRI-222-40,AWRI-222,AWRI-222-40,file,26500,product list / AWRI selector,24334,0.0,26500,21200,21,,,,,,,,,,152x165 mm
+wire_rope_isolators,AWRI-222-60,AWRI-222,AWRI-222-60,file,27000,product list / AWRI selector,24733,0.0,27000,21600,21,,,,,,,,,,159x175 mm
+wire_rope_isolators,AWRI-222-80,AWRI-222,AWRI-222-80,file,27500,product list / AWRI selector,26191,0.0,27500,22000,21,,,,,,,,,,191x210 mm
+wire_rope_isolators,AWRI-222-90,AWRI-222,AWRI-222-90,file,36000,product list / AWRI selector,27174,0.0,36000,28800,21,,,,,,,,,,216x235 mm
+wire_rope_isolators,AWRI-222-95,AWRI-222,AWRI-222-95,file,28000,product list / AWRI selector,28023,0.0,28000,22400,21,,,,,,,,,,216x286 mm
+wire_rope_isolators,AWRI-286-20,AWRI-286,AWRI-286-20,file,35200,product list / AWRI selector,32069,0.0,35200,28200,21,,,,,,,,,,178x216 mm
+wire_rope_isolators,AWRI-286-40,AWRI-286,AWRI-286-40,file,36500,product list / AWRI selector,33627,0.0,36500,29200,21,,,,,,,,,,216x241 mm
+wire_rope_isolators,AWRI-286-60,AWRI-286,AWRI-286-60,file,38500,product list / AWRI selector,34481,0.0,38500,30800,21,,,,,,,,,,235x260 mm
+wire_rope_isolators,AWRI-318-20,AWRI-318,AWRI-318-20,file,54200,product list / AWRI selector,34850,0.0,54200,43400,21,,,,,,,,,,178x210 mm
+wire_rope_isolators,AWRI-318-40,AWRI-318,AWRI-318-40,file,58000,product list / AWRI selector,36869,0.0,58000,46400,21,,,,,,,,,,216x248 mm
+wire_rope_isolators,ACWRI-12-10,ACWRI-12,ACWRI-12-10,file,1150,product list / AWRI selector,941,0.0,1150,950,21,,,,,,,,,,17x19 mm
+wire_rope_isolators,ACWRI-12-20,ACWRI-12,ACWRI-12-20,file,1200,product list / AWRI selector,965,0.0,1200,1000,21,,,,,,,,,,19x20 mm
+wire_rope_isolators,ACWRI-12-30,ACWRI-12,ACWRI-12-30,file,1250,product list / AWRI selector,1017,0.0,1250,1000,21,,,,,,,,,,23x23 mm
+wire_rope_isolators,ACWRI-12-40,ACWRI-12,ACWRI-12-40,file,1300,product list / AWRI selector,1056,0.0,1300,1050,21,,,,,,,,,,26x26 mm
+wire_rope_isolators,ACWRI-16-10,ACWRI-16,ACWRI-16-10,file,1450,product list / AWRI selector,1192,0.0,1450,1200,21,,,,,,,,,,16x20 mm
+wire_rope_isolators,ACWRI-16-20,ACWRI-16,ACWRI-16-20,file,1500,product list / AWRI selector,1234,0.0,1500,1200,21,,,,,,,,,,19x21 mm
+wire_rope_isolators,ACWRI-16-30,ACWRI-16,ACWRI-16-30,file,1600,product list / AWRI selector,1298,0.0,1600,1300,21,,,,,,,,,,23x24 mm
+wire_rope_isolators,ACWRI-16-40,ACWRI-16,ACWRI-16-40,file,1650,product list / AWRI selector,1356,0.0,1650,1350,21,,,,,,,,,,27x27 mm
+wire_rope_isolators,ACWRI-24-10,ACWRI-24,ACWRI-24-10,file,2100,product list / AWRI selector,1736,0.0,2100,1700,21,,,,,,,,,,19x22 mm
+wire_rope_isolators,ACWRI-24-20,ACWRI-24,ACWRI-24-20,file,2200,product list / AWRI selector,1814,0.0,2200,1800,21,,,,,,,,,,23x24 mm
+wire_rope_isolators,ACWRI-24-30,ACWRI-24,ACWRI-24-30,file,2300,product list / AWRI selector,1894,0.0,2300,1850,21,,,,,,,,,,27x27 mm
+wire_rope_isolators,ACWRI-24-40,ACWRI-24,ACWRI-24-40,file,2450,product list / AWRI selector,1987,0.0,2450,2000,21,,,,,,,,,,33x30 mm
+wire_rope_isolators,ACWRI-32-10,ACWRI-32,ACWRI-32-10,file,3450,product list / AWRI selector,2808,0.0,3450,2800,21,,,,,,,,,,42x47 mm
+wire_rope_isolators,ACWRI-32-20,ACWRI-32,ACWRI-32-20,file,3650,product list / AWRI selector,2976,0.0,3650,2950,21,,,,,,,,,,53x54 mm
+wire_rope_isolators,ACWRI-32-30,ACWRI-32,ACWRI-32-30,file,3750,product list / AWRI selector,3077,0.0,3750,3000,21,,,,,,,,,,60x59 mm
+wire_rope_isolators,ACWRI-32-40,ACWRI-32,ACWRI-32-40,file,4000,product list / AWRI selector,3258,0.0,4000,3200,21,,,,,,,,,,75x68 mm
+wire_rope_isolators,ACWRI-40-10,ACWRI-40,ACWRI-40-10,file,3700,product list / AWRI selector,3374,0.0,3700,3000,21,,,,,,,,,,41x48 mm
+wire_rope_isolators,ACWRI-40-20,ACWRI-40,ACWRI-40-20,file,4400,product list / AWRI selector,3578,0.0,4400,3550,21,,,,,,,,,,53x54 mm
+wire_rope_isolators,ACWRI-40-30,ACWRI-40,ACWRI-40-30,file,4550,product list / AWRI selector,3699,0.0,4550,3650,21,,,,,,,,,,60x59 mm
+wire_rope_isolators,ACWRI-40-40,ACWRI-40,ACWRI-40-40,file,4800,product list / AWRI selector,3916,0.0,4800,3850,21,,,,,,,,,,76x67 mm
+wire_rope_isolators,ACWRI-48-10,ACWRI-48,ACWRI-48-10,file,5000,product list / AWRI selector,4081,0.0,5000,4000,21,,,,,,,,,,47x54 mm
+wire_rope_isolators,ACWRI-48-20,ACWRI-48,ACWRI-48-20,file,5200,product list / AWRI selector,4242,0.0,5200,4200,21,,,,,,,,,,55x59 mm
+wire_rope_isolators,ACWRI-48-30,ACWRI-48,ACWRI-48-30,file,5400,product list / AWRI selector,4399,0.0,5400,4350,21,,,,,,,,,,64x64 mm
+wire_rope_isolators,ACWRI-48-40,ACWRI-48,ACWRI-48-40,file,5700,product list / AWRI selector,4641,0.0,5700,4600,21,,,,,,,,,,79x73 mm
+rubber_mounts,AT-OVTN10-20,OVTN rubber-coated anti-impact isolator,AT-OVTN10-20,cost,,,782,50.0,1200,1000,21,4,0.326,137,265,0.664,156,45000,225,782,rubber 0.326 kg + moulding + hardware 0.664 kg + mould 45000/50
+rubber_mounts,AT-OVTN10-15,OVTN rubber-coated anti-impact isolator,AT-OVTN10-15,cost,,,782,50.0,1200,1000,21,4,0.326,137,265,0.664,156,45000,225,782,rubber 0.326 kg + moulding + hardware 0.664 kg + mould 45000/50
+rubber_mounts,AT-OVTN10-10,OVTN rubber-coated anti-impact isolator,AT-OVTN10-10,cost,,,782,50.0,1200,1000,21,4,0.326,137,265,0.664,156,45000,225,782,rubber 0.326 kg + moulding + hardware 0.664 kg + mould 45000/50
+rubber_mounts,AT-OVTN20-150,OVTN rubber-coated anti-impact isolator,AT-OVTN20-150,cost,,,3052,50.0,4600,3700,21,1,1.325,557,525,1.578,371,80000,1600,3052,rubber 1.325 kg + moulding + hardware 1.578 kg + mould 80000/50
+rubber_mounts,AT-OVTN20-100,OVTN rubber-coated anti-impact isolator,AT-OVTN20-100,cost,,,3052,50.0,4600,3700,21,1,1.325,557,525,1.578,371,80000,1600,3052,rubber 1.325 kg + moulding + hardware 1.578 kg + mould 80000/50
+rubber_mounts,AT-OVTN20-50,OVTN rubber-coated anti-impact isolator,AT-OVTN20-50,cost,,,3052,50.0,4600,3700,21,1,1.325,557,525,1.578,371,80000,1600,3052,rubber 1.325 kg + moulding + hardware 1.578 kg + mould 80000/50
+rubber_mounts,AT-OVTN30-250,OVTN rubber-coated anti-impact isolator,AT-OVTN30-250,cost,,,3121,50.0,4700,3800,21,1,1.325,557,525,1.873,440,80000,1600,3121,rubber 1.325 kg + moulding + hardware 1.873 kg + mould 80000/50
+rubber_mounts,AT-OVTN30-125,OVTN rubber-coated anti-impact isolator,AT-OVTN30-125,cost,,,3121,50.0,4700,3800,21,1,1.325,557,525,1.873,440,80000,1600,3121,rubber 1.325 kg + moulding + hardware 1.873 kg + mould 80000/50
+rubber_mounts,AT-OVTN30-60,OVTN rubber-coated anti-impact isolator,AT-OVTN30-60,cost,,,3121,50.0,4700,3800,21,1,1.325,557,525,1.873,440,80000,1600,3121,rubber 1.325 kg + moulding + hardware 1.873 kg + mould 80000/50
+rubber_mounts,AT-OVTN40-300,OVTN rubber-coated anti-impact isolator,AT-OVTN40-300,cost,,,4660,50.0,7000,5600,21,1,3.169,1331,1004,3.088,726,80000,1600,4660,rubber 3.169 kg + moulding + hardware 3.088 kg + mould 80000/50
+rubber_mounts,AT-OVTN40-200,OVTN rubber-coated anti-impact isolator,AT-OVTN40-200,cost,,,4660,50.0,7000,5600,21,1,3.169,1331,1004,3.088,726,80000,1600,4660,rubber 3.169 kg + moulding + hardware 3.088 kg + mould 80000/50
+rubber_mounts,AT-OVTN40-80,OVTN rubber-coated anti-impact isolator,AT-OVTN40-80,cost,,,4660,50.0,7000,5600,21,1,3.169,1331,1004,3.088,726,80000,1600,4660,rubber 3.169 kg + moulding + hardware 3.088 kg + mould 80000/50
+rubber_mounts,AT-OVTN50-1800,OVTN rubber-coated anti-impact isolator,AT-OVTN50-1800,cost,,,5282,50.0,7950,6400,21,1,3.685,1548,1138,4.239,996,80000,1600,5282,rubber 3.685 kg + moulding + hardware 4.239 kg + mould 80000/50
+rubber_mounts,AT-OVTN50-1000,OVTN rubber-coated anti-impact isolator,AT-OVTN50-1000,cost,,,5282,50.0,7950,6400,21,1,3.685,1548,1138,4.239,996,80000,1600,5282,rubber 3.685 kg + moulding + hardware 4.239 kg + mould 80000/50
+rubber_mounts,AT-OVTN50-400,OVTN rubber-coated anti-impact isolator,AT-OVTN50-400,cost,,,5282,50.0,7950,6400,21,1,3.685,1548,1138,4.239,996,80000,1600,5282,rubber 3.685 kg + moulding + hardware 4.239 kg + mould 80000/50
+rubber_mounts,AT-OVTN60-2400,OVTN rubber-coated anti-impact isolator,AT-OVTN60-2400,cost,,,8660,50.0,13000,10400,21,1,7.408,3111,2106,7.844,1843,80000,1600,8660,rubber 7.408 kg + moulding + hardware 7.844 kg + mould 80000/50
+rubber_mounts,AT-OVTN60-1200,OVTN rubber-coated anti-impact isolator,AT-OVTN60-1200,cost,,,8660,50.0,13000,10400,21,1,7.408,3111,2106,7.844,1843,80000,1600,8660,rubber 7.408 kg + moulding + hardware 7.844 kg + mould 80000/50
+rubber_mounts,AT-OVTN60-600,OVTN rubber-coated anti-impact isolator,AT-OVTN60-600,cost,,,8660,50.0,13000,10400,21,1,7.408,3111,2106,7.844,1843,80000,1600,8660,rubber 7.408 kg + moulding + hardware 7.844 kg + mould 80000/50
+rubber_mounts,AT-OVTX-25-8,OVTX all-metal (metal rubber) isolator,AT-OVTX-25-8,cost,,,1472,50.0,2250,1800,21,4,0.679,285,357,2.576,605,45000,225,1472,rubber 0.679 kg + moulding + hardware 2.576 kg + mould 45000/50
+rubber_mounts,AT-OVTX-40-6,OVTX all-metal (metal rubber) isolator,AT-OVTX-40-6,cost,,,1472,50.0,2250,1800,21,4,0.679,285,357,2.576,605,45000,225,1472,rubber 0.679 kg + moulding + hardware 2.576 kg + mould 45000/50
+rubber_mounts,AT-OVTX-60-8,OVTX all-metal (metal rubber) isolator,AT-OVTX-60-8,cost,,,1472,50.0,2250,1800,21,4,0.679,285,357,2.576,605,45000,225,1472,rubber 0.679 kg + moulding + hardware 2.576 kg + mould 45000/50
+rubber_mounts,AT-OVTX-85-8,OVTX all-metal (metal rubber) isolator,AT-OVTX-85-8,cost,,,2051,50.0,3100,2500,21,4,1.138,478,476,3.709,872,45000,225,2051,rubber 1.138 kg + moulding + hardware 3.709 kg + mould 45000/50
+rubber_mounts,AT-OVTX-100-8,OVTX all-metal (metal rubber) isolator,AT-OVTX-100-8,cost,,,2051,50.0,3100,2500,21,4,1.138,478,476,3.709,872,45000,225,2051,rubber 1.138 kg + moulding + hardware 3.709 kg + mould 45000/50
+rubber_mounts,AT-OVTX-100-20,OVTX all-metal (metal rubber) isolator,AT-OVTX-100-20,cost,,,2099,50.0,3150,2550,21,4,1.209,508,494,3.709,872,45000,225,2099,rubber 1.209 kg + moulding + hardware 3.709 kg + mould 45000/50
+rubber_mounts,AT-OVTX-150-8,OVTX all-metal (metal rubber) isolator,AT-OVTX-150-8,cost,,,2051,50.0,3100,2500,21,4,1.138,478,476,3.709,872,45000,225,2051,rubber 1.138 kg + moulding + hardware 3.709 kg + mould 45000/50
+rubber_mounts,AT-BE3,Rubber BE shock absorber,AT-BE3,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.119,35,28000,70,303,rubber 0.026 kg + moulding + hardware 0.119 kg + mould 28000/50
+rubber_mounts,AT-BE5,Rubber BE shock absorber,AT-BE5,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.119,35,28000,70,303,rubber 0.026 kg + moulding + hardware 0.119 kg + mould 28000/50
+rubber_mounts,AT-BE10,Rubber BE shock absorber,AT-BE10,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.119,35,28000,70,303,rubber 0.026 kg + moulding + hardware 0.119 kg + mould 28000/50
+rubber_mounts,AT-BE15,Rubber BE shock absorber,AT-BE15,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.119,35,28000,70,303,rubber 0.026 kg + moulding + hardware 0.119 kg + mould 28000/50
+rubber_mounts,AT-BE25,Rubber BE shock absorber,AT-BE25,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.132,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.132 kg + mould 28000/50
+rubber_mounts,AT-BE40,Rubber BE shock absorber,AT-BE40,cost,,,349,50.0,550,450,21,8,0.069,29,198,0.22,52,28000,70,349,rubber 0.069 kg + moulding + hardware 0.22 kg + mould 28000/50
+rubber_mounts,AT-BE60,Rubber BE shock absorber,AT-BE60,cost,,,393,50.0,600,500,21,8,0.105,44,207,0.306,72,28000,70,393,rubber 0.105 kg + moulding + hardware 0.306 kg + mould 28000/50
+rubber_mounts,AT-BE85,Rubber BE shock absorber,AT-BE85,cost,,,442,50.0,700,600,21,8,0.146,61,218,0.396,93,28000,70,442,rubber 0.146 kg + moulding + hardware 0.396 kg + mould 28000/50
+rubber_mounts,AT-BE120,Rubber BE shock absorber,AT-BE120,cost,,,683,50.0,1050,850,21,4,0.215,90,236,0.56,132,45000,225,683,rubber 0.215 kg + moulding + hardware 0.56 kg + mould 45000/50
+rubber_mounts,AT-BE160,Rubber BE shock absorber,AT-BE160,cost,,,719,50.0,1100,900,21,4,0.249,105,245,0.615,144,45000,225,719,rubber 0.249 kg + moulding + hardware 0.615 kg + mould 45000/50
+rubber_mounts,AT-BE220,Rubber BE shock absorber,AT-BE220,cost,,,840,50.0,1300,1050,21,4,0.383,161,280,0.742,174,45000,225,840,rubber 0.383 kg + moulding + hardware 0.742 kg + mould 45000/50
+rubber_mounts,AT-BE300,Rubber BE shock absorber,AT-BE300,cost,,,937,50.0,1450,1200,21,4,0.493,207,308,0.84,197,45000,225,937,rubber 0.493 kg + moulding + hardware 0.84 kg + mould 45000/50
+rubber_mounts,AT-BE400,Rubber BE shock absorber,AT-BE400,cost,,,1027,50.0,1550,1250,21,4,0.572,240,329,0.989,232,45000,225,1027,rubber 0.572 kg + moulding + hardware 0.989 kg + mould 45000/50
+rubber_mounts,AT-B1-1,Rubber B reinforced shock absorber,AT-B1-1,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.048,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.048 kg + mould 28000/50
+rubber_mounts,AT-B1-2,Rubber B reinforced shock absorber,AT-B1-2,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.048,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.048 kg + mould 28000/50
+rubber_mounts,AT-B1-3,Rubber B reinforced shock absorber,AT-B1-3,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.048,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.048 kg + mould 28000/50
+rubber_mounts,AT-B1-4,Rubber B reinforced shock absorber,AT-B1-4,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.048,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.048 kg + mould 28000/50
+rubber_mounts,AT-B1-5,Rubber B reinforced shock absorber,AT-B1-5,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.048,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.048 kg + mould 28000/50
+rubber_mounts,AT-B2-4,Rubber B reinforced shock absorber,AT-B2-4,cost,,,346,50.0,550,450,21,8,0.09,38,203,0.095,35,28000,70,346,rubber 0.09 kg + moulding + hardware 0.095 kg + mould 28000/50
+rubber_mounts,AT-B2-5,Rubber B reinforced shock absorber,AT-B2-5,cost,,,346,50.0,550,450,21,8,0.09,38,203,0.095,35,28000,70,346,rubber 0.09 kg + moulding + hardware 0.095 kg + mould 28000/50
+rubber_mounts,AT-B2-6,Rubber B reinforced shock absorber,AT-B2-6,cost,,,346,50.0,550,450,21,8,0.09,38,203,0.095,35,28000,70,346,rubber 0.09 kg + moulding + hardware 0.095 kg + mould 28000/50
+rubber_mounts,AT-B2-10,Rubber B reinforced shock absorber,AT-B2-10,cost,,,346,50.0,550,450,21,8,0.09,38,203,0.095,35,28000,70,346,rubber 0.09 kg + moulding + hardware 0.095 kg + mould 28000/50
+rubber_mounts,AT-B2-12,Rubber B reinforced shock absorber,AT-B2-12,cost,,,346,50.0,550,450,21,8,0.09,38,203,0.095,35,28000,70,346,rubber 0.09 kg + moulding + hardware 0.095 kg + mould 28000/50
+rubber_mounts,AT-B3-15,Rubber B reinforced shock absorber,AT-B3-15,cost,,,419,50.0,650,550,21,8,0.195,82,231,0.153,36,28000,70,419,rubber 0.195 kg + moulding + hardware 0.153 kg + mould 28000/50
+rubber_mounts,AT-B3-20,Rubber B reinforced shock absorber,AT-B3-20,cost,,,419,50.0,650,550,21,8,0.195,82,231,0.153,36,28000,70,419,rubber 0.195 kg + moulding + hardware 0.153 kg + mould 28000/50
+rubber_mounts,AT-B3-25,Rubber B reinforced shock absorber,AT-B3-25,cost,,,419,50.0,650,550,21,8,0.195,82,231,0.153,36,28000,70,419,rubber 0.195 kg + moulding + hardware 0.153 kg + mould 28000/50
+rubber_mounts,AT-B3-35,Rubber B reinforced shock absorber,AT-B3-35,cost,,,419,50.0,650,550,21,8,0.195,82,231,0.153,36,28000,70,419,rubber 0.195 kg + moulding + hardware 0.153 kg + mould 28000/50
+rubber_mounts,AT-E10,Rubber E/EA shock absorber,AT-E10,cost,,,302,50.0,500,400,21,8,0.024,10,186,0.115,35,28000,70,302,rubber 0.024 kg + moulding + hardware 0.115 kg + mould 28000/50
+rubber_mounts,AT-E15,Rubber E/EA shock absorber,AT-E15,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.132,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.132 kg + mould 28000/50
+rubber_mounts,AT-E25,Rubber E/EA shock absorber,AT-E25,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.132,35,28000,70,307,rubber 0.032 kg + moulding + hardware 0.132 kg + mould 28000/50
+rubber_mounts,AT-EA25,Rubber E/EA shock absorber,AT-EA25,cost,,,318,50.0,500,400,21,8,0.046,19,192,0.158,37,28000,70,318,rubber 0.046 kg + moulding + hardware 0.158 kg + mould 28000/50
+rubber_mounts,AT-E40,Rubber E/EA shock absorber,AT-E40,cost,,,349,50.0,550,450,21,8,0.069,29,198,0.22,52,28000,70,349,rubber 0.069 kg + moulding + hardware 0.22 kg + mould 28000/50
+rubber_mounts,AT-EA40,Rubber E/EA shock absorber,AT-EA40,cost,,,371,50.0,600,500,21,8,0.091,38,204,0.252,59,28000,70,371,rubber 0.091 kg + moulding + hardware 0.252 kg + mould 28000/50
+rubber_mounts,AT-E60,Rubber E/EA shock absorber,AT-E60,cost,,,393,50.0,600,500,21,8,0.105,44,207,0.306,72,28000,70,393,rubber 0.105 kg + moulding + hardware 0.306 kg + mould 28000/50
+rubber_mounts,AT-EA60,Rubber E/EA shock absorber,AT-EA60,cost,,,421,50.0,650,550,21,8,0.132,56,214,0.344,81,28000,70,421,rubber 0.132 kg + moulding + hardware 0.344 kg + mould 28000/50
+rubber_mounts,AT-E85,Rubber E/EA shock absorber,AT-E85,cost,,,442,50.0,700,600,21,8,0.146,61,218,0.396,93,28000,70,442,rubber 0.146 kg + moulding + hardware 0.396 kg + mould 28000/50
+rubber_mounts,AT-EA85,Rubber E/EA shock absorber,AT-EA85,cost,,,486,50.0,750,600,21,8,0.191,80,230,0.452,106,28000,70,486,rubber 0.191 kg + moulding + hardware 0.452 kg + mould 28000/50
+rubber_mounts,AT-E120,Rubber E/EA shock absorber,AT-E120,cost,,,683,50.0,1050,850,21,4,0.215,90,236,0.56,132,45000,225,683,rubber 0.215 kg + moulding + hardware 0.56 kg + mould 45000/50
+rubber_mounts,AT-EA120,Rubber E/EA shock absorber,AT-EA120,cost,,,768,50.0,1200,1000,21,4,0.304,128,259,0.666,157,45000,225,768,rubber 0.304 kg + moulding + hardware 0.666 kg + mould 45000/50
+rubber_mounts,AT-E160,Rubber E/EA shock absorber,AT-E160,cost,,,815,50.0,1250,1000,21,4,0.348,146,270,0.738,173,45000,225,815,rubber 0.348 kg + moulding + hardware 0.738 kg + mould 45000/50
+rubber_mounts,AT-EA160,Rubber E/EA shock absorber,AT-EA160,cost,,,815,50.0,1250,1000,21,4,0.348,146,270,0.738,173,45000,225,815,rubber 0.348 kg + moulding + hardware 0.738 kg + mould 45000/50
+rubber_mounts,AT-E220,Rubber E/EA shock absorber,AT-E220,cost,,,883,50.0,1350,1100,21,4,0.415,174,288,0.834,196,45000,225,883,rubber 0.415 kg + moulding + hardware 0.834 kg + mould 45000/50
+rubber_mounts,AT-EA220,Rubber E/EA shock absorber,AT-EA220,cost,,,883,50.0,1350,1100,21,4,0.415,174,288,0.834,196,45000,225,883,rubber 0.415 kg + moulding + hardware 0.834 kg + mould 45000/50
+rubber_mounts,AT-E300,Rubber E/EA shock absorber,AT-E300,cost,,,963,50.0,1450,1200,21,4,0.505,212,311,0.913,214,45000,225,963,rubber 0.505 kg + moulding + hardware 0.913 kg + mould 45000/50
+rubber_mounts,AT-EA300,Rubber E/EA shock absorber,AT-EA300,cost,,,963,50.0,1450,1200,21,4,0.505,212,311,0.913,214,45000,225,963,rubber 0.505 kg + moulding + hardware 0.913 kg + mould 45000/50
+rubber_mounts,AT-E400,Rubber E/EA shock absorber,AT-E400,cost,,,1028,50.0,1550,1250,21,4,0.546,229,322,1.072,252,45000,225,1028,rubber 0.546 kg + moulding + hardware 1.072 kg + mould 45000/50
+rubber_mounts,AT-EA400,Rubber E/EA shock absorber,AT-EA400,cost,,,1028,50.0,1550,1250,21,4,0.546,229,322,1.072,252,45000,225,1028,rubber 0.546 kg + moulding + hardware 1.072 kg + mould 45000/50
+rubber_mounts,AT-6JX-25N,Rubber 6JX shock absorber,AT-6JX-25N,cost,,,447,50.0,700,600,21,8,0.146,61,218,0.415,98,28000,70,447,rubber 0.146 kg + moulding + hardware 0.415 kg + mould 28000/50
+rubber_mounts,AT-6JX-25,Rubber 6JX shock absorber,AT-6JX-25,cost,,,447,50.0,700,600,21,8,0.146,61,218,0.415,98,28000,70,447,rubber 0.146 kg + moulding + hardware 0.415 kg + mould 28000/50
+rubber_mounts,AT-6JX-45N,Rubber 6JX shock absorber,AT-6JX-45N,cost,,,505,50.0,800,650,21,8,0.189,80,229,0.537,126,28000,70,505,rubber 0.189 kg + moulding + hardware 0.537 kg + mould 28000/50
+rubber_mounts,AT-6JX-45,Rubber 6JX shock absorber,AT-6JX-45,cost,,,505,50.0,800,650,21,8,0.189,80,229,0.537,126,28000,70,505,rubber 0.189 kg + moulding + hardware 0.537 kg + mould 28000/50
+rubber_mounts,AT-6JX-70N,Rubber 6JX shock absorber,AT-6JX-70N,cost,,,712,50.0,1100,900,21,4,0.227,95,239,0.649,152,45000,225,712,rubber 0.227 kg + moulding + hardware 0.649 kg + mould 45000/50
+rubber_mounts,AT-6JX-70,Rubber 6JX shock absorber,AT-6JX-70,cost,,,712,50.0,1100,900,21,4,0.227,95,239,0.649,152,45000,225,712,rubber 0.227 kg + moulding + hardware 0.649 kg + mould 45000/50
+rubber_mounts,AT-6JX-100N,Rubber 6JX shock absorber,AT-6JX-100N,cost,,,716,50.0,1100,900,21,4,0.234,98,241,0.649,152,45000,225,716,rubber 0.234 kg + moulding + hardware 0.649 kg + mould 45000/50
+rubber_mounts,AT-6JX-100,Rubber 6JX shock absorber,AT-6JX-100,cost,,,716,50.0,1100,900,21,4,0.234,98,241,0.649,152,45000,225,716,rubber 0.234 kg + moulding + hardware 0.649 kg + mould 45000/50
+rubber_mounts,AT-6JX-200N,Rubber 6JX shock absorber,AT-6JX-200N,cost,,,782,50.0,1200,1000,21,4,0.308,129,260,0.713,168,45000,225,782,rubber 0.308 kg + moulding + hardware 0.713 kg + mould 45000/50
+rubber_mounts,AT-6JX-200,Rubber 6JX shock absorber,AT-6JX-200,cost,,,782,50.0,1200,1000,21,4,0.308,129,260,0.713,168,45000,225,782,rubber 0.308 kg + moulding + hardware 0.713 kg + mould 45000/50
+rubber_mounts,AT-6JX-400N,Rubber 6JX shock absorber,AT-6JX-400N,cost,,,1504,50.0,2300,1850,21,4,1.052,442,453,1.635,384,45000,225,1504,rubber 1.052 kg + moulding + hardware 1.635 kg + mould 45000/50
+rubber_mounts,AT-6JX-400,Rubber 6JX shock absorber,AT-6JX-400,cost,,,1504,50.0,2300,1850,21,4,1.052,442,453,1.635,384,45000,225,1504,rubber 1.052 kg + moulding + hardware 1.635 kg + mould 45000/50
+rubber_mounts,AT-6JX-600N,Rubber 6JX shock absorber,AT-6JX-600N,cost,,,1688,50.0,2550,2050,21,4,1.252,526,505,1.837,432,45000,225,1688,rubber 1.252 kg + moulding + hardware 1.837 kg + mould 45000/50
+rubber_mounts,AT-6JX-600,Rubber 6JX shock absorber,AT-6JX-600,cost,,,1688,50.0,2550,2050,21,4,1.252,526,505,1.837,432,45000,225,1688,rubber 1.252 kg + moulding + hardware 1.837 kg + mould 45000/50
+rubber_mounts,AT-6JX-900N,Rubber 6JX shock absorber,AT-6JX-900N,cost,,,3367,50.0,5100,4100,21,1,1.555,653,584,2.254,530,80000,1600,3367,rubber 1.555 kg + moulding + hardware 2.254 kg + mould 80000/50
+rubber_mounts,AT-6JX-900,Rubber 6JX shock absorber,AT-6JX-900,cost,,,3367,50.0,5100,4100,21,1,1.555,653,584,2.254,530,80000,1600,3367,rubber 1.555 kg + moulding + hardware 2.254 kg + mould 80000/50
+rubber_mounts,AT-6JX-1200N,Rubber 6JX shock absorber,AT-6JX-1200N,cost,,,4205,50.0,6350,5100,21,1,2.498,1049,829,3.091,726,80000,1600,4205,rubber 2.498 kg + moulding + hardware 3.091 kg + mould 80000/50
+rubber_mounts,AT-6JX-1200,Rubber 6JX shock absorber,AT-6JX-1200,cost,,,4205,50.0,6350,5100,21,1,2.498,1049,829,3.091,726,80000,1600,4205,rubber 2.498 kg + moulding + hardware 3.091 kg + mould 80000/50
+rubber_mounts,AT-SH-500,Rubber SH isolator,AT-SH-500,file,25000,product list: SH 500 rubber vibration isolater,820,0.0,25000,20000,21,4,0.274,115,251,0.975,229,45000,225,820,rubber 0.274 kg + moulding + hardware 0.975 kg + mould 45000/50
+rubber_mounts,AT-SH-750,Rubber SH isolator,AT-SH-750,model,,,22137,50.0,33300,26700,21,4,0.409,172,286,1.451,341,45000,225,1024,scaled from AT-SH-500 by load^0.7
+rubber_mounts,AT-SH-1150,Rubber SH isolator,AT-SH-1150,model,,,29858,50.0,44800,35900,21,4,0.627,263,343,1.929,453,45000,225,1284,scaled from AT-SH-500 by load^0.7
+rubber_mounts,AT-SH-1750,Rubber SH isolator,AT-SH-1750,model,,,40059,50.0,60100,48100,21,4,0.954,401,428,2.552,600,45000,225,1653,scaled from AT-SH-500 by load^0.7
+rubber_mounts,AT-SH-2200A,Rubber SH isolator,AT-SH-2200A,model,,,47018,50.0,70600,56500,21,4,1.199,504,492,2.973,699,45000,225,1919,scaled from AT-SH-500 by load^0.7
+rubber_mounts,AT-SH-2200B,Rubber SH isolator,AT-SH-2200B,model,,,47018,50.0,70600,56500,21,4,1.199,504,492,2.973,699,45000,225,1919,scaled from AT-SH-500 by load^0.7
+rubber_mounts,AT-WH-150,Rubber WH/WHG isolator,AT-WH-150,cost,,,1101,50.0,1700,1400,21,4,0.641,269,347,1.107,260,45000,225,1101,rubber 0.641 kg + moulding + hardware 1.107 kg + mould 45000/50
+rubber_mounts,AT-WH-250,Rubber WH/WHG isolator,AT-WH-250,cost,,,1101,50.0,1700,1400,21,4,0.641,269,347,1.107,260,45000,225,1101,rubber 0.641 kg + moulding + hardware 1.107 kg + mould 45000/50
+rubber_mounts,AT-WH-400,Rubber WH/WHG isolator,AT-WH-400,cost,,,1101,50.0,1700,1400,21,4,0.641,269,347,1.107,260,45000,225,1101,rubber 0.641 kg + moulding + hardware 1.107 kg + mould 45000/50
+rubber_mounts,AT-WHG-600,Rubber WH/WHG isolator,AT-WHG-600,cost,,,1552,50.0,2350,1900,21,4,1.03,433,448,1.899,446,45000,225,1552,rubber 1.03 kg + moulding + hardware 1.899 kg + mould 45000/50
+rubber_mounts,AT-WHG-800,Rubber WH/WHG isolator,AT-WHG-800,cost,,,1638,50.0,2500,2000,21,4,1.03,433,448,2.265,532,45000,225,1638,rubber 1.03 kg + moulding + hardware 2.265 kg + mould 45000/50
+rubber_mounts,AT-WHG-1200,Rubber WH/WHG isolator,AT-WHG-1200,cost,,,4375,50.0,6600,5300,21,1,2.688,1129,879,3.267,768,80000,1600,4375,rubber 2.688 kg + moulding + hardware 3.267 kg + mould 80000/50
+rubber_mounts,AT-WHG-1750,Rubber WH/WHG isolator,AT-WHG-1750,cost,,,4646,50.0,7000,5600,21,1,2.688,1129,879,4.42,1039,80000,1600,4646,rubber 2.688 kg + moulding + hardware 4.42 kg + mould 80000/50
+accessories,FF,accessory,0,model,,,1200,25.0,1500,1200,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,RF,accessory,1,model,,,1200,25.0,1500,1200,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,FRF,accessory,2,model,,,2200,25.0,2750,2200,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,FM,accessory,3,model,,,1500,25.0,1900,1550,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,RFFF,accessory,4,model,,,2600,25.0,3250,2600,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,CM,accessory,5,model,,,1800,25.0,2250,1800,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,SC,accessory,6,model,,,450,25.0,600,500,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,SLA,accessory,7,model,,,2400,25.0,3000,2400,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,BEL,accessory,8,model,,,900,25.0,1150,950,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,LN,accessory,9,model,,,250,25.0,350,300,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,NC,accessory,10,on request,,,0,0.0,0,0,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,PU,accessory,11,model,,,350,25.0,450,400,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,MC,accessory,12,model,,,600,25.0,750,600,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,MCPU,accessory,13,model,,,900,25.0,1150,950,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,SS,accessory,14,on request,,,0,0.0,0,0,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,SENS,accessory,15,model,,,6500,25.0,8150,6550,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+accessories,RECON,accessory,16,on request,,,0,0.0,0,0,14,,,,,,,,,,typical size AC-25..AC-64; SS and reconditioning quoted case by case; NC free
+other_products,TSC-15,other,Hydraulic feed-rate controller TSC-15,file,6150,product list / TSC pdf,6150,0.0,6150,4950,21,,,,,,,,,,
+other_products,TSC-25,other,"Hydraulic feed-rate controller TSC-25, stroke 30",file,6600,product list / TSC pdf,6600,0.0,6600,5300,21,,,,,,,,,,
+other_products,TSC-50,other,"Hydraulic feed-rate controller TSC-50, stroke 60",file,9840,product list / TSC pdf,9840,0.0,9850,7900,21,,,,,,,,,,
+other_products,TSC-75,other,"Hydraulic feed-rate controller TSC-75, stroke 80",file,14400,product list / TSC pdf,14400,0.0,14400,11600,21,,,,,,,,,,
+other_products,TSC-100,other,"Hydraulic feed-rate controller TSC-100, stroke 100",file,16625,product list / TSC pdf,16625,0.0,16700,13400,21,,,,,,,,,,
+other_products,ACWRI-40-10,other,Compact wire rope isolator ACWRI 40-10,file,3100,product list / TSC pdf,3100,0.0,3100,2500,21,,,,,,,,,,
+other_products,HHSS20,other,Half-helical wire rope isolator HHSS20,file,16500,product list / TSC pdf,16500,0.0,16500,13200,21,,,,,,,,,,
+other_products,VIBSOL-45W,other,Vibsol 45 W rubber isolator,file,30000,product list / TSC pdf,30000,0.0,30000,24000,21,,,,,,,,,,
+other_products,SH-500,other,SH 500 rubber vibration isolator,file,25000,product list / TSC pdf,25000,0.0,25000,20000,21,,,,,,,,,,
+other_products,AVM-530603,other,Diamond shaped anti-vibration mount 530603,file,450,product list / TSC pdf,450,0.0,450,400,21,,,,,,,,,,
+other_products,AVM-20x15-M8,other,"Anti-vibration mount, bilateral bolt 20x15 M8",file,450,product list / TSC pdf,450,0.0,450,400,21,,,,,,,,,,
+other_products,AVM-12x10-M5,other,"Anti-vibration mount, bilateral bolt 12x10 M5",file,450,product list / TSC pdf,450,0.0,450,400,21,,,,,,,,,,
+other_products,EM125140M,other,Evidgom EM125140M mount,file,16200,product list / TSC pdf,16200,0.0,16200,13000,21,,,,,,,,,,
+other_products,KP-125-800,other,Hydraulic buffer KP 125-800,file,69400,product list / TSC pdf,69400,0.0,69400,55600,21,,,,,,,,,,
+rubber_mounts,AT-RCM-SU-12.5x10-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-12.5x10-M5,cost,,,286,50.0,450,400,21,8,0.002,1,180,0.003,35,28000,70,286,local moulding: rubber 0.002 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-12.5x13.5-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-12.5x13.5-M5,cost,,,286,50.0,450,400,21,8,0.002,1,181,0.003,35,28000,70,286,local moulding: rubber 0.002 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-12.5x15-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-12.5x15-M5,cost,,,287,50.0,450,400,21,8,0.002,1,181,0.003,35,28000,70,287,local moulding: rubber 0.002 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-12.5x20-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-12.5x20-M5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.003,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-16x10-M4,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-16x10-M4,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.003,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-16x15-M4,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-16x15-M4,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.003,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-16x10-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-16x10-M5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.004,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.004 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-16x15-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-16x15-M5,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.004,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.004 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-16x20-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-16x20-M5,cost,,,288,50.0,450,400,21,8,0.005,2,181,0.004,35,28000,70,288,local moulding: rubber 0.005 kg + moulding + hardware 0.004 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-16x25-M5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-16x25-M5,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.004,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.004 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x5-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x5-M6,cost,,,286,50.0,450,400,21,8,0.002,1,181,0.006,35,28000,70,286,local moulding: rubber 0.002 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x8.5-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x8.5-M6,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.006,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x8.5-M6-G16.5,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x8.5-M6-G16.5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.008,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.008 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x15-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x15-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.008,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.008 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x20-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x20-M6,cost,,,290,50.0,450,400,21,8,0.008,3,182,0.008,35,28000,70,290,local moulding: rubber 0.008 kg + moulding + hardware 0.008 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x25-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x25-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.008,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.008 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-20x30-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-20x30-M6,cost,,,293,50.0,450,400,21,8,0.012,5,183,0.008,35,28000,70,293,local moulding: rubber 0.012 kg + moulding + hardware 0.008 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x10-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x10-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.011,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.011 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x15-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x15-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.011,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.011 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x20-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x20-M6,cost,,,294,50.0,450,400,21,8,0.013,5,183,0.011,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.011 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x30-M6,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x30-M6,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.011,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.011 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x5-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x5-M8,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.016,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x10-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x10-M8,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.016,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x15-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x15-M8,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.016,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x15-M8-G12,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x15-M8-G12,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.012,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.012 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x19-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x19-M8,cost,,,293,50.0,450,400,21,8,0.012,5,183,0.016,35,28000,70,293,local moulding: rubber 0.012 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x22-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x22-M8,cost,,,295,50.0,450,400,21,8,0.014,6,184,0.016,35,28000,70,295,local moulding: rubber 0.014 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x25-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x25-M8,cost,,,296,50.0,450,400,21,8,0.016,7,184,0.016,35,28000,70,296,local moulding: rubber 0.016 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x30-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x30-M8,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.016,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-25.5x40-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-25.5x40-M8,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.016,35,28000,70,303,local moulding: rubber 0.026 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-30x15-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-30x15-M8,cost,,,294,50.0,450,400,21,8,0.013,6,183,0.021,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-30x22-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-30x22-M8,cost,,,298,50.0,450,400,21,8,0.02,8,185,0.021,35,28000,70,298,local moulding: rubber 0.02 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-30x30-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-30x30-M8,cost,,,303,50.0,500,400,21,8,0.027,11,187,0.021,35,28000,70,303,local moulding: rubber 0.027 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-30x40-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-30x40-M8,cost,,,309,50.0,500,400,21,8,0.036,15,189,0.021,35,28000,70,309,local moulding: rubber 0.036 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x30-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x30-M8,cost,,,317,50.0,500,400,21,8,0.048,20,192,0.034,35,28000,70,317,local moulding: rubber 0.048 kg + moulding + hardware 0.034 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x40-M8,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x40-M8,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.034,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.034 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x20-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x20-M10,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.043,35,28000,70,307,local moulding: rubber 0.032 kg + moulding + hardware 0.043 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x25-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x25-M10,cost,,,312,50.0,500,400,21,8,0.04,17,190,0.043,35,28000,70,312,local moulding: rubber 0.04 kg + moulding + hardware 0.043 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x35-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x35-M10,cost,,,323,50.0,500,400,21,8,0.056,23,194,0.043,35,28000,70,323,local moulding: rubber 0.056 kg + moulding + hardware 0.043 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x40-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x40-M10,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.043,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.043 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-40x45-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-40x45-M10,cost,,,334,50.0,550,450,21,8,0.072,30,199,0.043,35,28000,70,334,local moulding: rubber 0.072 kg + moulding + hardware 0.043 kg + mould 28000/50
+rubber_mounts,AT-RCM-SU-50x25-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-50x25-M10,cost,,,482,50.0,750,600,21,4,0.062,26,196,0.057,35,45000,225,482,local moulding: rubber 0.062 kg + moulding + hardware 0.057 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-50x35-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-50x35-M10,cost,,,499,50.0,750,600,21,4,0.087,37,203,0.057,35,45000,225,499,local moulding: rubber 0.087 kg + moulding + hardware 0.057 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-50x45-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-50x45-M10,cost,,,516,50.0,800,650,21,4,0.112,47,209,0.057,35,45000,225,516,local moulding: rubber 0.112 kg + moulding + hardware 0.057 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-60x22-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-60x22-M10,cost,,,494,50.0,750,600,21,4,0.079,33,200,0.074,35,45000,225,494,local moulding: rubber 0.079 kg + moulding + hardware 0.074 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-60x25-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-60x25-M10,cost,,,501,50.0,800,650,21,4,0.089,38,203,0.074,35,45000,225,501,local moulding: rubber 0.089 kg + moulding + hardware 0.074 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-60x36-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-60x36-M10,cost,,,528,50.0,800,650,21,4,0.129,54,213,0.074,35,45000,225,528,local moulding: rubber 0.129 kg + moulding + hardware 0.074 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-60x45-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-60x45-M10,cost,,,549,50.0,850,700,21,4,0.161,68,222,0.074,35,45000,225,549,local moulding: rubber 0.161 kg + moulding + hardware 0.074 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-70x35-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-70x35-M10,cost,,,556,50.0,850,700,21,4,0.17,72,224,0.093,35,45000,225,556,local moulding: rubber 0.17 kg + moulding + hardware 0.093 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-70x50-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-70x50-M10,cost,,,606,50.0,950,800,21,4,0.243,102,243,0.093,35,45000,225,606,local moulding: rubber 0.243 kg + moulding + hardware 0.093 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-70x70-M10,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-70x70-M10,cost,,,672,50.0,1050,850,21,4,0.341,143,269,0.093,35,45000,225,672,local moulding: rubber 0.341 kg + moulding + hardware 0.093 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-80x25-M14,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-80x25-M14,cost,,,552,50.0,850,700,21,4,0.159,67,221,0.167,39,45000,225,552,local moulding: rubber 0.159 kg + moulding + hardware 0.167 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-80x30-M14,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-80x30-M14,cost,,,570,50.0,900,750,21,4,0.191,80,230,0.151,36,45000,225,570,local moulding: rubber 0.191 kg + moulding + hardware 0.151 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-80x40-M14,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-80x40-M14,cost,,,613,50.0,950,800,21,4,0.254,107,246,0.151,36,45000,225,613,local moulding: rubber 0.254 kg + moulding + hardware 0.151 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-80x70-M14,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-80x70-M14,cost,,,743,50.0,1150,950,21,4,0.445,187,296,0.151,36,45000,225,743,local moulding: rubber 0.445 kg + moulding + hardware 0.151 kg + mould 45000/50
+rubber_mounts,AT-RCM-SU-80x80-M14,"AT-RCM-SU cylindrical mount, stud one end",AT-RCM-SU-80x80-M14,cost,,,786,50.0,1200,1000,21,4,0.509,214,312,0.151,36,45000,225,786,local moulding: rubber 0.509 kg + moulding + hardware 0.151 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-10x8-M3,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-10x8-M3,cost,,,286,50.0,450,400,21,8,0.001,0,180,0.002,35,28000,70,286,local moulding: rubber 0.001 kg + moulding + hardware 0.002 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-12x8-M3,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-12x8-M3,cost,,,286,50.0,450,400,21,8,0.001,0,180,0.003,35,28000,70,286,local moulding: rubber 0.001 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-12.5x10-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-12.5x10-M5,cost,,,286,50.0,450,400,21,8,0.002,1,180,0.006,35,28000,70,286,local moulding: rubber 0.002 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-12.5x15-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-12.5x15-M5,cost,,,287,50.0,450,400,21,8,0.002,1,181,0.006,35,28000,70,287,local moulding: rubber 0.002 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-12.5x20-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-12.5x20-M5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.006,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-16x10-M4,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-16x10-M4,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.007,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-16x15-M4,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-16x15-M4,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.007,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-16x10-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-16x10-M5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.009,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.009 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-16x15-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-16x15-M5,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.009,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.009 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-16x20-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-16x20-M5,cost,,,288,50.0,450,400,21,8,0.005,2,181,0.009,35,28000,70,288,local moulding: rubber 0.005 kg + moulding + hardware 0.009 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-16x25-M5,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-16x25-M5,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.009,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.009 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-20x8.5-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-20x8.5-M6,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.016,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-20x15-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-20x15-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.016,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-20x20-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-20x20-M6,cost,,,290,50.0,450,400,21,8,0.008,3,182,0.016,35,28000,70,290,local moulding: rubber 0.008 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-20x25-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-20x25-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.016,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-20x30-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-20x30-M6,cost,,,293,50.0,450,400,21,8,0.012,5,183,0.016,35,28000,70,293,local moulding: rubber 0.012 kg + moulding + hardware 0.016 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x10-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x10-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.021,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x15-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x15-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.021,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x20-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x20-M6,cost,,,294,50.0,450,400,21,8,0.013,5,183,0.021,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x30-M6,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x30-M6,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.021,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.021 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x10-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x10-M8,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.032,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.032 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x15-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x15-M8,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.032,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.032 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x22-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x22-M8,cost,,,295,50.0,450,400,21,8,0.014,6,184,0.032,35,28000,70,295,local moulding: rubber 0.014 kg + moulding + hardware 0.032 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x25-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x25-M8,cost,,,296,50.0,450,400,21,8,0.016,7,184,0.032,35,28000,70,296,local moulding: rubber 0.016 kg + moulding + hardware 0.032 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x30-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x30-M8,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.032,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.032 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-25.5x40-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-25.5x40-M8,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.032,35,28000,70,303,local moulding: rubber 0.026 kg + moulding + hardware 0.032 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-30x15-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-30x15-M8,cost,,,294,50.0,450,400,21,8,0.013,6,183,0.041,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.041 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-30x22-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-30x22-M8,cost,,,298,50.0,450,400,21,8,0.02,8,185,0.041,35,28000,70,298,local moulding: rubber 0.02 kg + moulding + hardware 0.041 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-30x30-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-30x30-M8,cost,,,303,50.0,500,400,21,8,0.027,11,187,0.041,35,28000,70,303,local moulding: rubber 0.027 kg + moulding + hardware 0.041 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-30x40-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-30x40-M8,cost,,,309,50.0,500,400,21,8,0.036,15,189,0.041,35,28000,70,309,local moulding: rubber 0.036 kg + moulding + hardware 0.041 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x30-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x30-M8,cost,,,317,50.0,500,400,21,8,0.048,20,192,0.067,35,28000,70,317,local moulding: rubber 0.048 kg + moulding + hardware 0.067 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x40-M8,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x40-M8,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.067,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.067 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x20-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x20-M10,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.087,35,28000,70,307,local moulding: rubber 0.032 kg + moulding + hardware 0.087 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x28-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x28-M10,cost,,,315,50.0,500,400,21,8,0.045,19,192,0.087,35,28000,70,315,local moulding: rubber 0.045 kg + moulding + hardware 0.087 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x35-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x35-M10,cost,,,323,50.0,500,400,21,8,0.056,23,194,0.087,35,28000,70,323,local moulding: rubber 0.056 kg + moulding + hardware 0.087 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x40-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x40-M10,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.087,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.087 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-40x45-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-40x45-M10,cost,,,334,50.0,550,450,21,8,0.072,30,199,0.087,35,28000,70,334,local moulding: rubber 0.072 kg + moulding + hardware 0.087 kg + mould 28000/50
+rubber_mounts,AT-RCM-SS-50x25-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-50x25-M10,cost,,,482,50.0,750,600,21,4,0.062,26,196,0.114,35,45000,225,482,local moulding: rubber 0.062 kg + moulding + hardware 0.114 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-50x35-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-50x35-M10,cost,,,499,50.0,750,600,21,4,0.087,37,203,0.114,35,45000,225,499,local moulding: rubber 0.087 kg + moulding + hardware 0.114 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-50x45-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-50x45-M10,cost,,,516,50.0,800,650,21,4,0.112,47,209,0.114,35,45000,225,516,local moulding: rubber 0.112 kg + moulding + hardware 0.114 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-50x45-M10-G15,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-50x45-M10-G15,cost,,,516,50.0,800,650,21,4,0.112,47,209,0.098,35,45000,225,516,local moulding: rubber 0.112 kg + moulding + hardware 0.098 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-60x25-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-60x25-M10,cost,,,501,50.0,800,650,21,4,0.089,38,203,0.147,35,45000,225,501,local moulding: rubber 0.089 kg + moulding + hardware 0.147 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-60x36-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-60x36-M10,cost,,,528,50.0,800,650,21,4,0.129,54,213,0.147,35,45000,225,528,local moulding: rubber 0.129 kg + moulding + hardware 0.147 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-60x45-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-60x45-M10,cost,,,549,50.0,850,700,21,4,0.161,68,222,0.147,35,45000,225,549,local moulding: rubber 0.161 kg + moulding + hardware 0.147 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-70x35-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-70x35-M10,cost,,,565,50.0,850,700,21,4,0.17,72,224,0.187,44,45000,225,565,local moulding: rubber 0.17 kg + moulding + hardware 0.187 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-70x50-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-70x50-M10,cost,,,614,50.0,950,800,21,4,0.243,102,243,0.187,44,45000,225,614,local moulding: rubber 0.243 kg + moulding + hardware 0.187 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-70x70-M10,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-70x70-M10,cost,,,681,50.0,1050,850,21,4,0.341,143,269,0.187,44,45000,225,681,local moulding: rubber 0.341 kg + moulding + hardware 0.187 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-80x40-M12,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-80x40-M12,cost,,,638,50.0,1000,800,21,4,0.254,107,246,0.257,60,45000,225,638,local moulding: rubber 0.254 kg + moulding + hardware 0.257 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-80x30-M14,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-80x30-M14,cost,,,613,50.0,950,800,21,4,0.191,80,230,0.334,78,45000,225,613,local moulding: rubber 0.191 kg + moulding + hardware 0.334 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-80x30-M14-G35,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-80x30-M14-G35,cost,,,606,50.0,950,800,21,4,0.191,80,230,0.302,71,45000,225,606,local moulding: rubber 0.191 kg + moulding + hardware 0.302 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-80x40-M14,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-80x40-M14,cost,,,649,50.0,1000,800,21,4,0.254,107,246,0.302,71,45000,225,649,local moulding: rubber 0.254 kg + moulding + hardware 0.302 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-80x70-M14,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-80x70-M14,cost,,,779,50.0,1200,1000,21,4,0.445,187,296,0.302,71,45000,225,779,local moulding: rubber 0.445 kg + moulding + hardware 0.302 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-80x80-M14,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-80x80-M14,cost,,,822,50.0,1250,1000,21,4,0.509,214,312,0.302,71,45000,225,822,local moulding: rubber 0.509 kg + moulding + hardware 0.302 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-100x40-M16,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-100x40-M16,cost,,,792,50.0,1200,1000,21,4,0.397,167,283,0.495,116,45000,225,792,local moulding: rubber 0.397 kg + moulding + hardware 0.495 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-100x55-M16,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-100x55-M16,cost,,,893,50.0,1350,1100,21,4,0.546,230,322,0.495,116,45000,225,893,local moulding: rubber 0.546 kg + moulding + hardware 0.495 kg + mould 45000/50
+rubber_mounts,AT-RCM-SS-100x80-M16,"AT-RCM-SS cylindrical mount, studs both ends",AT-RCM-SS-100x80-M16,cost,,,1062,50.0,1600,1300,21,4,0.795,334,387,0.495,116,45000,225,1062,local moulding: rubber 0.795 kg + moulding + hardware 0.495 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-16x10-M4,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-16x10-M4,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.006,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-16x15-M4,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-16x15-M4,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.006,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-16x10-M5,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-16x10-M5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.007,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-16x15-M5,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-16x15-M5,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.007,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-16x20-M5,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-16x20-M5,cost,,,288,50.0,450,400,21,8,0.005,2,181,0.007,35,28000,70,288,local moulding: rubber 0.005 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-16x25-M5,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-16x25-M5,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.007,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-20x15-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-20x15-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.013,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.013 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-20x20-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-20x20-M6,cost,,,290,50.0,450,400,21,8,0.008,3,182,0.013,35,28000,70,290,local moulding: rubber 0.008 kg + moulding + hardware 0.013 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-20x25-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-20x25-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.013,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.013 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-20x30-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-20x30-M6,cost,,,293,50.0,450,400,21,8,0.012,5,183,0.013,35,28000,70,293,local moulding: rubber 0.012 kg + moulding + hardware 0.013 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x15-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x15-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.018,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.018 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x20-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x20-M6,cost,,,294,50.0,450,400,21,8,0.013,5,183,0.018,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.018 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x30-M6,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x30-M6,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.018,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.018 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x22-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x22-M8,cost,,,295,50.0,450,400,21,8,0.014,6,184,0.026,35,28000,70,295,local moulding: rubber 0.014 kg + moulding + hardware 0.026 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x25-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x25-M8,cost,,,296,50.0,450,400,21,8,0.016,7,184,0.026,35,28000,70,296,local moulding: rubber 0.016 kg + moulding + hardware 0.026 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x30-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x30-M8,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.026,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.026 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-25.5x40-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-25.5x40-M8,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.026,35,28000,70,303,local moulding: rubber 0.026 kg + moulding + hardware 0.026 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-30x15-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-30x15-M8,cost,,,294,50.0,450,400,21,8,0.013,6,183,0.033,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.033 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-30x22-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-30x22-M8,cost,,,298,50.0,450,400,21,8,0.02,8,185,0.033,35,28000,70,298,local moulding: rubber 0.02 kg + moulding + hardware 0.033 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-30x30-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-30x30-M8,cost,,,303,50.0,500,400,21,8,0.027,11,187,0.033,35,28000,70,303,local moulding: rubber 0.027 kg + moulding + hardware 0.033 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-30x40-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-30x40-M8,cost,,,309,50.0,500,400,21,8,0.036,15,189,0.033,35,28000,70,309,local moulding: rubber 0.036 kg + moulding + hardware 0.033 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x30-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x30-M8,cost,,,317,50.0,500,400,21,8,0.048,20,192,0.062,35,28000,70,317,local moulding: rubber 0.048 kg + moulding + hardware 0.062 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x40-M8,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x40-M8,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.062,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.062 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x20-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x20-M10,cost,,,307,50.0,500,400,21,8,0.032,13,188,0.077,35,28000,70,307,local moulding: rubber 0.032 kg + moulding + hardware 0.077 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x28-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x28-M10,cost,,,315,50.0,500,400,21,8,0.045,19,192,0.077,35,28000,70,315,local moulding: rubber 0.045 kg + moulding + hardware 0.077 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x35-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x35-M10,cost,,,323,50.0,500,400,21,8,0.056,23,194,0.077,35,28000,70,323,local moulding: rubber 0.056 kg + moulding + hardware 0.077 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x40-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x40-M10,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.077,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.077 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-40x45-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-40x45-M10,cost,,,334,50.0,550,450,21,8,0.072,30,199,0.077,35,28000,70,334,local moulding: rubber 0.072 kg + moulding + hardware 0.077 kg + mould 28000/50
+rubber_mounts,AT-RCM-SF-50x45-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-50x45-M10,cost,,,516,50.0,800,650,21,4,0.112,47,209,0.096,35,45000,225,516,local moulding: rubber 0.112 kg + moulding + hardware 0.096 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-50x35-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-50x35-M10,cost,,,499,50.0,750,600,21,4,0.087,37,203,0.104,35,45000,225,499,local moulding: rubber 0.087 kg + moulding + hardware 0.104 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-50x45-M10-G25,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-50x45-M10-G25,cost,,,516,50.0,800,650,21,4,0.112,47,209,0.104,35,45000,225,516,local moulding: rubber 0.112 kg + moulding + hardware 0.104 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-60x36-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-60x36-M10,cost,,,528,50.0,800,650,21,4,0.129,54,213,0.137,35,45000,225,528,local moulding: rubber 0.129 kg + moulding + hardware 0.137 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-60x45-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-60x45-M10,cost,,,549,50.0,850,700,21,4,0.161,68,222,0.137,35,45000,225,549,local moulding: rubber 0.161 kg + moulding + hardware 0.137 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-70x35-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-70x35-M10,cost,,,563,50.0,850,700,21,4,0.17,72,224,0.178,42,45000,225,563,local moulding: rubber 0.17 kg + moulding + hardware 0.178 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-70x50-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-70x50-M10,cost,,,612,50.0,950,800,21,4,0.243,102,243,0.178,42,45000,225,612,local moulding: rubber 0.243 kg + moulding + hardware 0.178 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-70x70-M10,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-70x70-M10,cost,,,678,50.0,1050,850,21,4,0.341,143,269,0.178,42,45000,225,678,local moulding: rubber 0.341 kg + moulding + hardware 0.178 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-80x40-M12,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-80x40-M12,cost,,,635,50.0,1000,800,21,4,0.254,107,246,0.242,57,45000,225,635,local moulding: rubber 0.254 kg + moulding + hardware 0.242 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-80x40-M14,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-80x40-M14,cost,,,643,50.0,1000,800,21,4,0.254,107,246,0.276,65,45000,225,643,local moulding: rubber 0.254 kg + moulding + hardware 0.276 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-80x70-M14,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-80x70-M14,cost,,,772,50.0,1200,1000,21,4,0.445,187,296,0.276,65,45000,225,772,local moulding: rubber 0.445 kg + moulding + hardware 0.276 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-80x80-M14,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-80x80-M14,cost,,,816,50.0,1250,1000,21,4,0.509,214,312,0.276,65,45000,225,816,local moulding: rubber 0.509 kg + moulding + hardware 0.276 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-100x40-M16,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-100x40-M16,cost,,,779,50.0,1200,1000,21,4,0.397,167,283,0.442,104,45000,225,779,local moulding: rubber 0.397 kg + moulding + hardware 0.442 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-100x55-M16,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-100x55-M16,cost,,,880,50.0,1350,1100,21,4,0.546,230,322,0.442,104,45000,225,880,local moulding: rubber 0.546 kg + moulding + hardware 0.442 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-100x80-M16,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-100x80-M16,cost,,,1049,50.0,1600,1300,21,4,0.795,334,387,0.442,104,45000,225,1049,local moulding: rubber 0.795 kg + moulding + hardware 0.442 kg + mould 45000/50
+rubber_mounts,AT-RCM-SF-100x100-M16,"AT-RCM-SF cylindrical mount, stud + tapped hole",AT-RCM-SF-100x100-M16,cost,,,1184,50.0,1800,1450,21,4,0.994,417,438,0.442,104,45000,225,1184,local moulding: rubber 0.994 kg + moulding + hardware 0.442 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-16x10-M4,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-16x10-M4,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.005,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.005 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-16x15-M4,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-16x15-M4,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.005,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.005 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-16x10-M5,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-16x10-M5,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.006,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-16x15-M5,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-16x15-M5,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.006,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-16x20-M5,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-16x20-M5,cost,,,288,50.0,450,400,21,8,0.005,2,181,0.006,35,28000,70,288,local moulding: rubber 0.005 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-16x25-M5,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-16x25-M5,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.006,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.006 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-20x15-M6,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-20x15-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.01,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.01 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-20x20-M6,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-20x20-M6,cost,,,290,50.0,450,400,21,8,0.008,3,182,0.01,35,28000,70,290,local moulding: rubber 0.008 kg + moulding + hardware 0.01 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-20x25-M6,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-20x25-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.01,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.01 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-20x30-M6,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-20x30-M6,cost,,,293,50.0,450,400,21,8,0.012,5,183,0.01,35,28000,70,293,local moulding: rubber 0.012 kg + moulding + hardware 0.01 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-25.5x20-M6,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-25.5x20-M6,cost,,,294,50.0,450,400,21,8,0.013,5,183,0.015,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.015 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-25.5x30-M6,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-25.5x30-M6,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.015,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.015 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-25.5x22-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-25.5x22-M8,cost,,,295,50.0,450,400,21,8,0.014,6,184,0.02,35,28000,70,295,local moulding: rubber 0.014 kg + moulding + hardware 0.02 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-25.5x25-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-25.5x25-M8,cost,,,296,50.0,450,400,21,8,0.016,7,184,0.02,35,28000,70,296,local moulding: rubber 0.016 kg + moulding + hardware 0.02 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-25.5x30-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-25.5x30-M8,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.02,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.02 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-25.5x40-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-25.5x40-M8,cost,,,303,50.0,500,400,21,8,0.026,11,187,0.02,35,28000,70,303,local moulding: rubber 0.026 kg + moulding + hardware 0.02 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-30x22-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-30x22-M8,cost,,,298,50.0,450,400,21,8,0.02,8,185,0.025,35,28000,70,298,local moulding: rubber 0.02 kg + moulding + hardware 0.025 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-30x30-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-30x30-M8,cost,,,303,50.0,500,400,21,8,0.027,11,187,0.025,35,28000,70,303,local moulding: rubber 0.027 kg + moulding + hardware 0.025 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-30x40-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-30x40-M8,cost,,,309,50.0,500,400,21,8,0.036,15,189,0.025,35,28000,70,309,local moulding: rubber 0.036 kg + moulding + hardware 0.025 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-40x30-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-40x30-M8,cost,,,317,50.0,500,400,21,8,0.048,20,192,0.056,35,28000,70,317,local moulding: rubber 0.048 kg + moulding + hardware 0.056 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-40x40-M8,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-40x40-M8,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.056,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.056 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-40x28-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-40x28-M10,cost,,,315,50.0,500,400,21,8,0.045,19,192,0.066,35,28000,70,315,local moulding: rubber 0.045 kg + moulding + hardware 0.066 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-40x35-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-40x35-M10,cost,,,323,50.0,500,400,21,8,0.056,23,194,0.066,35,28000,70,323,local moulding: rubber 0.056 kg + moulding + hardware 0.066 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-40x40-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-40x40-M10,cost,,,328,50.0,500,400,21,8,0.064,27,197,0.066,35,28000,70,328,local moulding: rubber 0.064 kg + moulding + hardware 0.066 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-40x45-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-40x45-M10,cost,,,334,50.0,550,450,21,8,0.072,30,199,0.066,35,28000,70,334,local moulding: rubber 0.072 kg + moulding + hardware 0.066 kg + mould 28000/50
+rubber_mounts,AT-RCM-FF-50x35-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-50x35-M10,cost,,,499,50.0,750,600,21,4,0.087,37,203,0.093,35,45000,225,499,local moulding: rubber 0.087 kg + moulding + hardware 0.093 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-50x45-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-50x45-M10,cost,,,516,50.0,800,650,21,4,0.112,47,209,0.093,35,45000,225,516,local moulding: rubber 0.112 kg + moulding + hardware 0.093 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-60x36-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-60x36-M10,cost,,,528,50.0,800,650,21,4,0.129,54,213,0.126,35,45000,225,528,local moulding: rubber 0.129 kg + moulding + hardware 0.126 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-60x45-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-60x45-M10,cost,,,549,50.0,850,700,21,4,0.161,68,222,0.126,35,45000,225,549,local moulding: rubber 0.161 kg + moulding + hardware 0.126 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-70x35-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-70x35-M10,cost,,,560,50.0,850,700,21,4,0.17,72,224,0.168,40,45000,225,560,local moulding: rubber 0.17 kg + moulding + hardware 0.168 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-70x50-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-70x50-M10,cost,,,610,50.0,950,800,21,4,0.243,102,243,0.168,40,45000,225,610,local moulding: rubber 0.243 kg + moulding + hardware 0.168 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-70x70-M10,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-70x70-M10,cost,,,676,50.0,1050,850,21,4,0.341,143,269,0.168,40,45000,225,676,local moulding: rubber 0.341 kg + moulding + hardware 0.168 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-80x40-M12,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-80x40-M12,cost,,,631,50.0,950,800,21,4,0.254,107,246,0.227,53,45000,225,631,local moulding: rubber 0.254 kg + moulding + hardware 0.227 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-80x40-M14,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-80x40-M14,cost,,,636,50.0,1000,800,21,4,0.254,107,246,0.249,58,45000,225,636,local moulding: rubber 0.254 kg + moulding + hardware 0.249 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-80x70-M14,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-80x70-M14,cost,,,766,50.0,1150,950,21,4,0.445,187,296,0.249,58,45000,225,766,local moulding: rubber 0.445 kg + moulding + hardware 0.249 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-80x80-M14,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-80x80-M14,cost,,,809,50.0,1250,1000,21,4,0.509,214,312,0.249,58,45000,225,809,local moulding: rubber 0.509 kg + moulding + hardware 0.249 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-100x40-M16,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-100x40-M16,cost,,,766,50.0,1150,950,21,4,0.397,167,283,0.388,91,45000,225,766,local moulding: rubber 0.397 kg + moulding + hardware 0.388 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-100x55-M16,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-100x55-M16,cost,,,868,50.0,1350,1100,21,4,0.546,230,322,0.388,91,45000,225,868,local moulding: rubber 0.546 kg + moulding + hardware 0.388 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-100x60-M16,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-100x60-M16,cost,,,902,50.0,1400,1150,21,4,0.596,250,335,0.388,91,45000,225,902,local moulding: rubber 0.596 kg + moulding + hardware 0.388 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-100x75-M16,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-100x75-M16,cost,,,1003,50.0,1550,1250,21,4,0.745,313,374,0.388,91,45000,225,1003,local moulding: rubber 0.745 kg + moulding + hardware 0.388 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-100x80-M16,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-100x80-M16,cost,,,1037,50.0,1600,1300,21,4,0.795,334,387,0.388,91,45000,225,1037,local moulding: rubber 0.795 kg + moulding + hardware 0.388 kg + mould 45000/50
+rubber_mounts,AT-RCM-FF-100x100-M16,"AT-RCM-FF cylindrical mount, tapped holes both ends",AT-RCM-FF-100x100-M16,cost,,,1172,50.0,1800,1450,21,4,0.994,417,438,0.388,91,45000,225,1172,local moulding: rubber 0.994 kg + moulding + hardware 0.388 kg + mould 45000/50
+rubber_mounts,AT-RCM-F0-16x10-M4,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-16x10-M4,cost,,,287,50.0,450,400,21,8,0.003,1,181,0.003,35,28000,70,287,local moulding: rubber 0.003 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-16x15-M4,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-16x15-M4,cost,,,288,50.0,450,400,21,8,0.004,2,181,0.003,35,28000,70,288,local moulding: rubber 0.004 kg + moulding + hardware 0.003 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-20x15-M6,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-20x15-M6,cost,,,289,50.0,450,400,21,8,0.006,3,182,0.005,35,28000,70,289,local moulding: rubber 0.006 kg + moulding + hardware 0.005 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-25.5x15-M6,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-25.5x15-M6,cost,,,292,50.0,450,400,21,8,0.01,4,183,0.007,35,28000,70,292,local moulding: rubber 0.01 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-25.5x20-M6,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-25.5x20-M6,cost,,,294,50.0,450,400,21,8,0.013,5,183,0.007,35,28000,70,294,local moulding: rubber 0.013 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-25.5x30-M6,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-25.5x30-M6,cost,,,298,50.0,450,400,21,8,0.019,8,185,0.007,35,28000,70,298,local moulding: rubber 0.019 kg + moulding + hardware 0.007 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-30x22-M8,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-30x22-M8,cost,,,298,50.0,450,400,21,8,0.02,8,185,0.012,35,28000,70,298,local moulding: rubber 0.02 kg + moulding + hardware 0.012 kg + mould 28000/50
+rubber_mounts,AT-RCM-F0-50x20-M10,"AT-RCM-F0 cylindrical buffer, tapped hole one end",AT-RCM-F0-50x20-M10,cost,,,474,50.0,750,600,21,4,0.05,21,193,0.049,35,45000,225,474,local moulding: rubber 0.05 kg + moulding + hardware 0.049 kg + mould 45000/50

@@ -11,7 +11,6 @@ const { app: api } = require('../lib/app');
 const app = express();
 app.use('/api', api);
 app.use('/d', (req, res, next) => { req.url = '/d' + req.url; api(req, res, next); });
-app.get(['/dealers', '/become-a-dealer'], (_q, res) => res.sendFile(path.join(__dirname, '..', 'site', 'dealer.html')));
 app.use(express.static(path.join(__dirname, '..', 'site'), { etag: true, setHeaders: (res, p) => res.setHeader('Cache-Control', /\.(html|css|js)$/i.test(p) ? 'no-cache' : 'public, max-age=86400') }));
 const PORT = process.env.PORT || 5000;
 if (!process.env.PUBLIC_URL) process.env.PUBLIC_URL = 'http://localhost:' + PORT;

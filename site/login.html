@@ -13,7 +13,7 @@
     <div id="msg"></div>
   </section>
 </div>
-<script src="common.js?v=6"></script>
+<script src="common.js?v=2"></script>
 <script>
 const next = new URLSearchParams(location.search).get('next') || 'index.html';
 const say = (cls, m) => $('#msg').innerHTML = `<div class="note ${cls}">${esc(m)}</div>`;
@@ -21,7 +21,7 @@ $('#send').onclick = $('#again').onclick = async () => { try { const r = await a
   $('#s1').classList.add('hidden'); $('#s2').classList.remove('hidden'); $('#code').focus();
   say(r.sent ? 'ok' : 'warn', r.sent ? t('code_sent') : (t('code_not_sent') + (r.dev_code ? ' — dev code: ' + r.dev_code : '') + (r.reason ? ' (' + r.reason + ')' : ''))); } catch (e) { say('bad', e.message); } };
 $('#verify').onclick = async () => { try { const r = await api('auth/verify', { method: 'POST', body: { email: $('#email').value, code: $('#code').value } }); AUTH.token = r.token; AUTH.user = r.user;
-  location.href = next !== 'index.html' ? next : r.user.role === 'admin' ? 'admin.html' : r.user.role === 'dealer' ? 'portal.html' : next; } catch (e) { say('bad', e.message); } };
+  location.href = r.user.role === 'admin' && next === 'index.html' ? 'admin.html' : next; } catch (e) { say('bad', e.message); } };
 $('#code').addEventListener('keydown', e => { if (e.key === 'Enter') $('#verify').click(); });
 $('#email').addEventListener('keydown', e => { if (e.key === 'Enter') $('#send').click(); });
 bootCommon('nav_login');
