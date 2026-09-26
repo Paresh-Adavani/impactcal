@@ -5,6 +5,7 @@ process.env.IMPACTCAL_STORE = fs.mkdtempSync(path.join(os.tmpdir(), 'impactcal-t
 process.env.IMPACTCAL_SECRET = 'test-secret';
 process.env.ADMIN_EMAILS = 'adonitech@gmail.com';
 process.env.PUBLIC_URL = 'http://test.local';
+process.env.ANTHROPIC_API_KEY = 'test-key';
 const { app } = require('../lib/app');
 const gst = require('../lib/gst');
 const csv = require('../lib/csv');
@@ -53,7 +54,26 @@ const server = app.listen(0, async () => {
     ok('114 AWRI models served', wri.awri.length === 114 && wri.prices_visible === false && Object.keys(wri.prices).length === 0);
     const rb = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 25, isolation_pct: 90 });
     ok('rubber: required fn from 90% isolation at 25 Hz is 7.54 Hz', near(rb.required.fn_req_hz, 25 / Math.sqrt(11)), rb.required.fn_req_hz.toFixed(2));
-    ok('rubber: candidates found', rb.count > 0 && rb.candidates.every(c => c.fn_hz <= rb.required.fn_req_hz * 1.02), rb.count + ' pass');
+    const rb2 = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 50, isolation_pct: 90 });
+    ok('rubber: 3000 rpm case finds mounts, all with a real natural frequency', rb2.count > 0 && rb2.candidates.every(c => c.fn_hz > 0 && c.fn_hz <= rb2.required.fn_req_hz * 1.02), rb2.count + ' pass');
+    ok('rubber: 1500 rpm / 90 % now finds AT-RCM cylindrical mounts (fn <= 7.5 Hz)', rb.count > 0 && rb.candidates.every(c => c.product.model.startsWith('AT-RCM-') && c.fn_hz <= rb.required.fn_req_hz * 1.02), rb.count + ' pass, best ' + (rb.candidates[0] || {}).product?.model);
+    // ---- bump / shock check (the 29 Aug application note: 5 kg on 6 points, 60 g / 11 ms, 10 g limit, 25 mm)
+    const bn = await post('/rubber/select', { mass_kg: 5, mounts: 6, shock: { peak_g: 60, pulse_ms: 11, fragility_g: 10, sway_mm: 25 } });
+    ok('bump: 60 g / 11 ms -> Δv 4.12 m/s, 173 mm travel needed, not possible in 25 mm (as in the application note)', near(bn.shock ? 0 : bn.required.shock.dv_m_s, 4.12, 0.01) && Math.round(bn.required.shock.stroke_linear_mm) === 173 && Math.round(bn.required.shock.stroke_floor_mm) === 87 && !bn.required.shock.feasible && bn.count === 0, bn.required.shock.verdict);
+    ok('bump: best a linear mount can do in 25 mm is 69 g', Math.round(bn.required.shock.best_linear_g) === 69);
+    const rb3 = require('../lib/rubber');
+    ok('bump: SDOF simulation matches the shock spectrum (fn 3.8 Hz undamped -> 10 g, 172 mm)', near(rb3.sdof(3.8, { A: 60, tau: 0.011, shape: 'half-sine', zeta: 0.0001 }).a_out_g, 10, 0.02) && near(rb3.sdof(3.8, { A: 60, tau: 0.011, shape: 'half-sine', zeta: 0.0001 }).travel_mm, 173, 0.02));
+    const bok = await post('/rubber/select', { mass_kg: 200, mounts: 4, shock: { peak_g: 15, pulse_ms: 11, fragility_g: 10, sway_mm: 30 } });
+    ok('bump only: 200 kg, 15 g / 11 ms, 10 g limit -> mounts found, each within 10 g and 30 mm', bok.count > 0 && bok.candidates.every(c => c.shock.a_out_g <= 10.2 && c.shock.travel_mm <= 30), bok.count + ' pass, best ' + bok.candidates[0].product.model + ' ' + bok.candidates[0].shock.a_out_g.toFixed(1) + ' g');
+    const both = await post('/rubber/select', { mass_kg: 200, mounts: 4, disturbing_hz: 50, isolation_pct: 90, shock: { peak_g: 15, pulse_ms: 11, fragility_g: 10, sway_mm: 30 } });
+    ok('vibration + bump: every pick passes both, short mounts that would bottom out are rejected', both.count > 0 && both.count < rb2.count && both.candidates.every(c => c.isolation_pct >= 89.9 && c.shock.a_out_g <= 10.2 && (c.shock.strain_pct == null || c.shock.strain_pct <= 40)), both.count + ' of ' + rb2.count);
+    ok('rubber: neither running speed nor bump -> clear message', /running speed|bump/.test((await post('/rubber/select', { mass_kg: 200, mounts: 4 })).error || ''));
+    const rbd = await get('/rubber/data');
+    const rcm = rbd.filter(r => r.model.startsWith('AT-RCM-'));
+    ok('rubber: 206 AT-RCM sizes in 5 styles, each with stiffness and its own icon', rcm.length === 206 && new Set(rcm.map(r => r.mount_style)).size === 5 && rcm.every(r => Number(r.stiffness_n_mm) > 0 && /RCM-(SU|SS|SF|FF|F0)\.svg$/.test(r.image)) && rcm.every(r => fs.existsSync(path.join(__dirname, '..', 'site', r.image))));
+    const r80 = rcm.find(r => r.model === 'AT-RCM-SS-80x70-M14');
+    ok('rubber: D80 x 70 M14 stiffness = 5000 N / 17 mm = 294 N/mm (as in the Pune report)', r80 && Number(r80.stiffness_n_mm) === 294, r80 && r80.stiffness_n_mm);
+    ok('rubber: no supplier name or supplier reference reaches the public', !JSON.stringify(rbd).match(/radiaflex|paulstra|Supplier ref/i) && rcm.every(r => r.source === undefined && r.price_inr === undefined));
 
     console.log('\n— GSTIN —');
     ok('rejects the mistyped GSTIN', !(await get('/gstin/27AHAPAPA3555B1Z1')).ok);
@@ -75,6 +95,23 @@ const server = app.listen(0, async () => {
     ok('customer role for others', v3.user.role === 'customer');
     ok('admin sees prices + fx in meta', (await get('/meta')).prices === true && (await get('/meta')).fx.rate > 0);
 
+    // ---- wire rope isolator lug options: EN8D + Arkor standard, aluminium +2 %, SS 304 +5 % (admin setting)
+    {
+      const anonW = await fetch(base + '/wri/data').then(r => r.json());
+      ok('wri: lug choices offered, EN8D + Arkor treated is the standard, no % shown to the public', anonW.lug_options[0].label === 'EN8D + Arkor treated' && anonW.lug_options[0].default && anonW.lug_options.map(o => o.label).join('|') === 'EN8D + Arkor treated|EN8D + Zinc plated|Aluminium alloy|SS 304' && anonW.lug_options.every(o => o.pct === undefined) && anonW.wire_options[0] === 'SS 304');
+      const admW = await get('/wri/data');
+      ok('wri: price viewers see the surcharge (Al +2 %, SS 304 +5 %)', admW.lug_options[1].pct === 0 && admW.lug_options[2].pct === 2 && admW.lug_options[3].pct === 5);
+      const w127 = admW.prices['AWRI-127-60'].price;
+      const lq = await post('/portal/quote', { customer: { company: 'Lug Test Pvt Ltd', contact: 'Test Engineer', email: 'eng@lugtest.in', phone: '+91 98220 55443' }, items: [
+        { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1 }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Aluminium alloy' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'SS 304', wire: 'SS 302' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Gold plated' }] });
+      const lqq = (await get('/approve/' + lq.quotation_id)).quotation.items;
+      const up = (p, pct) => { const v = p * (1 + pct / 100), st = v < 10000 ? 50 : 100; return Math.ceil(v / st) * st; };
+      ok('wri: quotation priced by lug — standard list, Al +2 %, SS 304 +5 %, unknown -> standard', lqq[0].rate === w127 && lqq[1].rate === up(w127, 2) && lqq[2].rate === up(w127, 5) && lqq[3].rate === w127, lqq.map(i => i.rate).join(' / '));
+      ok('wri: lug and wire printed on the line', /Lugs: EN8D \+ Arkor treated · Wire rope: SS 304/.test(lqq[0].description) && /Lugs: SS 304 · Wire rope: SS 302/.test(lqq[2].description) && lqq[2].lug_pct === 5);
+      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; Aluminium alloy=3; SS 304=6' });
+      ok('wri: surcharges follow the admin setting', (await get('/wri/data')).lug_options[2].pct === 6);
+      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5' });
+    }
     console.log('\n— CSV database (admin) —');
     const tables = await get('/admin/csv');
     ok('nine tables listed', tables.length === 9, tables.map(t => t.table).join(','));
@@ -157,9 +194,9 @@ const server = app.listen(0, async () => {
 
     console.log('\n— exports & audit —');
     const ex = await fetch(base + '/admin/export/rfqs.csv', { headers: H() }).then(r => r.text());
-    ok('RFQ export has both requests', csv.parse(ex).rows.length === 2);
+    ok('RFQ export lists every request', csv.parse(ex).rows.length === 3, csv.parse(ex).rows.length + ' rows (2 RFQs + the lug-price test quotation)');
     const au = await get('/admin/audit?days=1');
-    ok('audit trail records the approval', au.some(a => a.what === 'quotation.approve'));
+    ok('audit trail records the approval', au.some(a => a.what === 'quotation.send'));
     ok('mail verify reports cleanly when unconfigured', (await get('/admin/mail/verify')).ok === false);
     ok('drive status reports unconfigured cleanly', (await get('/admin/drive/status')).configured === false);
     ok('FY code is 4 digits', /^\d{4}$/.test(require('../lib/store').fyCode()));
@@ -215,6 +252,276 @@ const server = app.listen(0, async () => {
     const psel = await post('/select', { duty: { m: 5000, v: 1, F: 0, n: 1, C: 20, H_M: 2.5 }, case_id: 'C1', standard: 'IS3177', series: [], limit: 3, currency: 'INR' });
     ok('select: candidates now carry prices', psel.candidates.every(c => Number(c.price) > 0), psel.candidates.map(c => c.model + ' ' + c.price).join(', '));
 
+
+    console.log('\n— dealers, sales offices, discount limits —');
+    const asT = (tok) => ({ 'content-type': 'application/json', authorization: 'Bearer ' + tok });
+    const rq = (m, u, b, tok) => fetch(base + u, { method: m, headers: asT(tok), body: b ? JSON.stringify(b) : undefined }).then(async r => { const j = await r.json().catch(() => ({})); return Array.isArray(j) ? Object.assign(j, { status: r.status }) : { status: r.status, ...j }; });
+    const loginAs = async email => { const o = await post('/auth/request-otp', { email }); return post('/auth/verify', { email, code: o.dev_code }); };
+    const dlr0 = await loginAs('ravi@kumarengg.in');
+    ok('dealer: fresh login is a customer', dlr0.user.role === 'customer');
+    ok('dealer: portal refused before approval', (await rq('GET', '/portal/catalogue', null, dlr0.token)).status === 403);
+    ok('dealer: Indian dealer without GSTIN refused', (await rq('POST', '/dealer/apply', { company: 'Kumar Engineering', addr1: 'Plot 4', city: 'Pune', phone: '+91 98220 11223' }, dlr0.token)).status === 400);
+    const dap = await rq('POST', '/dealer/apply', { company: 'Kumar Engineering Services', contact: 'Ravi Kumar', addr1: 'Plot 4, Bhosari MIDC', city: 'Pune', pincode: '411026', phone: '+91 98220 11223', gstin: '27AAAPL1234C1Z5', bank_name: 'HDFC Bank', bank_account: '5010000000', bank_ifsc: 'HDFC0000001' }, dlr0.token);
+    ok('dealer: application stored as pending', dap.ok && dap.dealer.status === 'pending' && dap.dealer.state_code === '27', dap.dealer && dap.dealer.gstin);
+    const dlist = await get('/admin/dealers');
+    ok('dealer: admin sees the application', dlist.some(d => d.email === 'ravi@kumarengg.in' && d.status === 'pending'));
+    const ddec = await post('/admin/dealers/ravi@kumarengg.in/decide', { decision: 'approve' });
+    ok('dealer: approved once, code generated', ddec.ok && ddec.dealer.status === 'approved' && /^[A-Z]{3}/.test(ddec.dealer.code), ddec.dealer.code);
+    const me0 = await rq('GET', '/dealer/me', null, dlr0.token);
+    ok('dealer: old token asks to sign in again', me0.relogin === true);
+    const dlr = await loginAs('ravi@kumarengg.in');
+    ok('dealer: next login has role dealer', dlr.user.role === 'dealer', dlr.user.name);
+    const dcat = await rq('GET', '/portal/catalogue', null, dlr.token);
+    ok('portal: catalogue lists all five product tables with list prices', Array.isArray(dcat) && new Set(dcat.map(c => c.table)).size === 5 && dcat.filter(c => c.price_inr).length > 500, (dcat.length || 0) + ' items');
+    ok('portal: catalogue has no costing columns', !dcat.some(c => 'unit_cost' in c || 'dealer_inr' in c));
+    const ac = dcat.find(c => c.model === 'AC-42-50'), wr = dcat.find(c => c.table === 'wire_rope_isolators');
+    const pq = await rq('POST', '/portal/quote', { customer: { company: 'Sai Cranes Pvt Ltd', contact: 'Sunil Patil', email: 'sunil.patil@saicranes.in', phone: '+91 98500 12345', gstin: '29AABCS1234F1Z2' }, project: { name: 'EOT 10 t' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 2 }, { table: wr.table, key: wr.key, qty: 4 }] }, dlr.token);
+    ok('portal: dealer quick quote creates a draft in his own series', pq.quotation && pq.quotation.startsWith(ddec.dealer.code + '/Q/') && pq.issuer === 'dealer', pq.quotation);
+    const dq = await rq('GET', '/approve/' + pq.quotation_id, null, dlr.token);
+    ok('dealer: opens his own quotation (no token), sees billing, no drawings', dq.access === 'dealer' && dq.billing && dq.billing.billing_discount_pct === 25 && dq.drawings.length === 0);
+    ok('dealer: letterhead is the dealer, GST from his state', dq.company.name === 'Kumar Engineering Services' && dq.company.dealer && dq.quotation.supply_type === 'inter');
+    ok('dealer: bank block is the dealer bank', dq.bank.bank === 'HDFC Bank');
+    const doth = await loginAs('someone@otherfirm.in');
+    ok('dealer: another user cannot open it', (await rq('GET', '/approve/' + pq.quotation_id, null, doth.token)).status === 403);
+    const slp = await loginAs('adonitechpune@gmail.com');
+    ok('sales: cannot open a dealer quotation', (await rq('GET', '/approve/' + pq.quotation_id, null, slp.token)).status === 403);
+    // 30 % discount -> blocked; list price tamper ignored
+    const it30 = dq.quotation.items.map(i => ({ ...i, discount_pct: i.seq === 1 ? 30 : 0, list_rate: 1 }));
+    const sv = await rq('PUT', '/approve/' + pq.quotation_id, { items: it30 }, dlr.token);
+    ok('dealer: list rate cannot be changed from the page', sv.items[0].list_rate === dq.quotation.items[0].list_rate);
+    const blocked = await rq('POST', '/approve/' + pq.quotation_id + '/send', {}, dlr.token);
+    ok('limit: 30 % discount blocked for dealer', blocked.status === 403 && blocked.limit && blocked.limit.violations.length === 1, blocked.error);
+    const dsp = await rq('POST', '/approve/' + pq.quotation_id + '/special', { reason: 'OEM, 40 nos per year' }, dlr.token);
+    ok('special: request stored as pending', dsp.ok && dsp.special.status === 'pending');
+    ok('special: dealer cannot decide', (await rq('POST', '/approve/' + pq.quotation_id + '/special/decide', { decision: 'approve' }, dlr.token)).status === 403);
+    const spd = await post('/approve/' + pq.quotation_id + '/special/decide', { decision: 'approve', note: 'OK for this order', billing_discount_pct: 32 });
+    ok('special: admin approves, nets snapshotted', spd.ok && spd.special.status === 'approved' && Object.keys(spd.special.approved_nets).length === 1);
+    const dsent = await rq('POST', '/approve/' + pq.quotation_id + '/send', {}, dlr.token);
+    ok('dealer: sends after special approval (mail off in test), billing = list − 32 % (special)', dsent.status === 200 && dsent.billing && Math.abs(dsent.billing.billing_value - dsent.billing.list_value * 0.68) < 0.02 && dsent.billing.dealer_margin > 0, JSON.stringify(dsent.billing));
+    const dpdf = await fetch(base + '/approve/' + pq.quotation_id + '/pdf', { headers: asT(dlr.token) });
+    ok('dealer: PDF renders', dpdf.status === 200 && (await dpdf.arrayBuffer()).byteLength > 3000);
+    const dmine = await rq('GET', '/portal/quotations', null, dlr.token);
+    ok('portal: dealer lists only his quotations', Array.isArray(dmine) && dmine.length === 1 && dmine[0].dealer === 'ravi@kumarengg.in');
+    // sales: Pune office, 25 % limit, IEC on export
+    const sq = await rq('POST', '/portal/quote', { customer: { company: 'Nordic Lift AB', contact: 'Erik Lund', email: 'erik.lund@nordiclift.se', phone: '+46 70 123 4567', country: 'Sweden' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 1 }] }, slp.token);
+    ok('sales: quick quote is an ADONI TECH quotation', sq.quotation && sq.quotation.startsWith('AT/Q/') && sq.issuer === 'adoni', sq.quotation);
+    const sd = await rq('GET', '/approve/' + sq.quotation_id, null, slp.token);
+    ok('sales: opens it, office = pune, no billing box', sd.access === 'sales' && sd.quotation.issuer.office === 'pune' && sd.billing === null && sd.quotation.currency === 'USD');
+    ok('sales: quotation shows the sales person', sd.company.person === 'Krishnakant Harpale');
+    const s26 = await rq('PUT', '/approve/' + sq.quotation_id, { items: sd.quotation.items.map(i => ({ ...i, discount_pct: 26 })) }, slp.token);
+    ok('limit: sales 26 % blocked', (await rq('POST', '/approve/' + sq.quotation_id + '/send', {}, slp.token)).status === 403);
+    await rq('PUT', '/approve/' + sq.quotation_id, { items: s26.items.map(i => ({ ...i, discount_pct: 25, rate: i.rate })), office: 'satara' }, slp.token);
+    const ss = await rq('POST', '/approve/' + sq.quotation_id + '/send', {}, slp.token);
+    ok('limit: sales 25 % allowed', ss.status === 200, ss.reason || '');
+    const spdf = await fetch(base + '/approve/' + sq.quotation_id + '/pdf', { headers: asT(slp.token) });
+    const stxt = Buffer.from(await spdf.arrayBuffer()).toString('latin1');
+    ok('export PDF renders', spdf.status === 200 && stxt.length > 3000);
+    const { docParties } = require('../lib/quote');
+    const sqq = await get('/admin/quotation/' + sq.quotation_id);
+    ok('export: IEC on the company block', sqq.currency === 'USD' && docParties(sqq, Object.fromEntries((await get('/admin/settings')).map(r => [r.key, r.value]))).company.iec === '3106020261');
+    ok('admin quotation link carries a token; sales link does not', /&t=/.test(sqq.approve_url) && !/&t=/.test((await rq('GET', '/admin/quotation/' + sq.quotation_id, null, slp.token)).approve_url));
+
+    const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==', 'base64');
+    const osd = await loginAs('ops@nordicdamp.se');
+    const osa = await rq('POST', '/dealer/apply', { company: 'Nordic Damping AB', contact: 'Lars Berg', addr1: 'Industrivagen 5', city: 'Gothenburg', phone: '+46 31 123 4567', country: 'Sweden' }, osd.token);
+    ok('overseas dealer: applies without GSTIN', osa.ok && osa.dealer.status === 'pending');
+    ok('dealer logo: non-image refused', (await rq('PUT', '/dealer/me/logo', { base64: Buffer.from('hello').toString('base64') }, osd.token)).status === 400);
+    ok('dealer logo: PNG stored', (await rq('PUT', '/dealer/me/logo', { base64: 'data:image/png;base64,' + png.toString('base64') }, osd.token)).logo === 'image/png');
+    const osdec = await post('/admin/dealers/ops@nordicdamp.se/decide', { decision: 'approve', discount_pct: 35, max_discount_pct: 30 });
+    ok('overseas dealer: own terms set at approval', osdec.dealer.discount_pct === 35 && osdec.dealer.max_discount_pct === 30);
+    const os2 = await loginAs('ops@nordicdamp.se');
+    const osq = await rq('POST', '/portal/quote', { customer: { company: 'Kran Service GmbH', contact: 'Jonas Weber', email: 'j.weber@kranservice.de', phone: '+49 171 2345678', country: 'Germany' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 3 }] }, os2.token);
+    const osv = await rq('GET', '/approve/' + osq.quotation_id, null, os2.token);
+    ok('overseas dealer: USD quotation, billed at list − 35 %, limit 30 %', osv.quotation.currency === 'USD' && osv.billing.billing_discount_pct === 35 && osv.limit.max_pct === 30);
+    const ospdf = await fetch(base + '/approve/' + osq.quotation_id + '/pdf', { headers: asT(os2.token) });
+    ok('dealer logo: quotation PDF renders with the logo', ospdf.status === 200 && Buffer.from(await ospdf.arrayBuffer()).toString('latin1').includes('/Subtype /Image'));
+
+    // sales: price above list needs approval; dealer: markup free, no manufacturer line, self-send
+    const sq2 = await rq('POST', '/portal/quote', { customer: { company: 'Mehta Cranes', contact: 'Amit Mehta', email: 'amit@mehtacranes.in', phone: '+91 98200 45678' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 1 }] }, slp.token);
+    const sd2 = await rq('GET', '/approve/' + sq2.quotation_id, null, slp.token);
+    await rq('PUT', '/approve/' + sq2.quotation_id, { items: sd2.quotation.items.map(i => ({ ...i, rate: i.rate * 1.1 })) }, slp.token);
+    const mkb = await rq('POST', '/approve/' + sq2.quotation_id + '/send', {}, slp.token);
+    ok('sales: price above list blocked without approval', mkb.status === 403 && mkb.limit.violations[0].kind === 'markup', mkb.error);
+    const mkr = await rq('POST', '/approve/' + sq2.quotation_id + '/special', { reason: 'urgent delivery' }, slp.token);
+    ok('sales: markup approval request stored', mkr.ok && mkr.special.markup === true);
+    await post('/approve/' + sq2.quotation_id + '/special/decide', { decision: 'approve' });
+    ok('sales: sends after markup approval', (await rq('POST', '/approve/' + sq2.quotation_id + '/send', {}, slp.token)).status === 200);
+    ok('dealer: no manufacturer line on his quotation', docParties(await get('/admin/quotation/' + pq.quotation_id), Object.fromEntries((await get('/admin/settings')).map(r => [r.key, r.value]))).company.footer === '');
+    const dq2 = await rq('POST', '/portal/quote', { customer: { company: 'Sai Cranes Pvt Ltd', contact: 'Sunil Patil', email: 'sunil.patil@saicranes.in', phone: '+91 98500 12345' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 1 }] }, dlr.token);
+    const dq2v = await rq('GET', '/approve/' + dq2.quotation_id, null, dlr.token);
+    await rq('PUT', '/approve/' + dq2.quotation_id, { items: dq2v.quotation.items.map(i => ({ ...i, rate: i.rate * 1.3 })) }, dlr.token);
+    const self = await rq('POST', '/approve/' + dq2.quotation_id + '/send', { self_send: true }, dlr.token);
+    ok('dealer: 30 % markup free, self-send recorded as sent', self.status === 200 && self.ok && /dealer/.test(self.sent_to) && self.billing.dealer_margin > 0, self.sent_to);
+    const prog = await get('/dealer/program'); const pc = await get('/public/config');
+    ok('dealer page: program + public config endpoints', Array.isArray(prog.cities) && 'ga_id' in pc);
+    const nd = await loginAs('sales@newtrade.co.in');
+    const nda = await rq('POST', '/dealer/apply', { company: 'New Trade Links', contact: 'Priya Rao', addr1: 'MIDC Satpur', city: 'Nashik', phone: '+91 97654 32109', gstin: '27AAAPL1234C1Z5', territory: 'Nashik, Dhule', products: ['Crane buffers', 'Wire rope isolators'], source: 'dealer sign-up page' }, nd.token);
+    ok('dealer page: application keeps territory and products', nda.ok && nda.dealer.territory === 'Nashik, Dhule' && nda.dealer.products === 'Crane buffers, Wire rope isolators');
+    {
+    // ---- dealer rules: standard policy at sign-up, every point confirmed, own rules per dealer, versioned
+    ok('policy: standard pricing policy e-mailed on first application (mail off -> attempted)', nda.policy_mail === false);
+    const pol0 = await get('/admin/dealers/sales@newtrade.co.in/policy');
+    ok('policy: 13 rules with standard values', pol0.rules.length === 13 && pol0.rules.find(r => r.k === 'discount_pct').value === 25 && pol0.rules.find(r => r.k === 'freight_rate').value === 35 && pol0.rules.find(r => r.k === 'territory').value === 'Nashik, Dhule');
+    const own = { discount_pct: 30, routes: 'resale', freight_rate: 40, special: 'Keeps 10 pcs AKHG 100-200 in stock at Nashik' };
+    const allRules = Object.fromEntries(pol0.rules.map(r => [r.k, own[r.k] !== undefined ? own[r.k] : r.value]));
+    const notAll = await fetch(base + '/admin/dealers/sales@newtrade.co.in/policy', { method: 'POST', headers: H(), body: JSON.stringify({ rules: allRules, confirmed: ['discount_pct'], approve: true }) });
+    ok('policy: refused until every point is ticked as agreed', notAll.status === 400);
+    const prev = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: allRules, preview: true });
+    ok('policy: preview shows his own values and the worked example', /30 %/.test(prev.html) && /Resale only/.test(prev.html) && /Keeps 10 pcs/.test(prev.html) && /Example/.test(prev.html) && !/Direct supply:/.test(prev.html));
+    const conf = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: allRules, confirmed: pol0.rules.map(r => r.k), approve: true, note: 'Welcome aboard' });
+    ok('policy: confirm + approve -> version 1, own rules stored, dealer approved', conf.ok && conf.dealer.status === 'approved' && conf.dealer.policy.version === 1 && JSON.stringify(Object.keys(conf.dealer.rules).sort()) === JSON.stringify(['discount_pct', 'freight_rate', 'routes', 'special']), Object.keys(conf.dealer.rules).join(','));
+    const nd2 = await loginAs('sales@newtrade.co.in');
+    const ndme = await rq('GET', '/dealer/me', null, nd2.token);
+    ok('policy: dealer sees his confirmed terms', ndme.policy.version === 1 && ndme.rules.find(r => r.k === 'discount_pct').value === 30);
+    const ndcat = await rq('GET', '/portal/catalogue', null, nd2.token), akhg = ndcat.find(c => c.model === 'AKHG 100-200');
+    const ndDirect = await rq('POST', '/portal/quote', { route: 'direct', customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, nd2.token);
+    ok('policy: "resale only" dealer cannot make a direct-supply quotation', ndDirect.status === 403);
+    const ndq = await rq('POST', '/portal/quote', { customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, nd2.token);
+    const ndg = await rq('GET', '/approve/' + ndq.quotation_id, null, nd2.token);
+    ok('policy: his own discount (30 %) and freight rate (Rs 40/kg) are used', ndg.billing.billing_discount_pct === 30 && ndg.billing.freight.rate === 40, `${ndg.billing.freight.kg_charged} kg x ${ndg.billing.freight.rate}`);
+    const rev = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: { ...allRules, discount_pct: 25 }, confirmed: pol0.rules.map(r => r.k) });
+    const polH = await get('/admin/dealers/sales@newtrade.co.in/policy');
+    ok('policy: revision -> version 2, back on the standard discount, history kept', rev.dealer.policy.version === 2 && !('discount_pct' in rev.dealer.rules) && polH.history.length === 2);
+
+    // ---- lead times: admin + settings leadtime.users update them; kept apart from the CSV
+    const shital = await loginAs('adonisatara@gmail.com'), krish = await loginAs('adonitechpune@gmail.com');
+    ok('lead times: sales person not in leadtime.users is refused', (await rq('GET', '/leadtimes', null, krish.token)).status === 403);
+    const ltl = await rq('GET', '/leadtimes', null, shital.token);
+    const lak = ltl.find && ltl.find(r => r.model === 'AKHG 100-200');
+    ok('lead times: Shital (leadtime.users) sees every product line', Array.isArray(ltl) && new Set(ltl.map(r => r.group)).size >= 5 && lak && lak.base_days > 0, ltl.length + ' lines');
+    ok('lead times: whole days only', (await rq('PUT', '/leadtimes', { changes: [{ table: 'shock_absorbers', key: lak.key, days: 4.5 }] }, shital.token)).status === 400);
+    const ltput = await rq('PUT', '/leadtimes', { changes: [{ table: 'shock_absorbers', key: lak.key, days: 63, note: 'seal kit from new supplier' }] }, shital.token);
+    const lcat = await rq('GET', '/portal/catalogue', null, TOKEN);
+    ok('lead times: new value live at once in the catalogue', ltput.ok && lcat.find(c => c.model === 'AKHG 100-200').lead_time_days === 63);
+    const lq = await rq('POST', '/portal/quote', { customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, nd2.token);
+    ok('lead times: and on new quotations', (await rq('GET', '/approve/' + lq.quotation_id, null, nd2.token)).quotation.items[0].lead_time_days === 63);
+    const ltl2 = await rq('GET', '/leadtimes', null, TOKEN);
+    ok('lead times: who and why are kept', ltl2.find(r => r.key === lak.key).override.by === 'adonisatara@gmail.com');
+    await rq('PUT', '/leadtimes', { changes: [{ table: 'shock_absorbers', key: lak.key, days: null }] }, shital.token);
+    ok('lead times: clearing returns to the database value', (await rq('GET', '/portal/catalogue', null, TOKEN)).find(c => c.model === 'AKHG 100-200').lead_time_days === lak.base_days);
+
+    // ---- customer master: sales make customers (-> CRM), quote without a selection
+    const cu1 = await rq('POST', '/customers', { company: 'Jindal Steel Works', contact: 'Rajesh Kulkarni', designation: 'Maintenance Head', email: 'rajesh.kulkarni@jindalsw.in', phone: '+91 98221 33445', gstin: '27AAACJ4323N1ZX', city: 'Dolvi', industry: 'Steel plant cranes' }, krish.token);
+    ok('customers: sales person creates a customer, numbered C-<FY>-0001', cu1.ok && /^C-\d{4}-0001$/.test(cu1.customer.id) && cu1.customer.state_code === '27', cu1.customer && cu1.customer.id);
+    ok('customers: pushed to the CRM (test has no UnitePro token -> reason recorded)', cu1.crm && cu1.crm.ok === false && /disabled|not configured/.test(cu1.crm.reason) && cu1.customer.crm && cu1.customer.crm.ok === false);
+    ok('customers: duplicate e-mail refused with the existing number', (await rq('POST', '/customers', { contact: 'R Kulkarni', email: 'Rajesh.Kulkarni@jindalsw.in', phone: '9000000000' }, krish.token)).status === 409);
+    ok('customers: whole sales team shares the list', (await rq('GET', '/customers?q=jindal', null, shital.token)).some(c => c.id === cu1.customer.id));
+    ok('customers: a dealer does not see ADONI TECH customers', !(await rq('GET', '/customers', null, nd2.token)).some(c => c.id === cu1.customer.id));
+    const dcu = await rq('POST', '/customers', { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, nd2.token);
+    ok('customers: dealer keeps his own list, never sent to the ADONI TECH CRM', dcu.ok && dcu.customer.id.startsWith(conf.dealer.code + '-C-') && dcu.crm === null);
+    const sq = await rq('POST', '/portal/quote', { customer_id: cu1.customer.id, project: { name: 'Crane 3 LT' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, krish.token);
+    const sqg = await rq('GET', '/approve/' + sq.quotation_id, null, krish.token);
+    ok('customers: sales quotation straight from the catalogue for a saved customer', sq.quotation && sq.customer_id === cu1.customer.id && sqg.quotation.customer.company === 'Jindal Steel Works' && sqg.quotation.customer.customer_id === cu1.customer.id && sqg.quotation.issuer.type === 'adoni', sq.quotation);
+    const sq2 = await rq('POST', '/portal/quote', { save_customer: true, customer: { company: 'Uttam Galva', contact: 'Sneha Pawar', email: 'sneha.pawar@uttamgalva.in', phone: '+91 97300 11223' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, krish.token);
+    ok('customers: a new customer typed on a quotation is saved to the list', sq2.customer_saved && (await rq('GET', '/customers?q=uttam', null, krish.token)).length === 1);
+    const sq3 = await rq('POST', '/portal/quote', { save_customer: true, customer: { company: 'Uttam Galva', contact: 'Sneha Pawar', email: 'sneha.pawar@uttamgalva.in', phone: '+91 97300 11223' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, krish.token);
+    ok('customers: typing the same customer again links him, no duplicate', !sq3.customer_saved && sq3.customer_id === sq2.customer_id && (await rq('GET', '/customers?q=uttam', null, krish.token)).length === 1);
+    }
+    // ---- resale: packing & freight Rs 35/kg to the dealer's godown
+    {
+      const fq = await rq('GET', '/approve/' + pq.quotation_id, null, dlr.token), q0 = fq.quotation, b0 = fq.billing;
+      const kg = Math.ceil(q0.items.filter(i => i.kind === 'product').reduce((s, i) => s + (Number(i.weight_kg) || 0) * i.qty, 0));
+      ok('resale: freight = Rs 35 x estimated weight, added to the dealer billing', kg > 0 && b0.route === 'resale' && b0.freight.amount === kg * 35 && Math.abs(b0.billing_total - (b0.billing_value + kg * 35)) < 0.01, `${kg} kg → Rs ${b0.freight.amount}`);
+      ok('resale: dealer quotation carries a plain "Packing & freight" line he can change', q0.freight === kg * 35 && q0.freight_label === 'Packing & freight');
+    }
+    // ---- direct supply: ADONI TECH letterhead, dealer commission = his discount - what he passes on, x quoted price
+    {
+      const dp = await rq('POST', '/portal/quote', { route: 'direct', customer: { company: 'Sai Cranes Pvt Ltd', contact: 'Sunil Patil', email: 'sunil.patil@saicranes.in', phone: '+91 98500 12345', gstin: '29AABCS1234F1Z2' }, project: { name: 'EOT 10 t direct' }, items: [{ table: 'shock_absorbers', key: ac.key, qty: 2 }] }, dlr.token);
+      ok('direct: numbered in the ADONI TECH series with the dealer code', dp.quotation && dp.quotation.startsWith('AT/Q/' + ddec.dealer.code + '/'), dp.quotation);
+      let g = await rq('GET', '/approve/' + dp.quotation_id, null, dlr.token);
+      ok('direct: ADONI TECH letterhead + bank, dealer shown as channel partner, GST from Maharashtra', g.quotation.route === 'direct' && !g.company.dealer && /ADONI TECH/.test(g.company.name) && g.company.channel_partner.company === 'Kumar Engineering Services' && g.bank.bank !== 'HDFC Bank' && g.quotation.supply_type === 'inter');
+      const L0 = g.quotation.items[0].list_rate, kg = Math.ceil(g.quotation.items[0].weight_kg * 2);
+      ok('direct: packing & freight line to site = Rs 35 x weight, basis printed', g.quotation.freight === kg * 35 && /kg × Rs 35\/kg/.test(g.quotation.freight_label), g.quotation.freight_label);
+      const put = async (rate, disc) => { await rq('PUT', '/approve/' + dp.quotation_id, { items: g.quotation.items.map(i => ({ ...i, rate, discount_pct: disc })), freight: 0 }, dlr.token); return rq('GET', '/approve/' + dp.quotation_id, null, dlr.token); };
+      g = await put(L0, 10);
+      ok('direct: list 100, passes 10 % -> commission 15 % of list, ADONI keeps 75 %', Math.abs(g.billing.commission_value - 0.15 * L0 * 2) < 0.02 && Math.abs(g.billing.adoni_net - 0.75 * L0 * 2) < 0.02 && g.limit.ok, `commission ${g.billing.commission_value} on list ${L0} x2`);
+      ok('direct: dealer cannot change the freight line', g.quotation.freight === kg * 35);
+      g = await put(L0 * 1.25, 10);
+      ok('direct: markup to 125 and passes 10 % -> commission 15 % of 125 (18.75 per 100)', Math.abs(g.billing.commission_value - 0.1875 * L0 * 2) < 0.02 && Math.abs(g.billing.adoni_net - 0.9375 * L0 * 2) < 0.02, `commission ${g.billing.commission_value}`);
+      g = await put(L0 * 1.25, 30);
+      ok('direct: passing on more than his 25 % is blocked (commission would go negative)', !g.limit.ok && g.limit.violations[0].kind === 'commission' && (await rq('POST', '/approve/' + dp.quotation_id + '/send', { self_send: true }, dlr.token)).status === 403);
+      const ex = await rq('PUT', '/approve/' + dp.quotation_id, { items: [...g.quotation.items, { seq: 99, model: 'Installation', qty: 1, rate: 500 }] }, dlr.token);
+      ok('direct: dealer cannot add his own lines to an ADONI TECH offer', ex.status === 400);
+      g = await put(L0 * 1.25, 10);
+      const dpdf = await fetch(base + '/approve/' + dp.quotation_id + '/pdf', { headers: asT(dlr.token) });
+      ok('direct: PDF renders', dpdf.status === 200 && (await dpdf.arrayBuffer()).byteLength > 5000);
+      const snd = await rq('POST', '/approve/' + dp.quotation_id + '/send', { self_send: true }, dlr.token);
+      ok('direct: sent, commission enters the register as "quoted"', snd.ok && snd.billing.route === 'direct');
+      const reg = await rq('GET', '/admin/commissions', null, TOKEN);
+      const rr = reg.rows && reg.rows.find(r => r.id === dp.quotation_id);
+      ok('direct: admin commission register shows it', rr && rr.status === 'quoted' && Math.abs(rr.commission - 0.1875 * L0 * 2) < 0.02, rr && rr.commission);
+      const early = await rq('PATCH', '/admin/commission/' + dp.quotation_id, { status: 'commission_paid' }, TOKEN);
+      ok('direct: commission cannot be marked paid before the customer pays', early.status === 400);
+      await rq('PATCH', '/admin/commission/' + dp.quotation_id, { status: 'customer_paid', note: 'UTR 1234' }, TOKEN);
+      const paid = await rq('PATCH', '/admin/commission/' + dp.quotation_id, { status: 'commission_paid' }, TOKEN);
+      ok('direct: then paid, with history', paid.ok && paid.commission.history.length === 3);
+      const mineQ = await rq('GET', '/portal/quotations', null, dlr.token);
+      ok('direct: dealer sees route and commission in his list', mineQ.some(x => x.id === dp.quotation_id && x.route === 'direct' && x.commission > 0));
+      ok('direct: dealer cannot read the register', (await rq('GET', '/admin/commissions', null, dlr.token)).status === 403);
+    }
+    const susp = await post('/admin/dealers/ravi@kumarengg.in/decide', { decision: 'suspend' });
+    ok('dealer: suspended dealer loses the portal', susp.ok && (await rq('GET', '/portal/catalogue', null, dlr.token)).status === 403);
+
+    console.log('\n— GA library: large PDFs in chunks —');
+    const big = Buffer.concat([Buffer.from('%PDF-1.4\n'), Buffer.alloc(7 * 1024 * 1024, 65), Buffer.from('\n%%EOF')]);
+    const C = 3 * 1024 * 1024, nP = Math.ceil(big.length / C); let cr;
+    for (let i = 0; i < nP; i++) cr = await post('/admin/ga/chunk', { path: 'AC/AC-TEST-BIG.pdf', upload_id: 'testupload01', index: i, total: nP, base64: big.slice(i * C, (i + 1) * C).toString('base64') });
+    ok('ga: 7 MB drawing uploaded in 3 parts', cr.ok && cr.bytes === big.length && cr.chunks === 3, JSON.stringify(cr));
+    const gl = await get('/admin/ga');
+    ok('ga: large drawing listed as available', gl.uploaded_paths.includes('AC/AC-TEST-BIG.pdf'));
+    const miss = await post('/admin/ga/chunk', { path: 'AC/X.pdf', upload_id: 'testupload02', index: 1, total: 2, base64: Buffer.from('x').toString('base64') });
+    ok('ga: missing part reported', /part 1 of 2 missing/.test(miss.error || ''), miss.error);
+    const notpdf = await post('/admin/ga/chunk', { path: 'AC/Y.pdf', upload_id: 'testupload03', index: 0, total: 1, base64: Buffer.from('hello').toString('base64') });
+    ok('ga: non-PDF refused', notpdf.error === 'not a PDF');
+
+    {
+    console.log('\n— DAMPA assistant (mock Claude API) —');
+    const http = require('http'); const seen = [];
+    const mock = http.createServer((q, r) => { let b = ''; q.on('data', c => b += c); q.on('end', () => {
+      const body = JSON.parse(b); seen.push(body); const last = body.messages[body.messages.length - 1];
+      const lastText = JSON.stringify(last.content);
+      let out;
+      if (/tool_result/.test(lastText) && /AWRI/.test(lastText)) out = { stop_reason: 'tool_use', content: [{ type: 'text', text: 'AWRI-127-90 passes all checks.' }, { type: 'tool_use', id: 't2', name: 'prepare_rfq', input: { line: 'wri', items: [{ model: 'AWRI-127-90', qty: 4 }], summary: { mass: '280 kg' } } }] };
+      else if (/tool_result/.test(lastText)) out = { stop_reason: 'end_turn', content: [{ type: 'text', text: 'Please confirm your contact details in the card.' }] };
+      else if (/280 kg/.test(lastText)) out = { stop_reason: 'tool_use', content: [{ type: 'tool_use', id: 't1', name: 'select_wire_rope_isolator', input: { mass_kg: 280, isolators: 4, standard: 'BR3021' } }] };
+      else out = { stop_reason: 'end_turn', content: [{ type: 'text', text: 'What is the mass of the equipment (kg)?' }] };
+      r.writeHead(200, { 'content-type': 'application/json' }); r.end(JSON.stringify({ ...out, usage: { input_tokens: 1000, output_tokens: 200 } })); }); });
+    await new Promise(r => mock.listen(0, r)); process.env.ANTHROPIC_BASE_URL = 'http://127.0.0.1:' + mock.address().port;
+    const held = await (await fetch(base + '/assistant/config')).json();
+    ok('dampa: on hold by default (hidden for everyone)', held.held === true && held.enabled === false);
+    await put('/admin/settings', { 'assistant.enabled': '1' });
+    const acfg = await (await fetch(base + '/assistant/config')).json();
+    ok('dampa: config public, named DAMPA, enabled with key', acfg.enabled && acfg.name === 'DAMPA');
+    const dpng = 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8z8BQDwAEhQGAhKmMIQAAAABJRU5ErkJggg==';
+    const vis = (b) => fetch(base + '/assistant/chat', { method: 'POST', headers: { 'content-type': 'application/json', 'user-agent': 'dampa-test' }, body: JSON.stringify(b) }).then(async r => ({ status: r.status, ...(await r.json()) }));
+    const c1 = await vis({ text: 'I need isolators for a naval cabinet', page: 'index', files: [{ name: 'cabinet.png', type: 'image/png', base64: dpng }, { name: 'data.csv', type: 'text/csv', base64: Buffer.from('shock,50 g\nmounts,4').toString('base64') }] });
+    ok('dampa: first turn asks for the gap', c1.status === 200 && /mass/.test(c1.reply) && /^d[a-z0-9]+$/.test(c1.conversation_id), c1.reply);
+    const sent = seen[0].messages[0].content;
+    ok('dampa: photo sent as image, CSV as text, page context included', sent.some(b => b.type === 'image') && sent.some(b => b.type === 'text' && /50 g/.test(b.text)) && sent.some(b => /\[Page: index/.test(b.text || '')));
+    ok('dampa: system prompt hides prices from visitors, bans competitor names', /Do not state prices/.test(seen[0].system) && /Enidine/.test(seen[0].system));
+    const c2 = await vis({ conversation_id: c1.conversation_id, text: 'It is 280 kg on 4 mounts, BR 3021' });
+    ok('dampa: runs WRI selection tool, then offers RFQ card', c2.status === 200 && c2.tools.join() === 'select_wire_rope_isolator,prepare_rfq' && c2.rfq && c2.rfq.items[0].model === 'AWRI-127-90', c2.tools.join());
+    const toolRes = JSON.stringify(seen.find(b => /tool_result/.test(JSON.stringify(b.messages[b.messages.length - 1]))).messages.slice(-1));
+    ok('dampa: tool result carries real candidates, no price for visitor', /AWRI-127-90/.test(toolRes) && !/list_price_inr/.test(toolRes));
+    const rq2 = await post('/rfq', { line: 'wri', customer: { company: 'Bharat Naval Systems', contact: 'Arun Menon', email: 'arun.menon@bharatnaval.in', phone: '+91 98470 12345' }, items: [{ table: 'wire_rope_isolators', key: 'AWRI-127-90', model: 'AWRI-127-90', qty: 4 }], selection: { case_id: 'DAMPA', summary: { mass: '280 kg' } }, message: 'Prepared with DAMPA', assistant_conversation: c1.conversation_id }, { 'content-type': 'application/json' });
+    const al = await get('/admin/assistant');
+    const row = al.conversations.find(x => x.id === c1.conversation_id);
+    ok('dampa: admin sees conversation, files, cost and linked RFQ', row && row.files === 2 && row.rfq === rq2.number && al.usage.usd > 0, JSON.stringify(row));
+    const tv = await get('/admin/assistant/conv/' + c1.conversation_id);
+    ok('dampa: transcript + stored files', tv.transcript.some(m => m.role === 'tool' && /select_wire_rope_isolator/.test(m.text)) && tv.files.length === 2);
+    const fdl = await fetch(base + '/admin/assistant/file?key=' + encodeURIComponent(tv.files[0].key), { headers: H() });
+    ok('dampa: admin downloads the customer photo', fdl.status === 200 && (await fdl.arrayBuffer()).byteLength > 60);
+    ok('dampa: visitor cannot read the admin view', (await fetch(base + '/admin/assistant')).status === 401);
+    const other = await fetch(base + '/assistant/chat', { method: 'POST', headers: { 'content-type': 'application/json', 'user-agent': 'someone-else' }, body: JSON.stringify({ conversation_id: c1.conversation_id, text: 'hello' }) }).then(r => r.json());
+    ok('dampa: another visitor cannot continue that chat', other.conversation_id !== c1.conversation_id);
+    await put('/admin/settings', { 'assistant.daily_limit_visitor': '2' });
+    const lim = await vis({ text: 'one more' });
+    ok('dampa: daily visitor limit enforced', lim.status === 429 && /Daily limit/.test(lim.error), lim.error);
+    await put('/admin/settings', { 'assistant.enabled': '0' });
+    ok('dampa: switched off in settings', (await (await fetch(base + '/assistant/config')).json()).enabled === false);
+    await put('/admin/settings', { 'assistant.enabled': '0', 'assistant.daily_limit_visitor': '25' });
+    mock.close();
+    }
     console.log(`\n${'='.repeat(56)}\n${pass} passed, ${fail} failed`);
   } catch (e) { console.error('\nERROR', e); fail++; }
   server.close(); fs.rmSync(process.env.IMPACTCAL_STORE, { recursive: true, force: true }); process.exit(fail ? 1 : 0);

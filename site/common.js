@@ -49,6 +49,19 @@ async function loadI18n() {
 }
 function setLang(l) { I18N.lang = l; try { localStorage.setItem('ic_lang', l); } catch {} applyI18n(); document.dispatchEvent(new CustomEvent('langchange')); }
 
+/* ---------- Google tag (GA4): loads only when settings analytics.ga_id is set ---------- */
+window.dataLayer = window.dataLayer || [];
+function gtag() { dataLayer.push(arguments); }
+function track(name, params) { try { gtag('event', name, params || {}); } catch {} }
+(async function loadGtag() {
+  try {
+    const c = await fetch('/api/public/config').then(r => r.json());
+    if (!c.ga_id) return;
+    const s = document.createElement('script'); s.async = true; s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(c.ga_id); document.head.appendChild(s);
+    gtag('js', new Date()); gtag('config', c.ga_id);
+  } catch {}
+})();
+
 /* ---------- header ---------- */
 function renderHeader(active) {
   const u = AUTH.user;
@@ -58,15 +71,19 @@ function renderHeader(active) {
   el.innerHTML = `<a href="index.html"><img src="img/logo.png" alt="ADONI TECH" class="brandmark"></a>
     <div class="sub">ImpactCal<br><span data-t="tagline">Selection &amp; RFQ Suite</span></div>
     <nav>${links.map(([h, k]) => `<a href="${h}" class="${active === k ? 'on' : ''}" data-t="${k}"></a>`).join('')}
+      ${!u || u.role === 'customer' ? `<a href="/dealers" class="dealer-cta ${active === 'nav_dealer' ? 'on' : ''}" data-t="nav_dealer" onclick="track('select_content',{content_type:'dealer_cta',item_id:'header'})"></a>` : ''}
+      ${u && ['admin', 'sales', 'dealer'].includes(u.role) ? `<a href="portal.html" class="${active === 'nav_portal' ? 'on' : ''}" data-t="nav_portal"></a>` : ''}
       ${u && (u.role === 'admin' || u.role === 'sales') ? `<a href="admin.html" class="${active === 'nav_admin' ? 'on' : ''}" data-t="nav_admin"></a>` : ''}
       <select class="lang" id="langSel">${I18N.langs.map(l => `<option value="${l}" ${l === I18N.lang ? 'selected' : ''}>${LANG_NAMES[l] || l}</option>`).join('')}</select>
-      ${u ? `<button id="logoutBtn" title="${esc(u.email)}"><span class="pill ${u.role === 'admin' ? 'brand' : ''}">${esc(u.role)}</span> ${esc(u.name || u.email.split('@')[0])} ✕</button>` : `<a href="login.html?next=${encodeURIComponent(location.pathname.split('/').pop() || 'index.html')}" data-t="nav_login"></a>`}
+      ${u ? `<button id="logoutBtn" title="${esc(u.email)}"><span class="pill ${u.role === 'admin' ? 'brand' : u.role === 'dealer' ? 'ok' : ''}">${esc(u.role)}</span> ${esc(u.name || u.email.split('@')[0])} ✕</button>` : `<a href="login.html?next=${encodeURIComponent(location.pathname.split('/').pop() || 'index.html')}" data-t="nav_login"></a>`}
     </nav>`;
   $('#langSel').onchange = e => setLang(e.target.value);
   const lb = $('#logoutBtn'); if (lb) lb.onclick = () => AUTH.logout();
   applyI18n(el);
 }
+function loadDampa() { if (document.querySelector('script[data-dampa]')) return; const s = document.createElement('script'); s.src = '/dampa.js?v=1'; s.defer = true; s.dataset.dampa = '1'; document.head.appendChild(s); }
 async function bootCommon(active) {
+  if (active !== 'nav_login') loadDampa();
   await loadI18n();
   renderHeader(active);
   applyI18n();

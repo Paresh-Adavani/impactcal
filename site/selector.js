@@ -197,6 +197,7 @@ async function sendRfq() {
     await held;
     overlay('done', t('sent_title', { n: r.number }), (r.ack && r.ack.ok) ? t('sent_ack') : t('sent_noack'), true);
     $('#rfqOut').innerHTML = `<div class="note ok"><b>${t('sent_title', { n: r.number })}</b> ${t('sent_note')}</div>`;
+    if (r.quotation_id && AUTH.user && ['dealer', 'sales'].includes(AUTH.user.role)) { setTimeout(() => { location.href = 'approve.html?id=' + encodeURIComponent(r.quotation_id); }, 1600); return; }
     setTimeout(() => { $('#sentOverlay').hidden = true; startOver(r.number); }, 4200);
   } catch (e) { await held; overlay('failed', t('send_failed'), e.message, true); }
 }
@@ -213,3 +214,6 @@ $('#pgstin').addEventListener('blur', async () => { const g = $('#pgstin').value
   $('#gstinMsg').innerHTML = v.ok ? `<div class="note ok">${t('gstin_ok')} — ${esc(v.state_name)} (${v.state_code}), PAN ${esc(v.pan)}</div>` : `<div class="note bad">${t('gstin_bad')}: ${esc(v.reason)}.` + (v.suggestions && v.suggestions.length ? ` ${t('did_you_mean')} <b>${esc(v.suggestions[0])}</b>?` : '') + `</div>`; });
 CASE = S.case || null;
 boot().catch(e => document.body.insertAdjacentHTML('afterbegin', `<div class="note bad">${esc(e.message)}</div>`));
+
+/* DAMPA (the AI assistant) reads what the user has entered on this page */
+window.IC_CONTEXT = () => { let d = null; try { d = CASE ? duty() : null; } catch {} return { group: GROUP, case_id: CASE, duty: d }; };

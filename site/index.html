@@ -18,6 +18,19 @@
       <a class="pick" href="rubber.html"><span class="thumb"><img src="img/series/line-rubber.svg" alt=""></span><b data-t="line_rubber">Rubber anti-vibration mounts</b><small data-t="line_rubber_sub">Gensets, compressors, HVAC, pumps, presses — moulded rubber mounts by load &amp; disturbing frequency</small></a>
     </div>
   </section>
+  <section class="card" id="dampaBox" data-dampa-box hidden style="display:flex;gap:18px;align-items:center;flex-wrap:wrap;border:2px solid #F57C00;background:linear-gradient(135deg,#fff,#FFF7EF)">
+    <svg viewBox="0 0 48 48" width="64" height="64" aria-hidden="true" style="flex:none;background:#fff;border-radius:50%;box-shadow:0 4px 14px rgba(27,49,96,.18)"><path d="M6 30 Q12 18 18 30 T30 30 T42 30" fill="none" stroke="#F57C00" stroke-width="3.2" stroke-linecap="round"/><path d="M6 21 Q12 13 18 21 T30 21 T42 21" fill="none" stroke="#1B3160" stroke-width="2.6" stroke-linecap="round" opacity=".85"/><circle cx="24" cy="36" r="2.6" fill="#1B3160"/></svg>
+    <div style="flex:1;min-width:230px"><div style="color:#B45400;font-size:12.5px;font-weight:700;letter-spacing:.5px">NEW · AI ENGINEER</div>
+      <h3 style="margin:2px 0">Meet DAMPA — your impact &amp; vibration engineer</h3>
+      <p class="muted" style="margin:0">Describe your crane, machine or equipment in plain words — or send a photo, drawing, datasheet or Excel sheet. DAMPA picks out the data, asks for what is missing, runs the ADONI TECH selection and prepares your quotation request.</p></div>
+    <a class="btn" href="#" data-dampa-open hidden style="font-weight:700;padding:12px 20px;border-radius:10px">Ask DAMPA</a>
+  </section>
+  <section id="dealerBox" style="background:linear-gradient(135deg,#132447,#1B3160 60%,#27457F);color:#fff;border-radius:16px;padding:22px 24px;margin-bottom:16px;display:flex;gap:18px;align-items:center;flex-wrap:wrap">
+    <div style="flex:1;min-width:240px"><div style="color:#FFB36B;font-size:12.5px;font-weight:700;letter-spacing:.5px" data-t="dealer_kicker">DEALERS WANTED</div>
+      <h3 style="color:#fff;font-size:21px;margin:4px 0" data-t="dealer_title">Grow your business with ADONI TECH</h3>
+      <p style="margin:0;color:#D8E1F0" data-t="dealer_sub">Sell Made-in-India crane buffers, shock absorbers and vibration isolators. Quote in your own name with this software — your customers stay yours.</p><p id="dealerCities" style="margin:6px 0 0;color:#FFD2A6;font-size:13.5px"></p></div>
+    <a class="btn" href="/dealers" style="background:#F57C00;color:#fff;font-weight:700;padding:12px 20px;border-radius:10px;text-decoration:none" data-t="dealer_btn" onclick="track('select_content',{content_type:'dealer_cta',item_id:'home_banner'})">Become a dealer</a>
+  </section>
   <section class="card">
     <div class="grid" style="grid-template-columns:repeat(auto-fit,minmax(240px,1fr))">
       <div><h3 data-t="how_1">1 · Calculate</h3><p class="muted" data-t="how_1_sub">Enter mass, speed, cycles and the application picture. Energies, effective mass, reaction force and deceleration follow the Adoni Tech catalogue method.</p></div>
@@ -31,8 +44,8 @@
   </section>
 </div>
 <footer>ADONI TECH · Satara MIDC, Maharashtra, India · GSTIN 27AHAPA3555B1Z1 · <a href="wri/knowledge.html">Knowledge base</a></footer>
-<script src="common.js?v=2"></script>
+<script src="common.js?v=6"></script>
 <script>
-bootCommon('nav_home').then(() => { const u = AUTH.user; if (u && (u.role === 'admin' || u.role === 'sales')) $('#salesBox').hidden = false; });
+bootCommon('nav_home').then(() => { fetch('/api/dealer/program').then(r => r.json()).then(p => { if (p.cities && p.cities.length) $('#dealerCities').textContent = '📍 Now appointing in ' + p.cities.slice(0, 8).join(' · ') + (p.cities.length > 8 ? ' and more' : ''); }).catch(() => {}); const u = AUTH.user; if (u && (u.role === 'admin' || u.role === 'sales' || u.role === 'dealer')) $('#salesBox').hidden = false; });
 </script>
 </body></html>
