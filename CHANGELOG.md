@@ -1,4 +1,14 @@
 # Changelog
+## 2.9.2 — 27 Sep 2026 (rubber mount selector: running speed unit, examples)
+- **Running speed now has an rpm / Hz switch** and shows the other unit live ("= 50.0 Hz"). Below 300 rpm it warns that the number may be a frequency in Hz.
+- **Panel / cabinet preset fixed:** it filled 50 into the rpm box (read as 50 rpm, so fn ≤ 0.34 Hz and no result). It now fills 3000 rpm (= 50 Hz).
+- Field units (kg, %, rpm) no longer disappear when the page language loads.
+- **Shock check:** a warning appears when "Equipment can take" is equal to or above the bump peak, because then no mount is needed for the bump.
+- **No-result message** is now specific to rubber mounts, and says when the running speed is too slow for any rubber mount.
+- **13 worked examples** ("Try an example"), one per mount type. Each fills the inputs, ticks that mount type and runs the selection.
+- **Fix: 6 mount types could never be selected** (OVTX, Rubber B, 6JX, SH, WH/WHG and part of the reference data). Catalogue frequencies written as "8±1" were read as blank. They are now read as the nominal value. SH mounts use the catalogue static deflection (range mid-value).
+- Ticked mount types are now filtered on the server before the top-40 cut, so a ticked type is no longer hidden behind 40 other results.
+- Load band shows "≤ 100" instead of "—–100" when the catalogue gives only a maximum.
 ## 2.9.1 — 26 Sep 2026 (wire rope isolator lug material)
 - The standard build is now **EN8D lugs, Arkor treated**, with SS 304 wire rope and normal duty. **EN8D + Zinc plated** lugs are also offered at list price.
 - Choices:

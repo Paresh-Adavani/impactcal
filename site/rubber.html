@@ -4,29 +4,31 @@
 <link rel="icon" href="favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
 <link rel="stylesheet" href="style.css?v=2">
+<style>.examples{margin:4px 0 14px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;font-size:13px}.examples button{font:inherit;font-size:12.5px;padding:5px 11px;border-radius:999px;border:1px solid #C7CFD9;background:#fff;color:var(--navy);cursor:pointer}.examples button:hover,.examples button.on{border-color:var(--orange);background:#FFF4E8}.hint-live{display:block;margin-top:4px;font-size:12.5px;color:#5A6B80;min-height:1em}.hint-live.warn{color:#B25E00;font-weight:500}</style>
 </head><body>
 <header><div class="wrap"></div></header>
 <div class="wrap">
   <section class="card">
     <h3 data-t="rub_title">Rubber anti-vibration mounts</h3>
     <p class="hint" data-t="rub_hint">Pick the machine type, enter the supported mass, number of mounts and the disturbing frequency (running speed). The selector finds mounts whose load band and natural frequency give the isolation you want.</p>
+    <div class="examples"><b data-t="rub_examples">Try an example:</b> <span id="rubExamples"></span></div>
     <div class="picker" id="rubApps"></div>
     <div class="grid" style="margin-top:16px">
-      <div><label data-t="f_mass">Supported mass <span class="muted">kg</span></label><input id="mass" type="number" step="any" inputmode="decimal" value="250"></div>
+      <div><label><span data-t="f_mass">Supported mass</span> <span class="muted">kg</span></label><input id="mass" type="number" step="any" inputmode="decimal" value="250"></div>
       <div><label data-t="f_mounts">Number of mounts</label><input id="mounts" type="number" min="1" value="4"></div>
-      <div><label data-t="f_rpm">Running speed <span class="muted">rpm</span></label><input id="rpm" type="number" step="any" value="1500" placeholder="empty = bump only"></div>
-      <div><label data-t="f_iso">Isolation wanted <span class="muted">%</span></label><select id="iso"><option>80</option><option>85</option><option selected>90</option><option>95</option></select></div>
-      <div><label data-t="f_cg">CG load factor <span class="muted">1.0 = central</span></label><input id="cg" type="number" step="0.05" value="1.0"></div>
+      <div><label><span data-t="f_rpm">Running speed</span> <span class="muted" id="rpmUnitLbl">rpm</span></label><div style="display:flex;gap:6px"><input id="rpm" type="number" step="any" value="1500" placeholder="empty = bump only"><select id="rpmUnit" style="width:90px;flex:none" title="unit of the running speed"><option value="rpm">rpm</option><option value="hz">Hz</option></select></div><small id="rpmHint" class="hint-live"></small></div>
+      <div><label><span data-t="f_iso">Isolation wanted</span> <span class="muted">%</span></label><select id="iso"><option>80</option><option>85</option><option selected>90</option><option>95</option></select></div>
+      <div><label><span data-t="f_cg">CG load factor</span> <span class="muted">1.0 = central</span></label><input id="cg" type="number" step="0.05" value="1.0"></div>
     </div>
     <details id="shockBox" style="margin-top:18px;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:#fff">
       <summary style="cursor:pointer;font-weight:600;color:var(--navy)"><span data-t="bump_title">Shock / bump check</span> <span class="muted" style="font-weight:400" data-t="bump_opt">(optional — transport, road or ship bumps, drops, test standards)</span></summary>
       <p class="hint" data-t="bump_hint">Enter the bump the equipment must survive and how much it can take. The selector runs the pulse through every mount and shows the g reaching the equipment and the travel needed. Leave the running speed empty to select for the bump alone.</p>
       <div class="grid">
-        <div><label data-t="f_bump_g">Bump peak <span class="muted">g</span></label><input id="bg" type="number" step="any" placeholder="e.g. 15"></div>
-        <div><label data-t="f_bump_ms">Pulse duration <span class="muted">ms</span></label><input id="bms" type="number" step="any" placeholder="e.g. 11"></div>
+        <div><label><span data-t="f_bump_g">Bump peak (g)</span></label><input id="bg" type="number" step="any" placeholder="e.g. 15"></div>
+        <div><label><span data-t="f_bump_ms">Pulse duration (ms)</span></label><input id="bms" type="number" step="any" placeholder="e.g. 11"></div>
         <div><label data-t="f_bump_shape">Pulse shape</label><select id="bshape"><option value="half-sine">Half-sine</option><option value="rect">Rectangular</option><option value="sawtooth">Terminal-peak sawtooth</option></select></div>
-        <div><label data-t="f_bump_frag">Equipment can take <span class="muted">g (fragility)</span></label><input id="bfrag" type="number" step="any" placeholder="e.g. 10"></div>
-        <div><label data-t="f_bump_sway">Free travel around it <span class="muted">mm</span></label><input id="bsway" type="number" step="any" placeholder="e.g. 25"></div>
+        <div><label><span data-t="f_bump_frag">Equipment can take (g)</span> <span class="muted">fragility</span></label><input id="bfrag" type="number" step="any" placeholder="e.g. 10"><small id="fragHint" class="hint-live"></small></div>
+        <div><label><span data-t="f_bump_sway">Free travel around it (mm)</span></label><input id="bsway" type="number" step="any" placeholder="e.g. 25"></div>
       </div>
     </details>
     <h3 style="margin-top:18px" data-t="mount_type_title">Mount type</h3>
@@ -73,14 +75,58 @@ const APPS = [
   ['hvac', 'rub_hvac', 'rub_hvac_sub', '<rect x="40" y="30" width="160" height="90" rx="6" fill="#fff"/><circle cx="120" cy="75" r="30" stroke="#F57C00"/><path d="M120 45 v60 M90 75 h60" stroke="#F57C00"/><rect x="60" y="120" width="12" height="12" fill="#F57C00"/><rect x="170" y="120" width="12" height="12" fill="#F57C00"/>', 960],
   ['pump', 'rub_pump', 'rub_pump_sub', '<circle cx="90" cy="80" r="32" fill="#fff"/><rect x="122" y="60" width="70" height="40" rx="6" fill="#fff"/><path d="M90 48 v-20 h40" stroke="#F57C00"/><rect x="70" y="112" width="12" height="14" fill="#F57C00"/><rect x="170" y="100" width="12" height="14" fill="#F57C00"/>', 2900],
   ['press', 'rub_press', 'rub_press_sub', '<rect x="60" y="20" width="120" height="30" fill="#fff"/><rect x="110" y="50" width="20" height="30" fill="#F57C00"/><rect x="70" y="80" width="100" height="30" fill="#fff"/><rect x="60" y="110" width="12" height="14" fill="#F57C00"/><rect x="170" y="110" width="12" height="14" fill="#F57C00"/>', 300],
-  ['panel', 'rub_panel', 'rub_panel_sub', '<rect x="70" y="20" width="100" height="100" rx="4" fill="#fff"/><circle cx="120" cy="60" r="10" stroke="#F57C00"/><rect x="90" y="85" width="60" height="6" fill="#F57C00"/><rect x="80" y="120" width="12" height="12" fill="#F57C00"/><rect x="150" y="120" width="12" height="12" fill="#F57C00"/>', 50],
+  ['panel', 'rub_panel', 'rub_panel_sub', '<rect x="70" y="20" width="100" height="100" rx="4" fill="#fff"/><circle cx="120" cy="60" r="10" stroke="#F57C00"/><rect x="90" y="85" width="60" height="6" fill="#F57C00"/><rect x="80" y="120" width="12" height="12" fill="#F57C00"/><rect x="150" y="120" width="12" height="12" fill="#F57C00"/>', 3000],
 ];
+/* worked examples - one per mount type, each checked to select that type (inputs in MKS; speed in rpm) */
+const EXAMPLES = [
+  { fam: 'AT-RCM-SS cylindrical mount, studs both ends', label: 'Diesel genset 1200 kg', app: 'genset', mass: 1200, mounts: 4, rpm: 1500, iso: 90 },
+  { fam: 'AT-RCM-SF cylindrical mount, stud + tapped hole', label: 'Screw compressor 600 kg', app: 'compressor', mass: 600, mounts: 4, rpm: 1450, iso: 85 },
+  { fam: 'AT-RCM-FF cylindrical mount, tapped holes both ends', label: 'AHU 1500 kg on 6', app: 'hvac', mass: 1500, mounts: 6, rpm: 1440, iso: 85 },
+  { fam: 'AT-RCM-SU cylindrical mount, stud one end', label: 'Pump set 300 kg', app: 'pump', mass: 300, mounts: 4, rpm: 2900, iso: 90 },
+  { fam: 'AT-RCM-F0 cylindrical buffer, tapped hole one end', label: 'Panel with transformer 200 kg', app: 'panel', mass: 200, mounts: 4, rpm: 3000, iso: 90 },
+  { fam: 'Rubber 6JX shock absorber', label: 'Genset on base frame 1500 kg', app: 'genset', mass: 1500, mounts: 6, rpm: 1500, iso: 85 },
+  { fam: 'Rubber E/EA shock absorber', label: '2-pole motor-fan 400 kg', app: 'pump', mass: 400, mounts: 4, rpm: 3000, iso: 80 },
+  { fam: 'Rubber BE shock absorber', label: 'Control box 12 kg', app: 'panel', mass: 12, mounts: 4, rpm: 3000, iso: 80 },
+  { fam: 'Rubber B reinforced shock absorber', label: 'Instrument / lamp 3 kg', app: 'panel', mass: 3, mounts: 4, rpm: 3000, iso: 80 },
+  { fam: 'Rubber WH/WHG isolator', label: 'Marine pump 1200 kg', app: 'pump', mass: 1200, mounts: 4, rpm: 1500, iso: 85 },
+  { fam: 'Rubber SH isolator', label: 'Marine auxiliary 4000 kg on 6', app: 'genset', mass: 4000, mounts: 6, rpm: 3000, iso: 80 },
+  { fam: 'OVTX all-metal (metal rubber) isolator', label: 'Ship rack 300 kg + 15 g bump', app: 'panel', mass: 300, mounts: 4, rpm: 3000, iso: 90, bump: [15, 11, 'half-sine', 8, 25] },
+  { fam: 'OVTN rubber-coated anti-impact isolator', label: 'Vehicle electronics 60 kg, bump only', app: 'panel', mass: 60, mounts: 4, rpm: '', iso: 90, bump: [15, 11, 'half-sine', 10, 25] },
+];
+let EX = null;
+function drawExamples() {
+  $('#rubExamples').innerHTML = EXAMPLES.map((e, i) => `<button type="button" data-i="${i}" class="${EX === i ? 'on' : ''}" title="${esc(e.fam)}">${esc(e.label)}</button>`).join(' ');
+  $$('#rubExamples button').forEach(b => b.onclick = () => loadExample(Number(b.dataset.i)));
+}
+function loadExample(i) {
+  const e = EXAMPLES[i]; EX = i; APP = e.app;
+  $('#mass').value = e.mass; $('#mounts').value = e.mounts; $('#rpm').value = e.rpm; $('#rpmUnit').value = 'rpm'; $('#iso').value = String(e.iso); $('#cg').value = '1.0';
+  const [g, ms, shape, frag, sway] = e.bump || ['', '', 'half-sine', '', ''];
+  $('#bg').value = g; $('#bms').value = ms; $('#bshape').value = shape; $('#bfrag').value = frag; $('#bsway').value = sway; $('#shockBox').open = !!e.bump;
+  TYPES = new Set([e.fam]); drawApps(); drawTypes(); drawExamples(); liveHints();
+  calc().catch(err => alert(err.message));
+}
+/* running speed -> Hz, whichever unit the user picked */
+function speedHz() { const v = Number($('#rpm').value); if (!(v > 0)) return 0; return $('#rpmUnit').value === 'hz' ? v : v / 60; }
+function liveHints() {
+  const v = Number($('#rpm').value), hz = speedHz(), unit = $('#rpmUnit').value, h = $('#rpmHint');
+  $('#rpmUnitLbl').textContent = unit === 'hz' ? 'Hz' : 'rpm';
+  h.className = 'hint-live';
+  if (!(v > 0)) h.textContent = t('rpm_empty');
+  else if (unit === 'rpm' && v < 300) { h.className = 'hint-live warn'; h.textContent = t('rpm_low_warn', { v, rpm: v * 60 }); }
+  else h.textContent = unit === 'hz' ? `= ${nf(hz * 60, 0)} rpm` : `= ${nf(hz, 1)} Hz`;
+  const bg = Number($('#bg').value), fr = Number($('#bfrag').value), f = $('#fragHint');
+  f.className = 'hint-live'; f.textContent = '';
+  if (bg > 0 && fr > 0 && fr >= bg) { f.className = 'hint-live warn'; f.textContent = t('frag_ge_bump', { fr, bg }); }
+}
+['rpm', 'rpmUnit', 'bg', 'bfrag'].forEach(id => ['input', 'change'].forEach(ev => $('#' + id).addEventListener(ev, liveHints)));
+$('#rpmUnit').addEventListener('change', () => { const v = Number($('#rpm').value); if (v > 0) $('#rpm').value = $('#rpmUnit').value === 'hz' ? +(v / 60).toFixed(2) : Math.round(v * 60); liveHints(); });
 const nf = (v, d = 1) => v == null || !isFinite(v) ? '—' : Number(v).toFixed(d);
 let RES = null, CHOSEN = null, PRICES = false, APP = 'genset', FAMILIES = [], TYPES = new Set();
 const icon = b => `<svg viewBox="0 0 240 150" fill="none" stroke="#1B3160" stroke-width="3" stroke-linejoin="round" style="max-height:92px">${b}</svg>`;
 function drawApps() {
   $('#rubApps').innerHTML = APPS.map(a => `<button class="pick ${a[0] === APP ? 'on' : ''}" data-app="${a[0]}"><span class="thumb">${icon(a[3])}</span><b>${esc(t(a[1]))}</b><small>${esc(t(a[2]))}</small></button>`).join('');
-  $$('#rubApps .pick').forEach(b => b.onclick = () => { APP = b.dataset.app; const a = APPS.find(x => x[0] === APP); $('#rpm').value = a[4]; drawApps(); });
+  $$('#rubApps .pick').forEach(b => b.onclick = () => { APP = b.dataset.app; const a = APPS.find(x => x[0] === APP); $('#rpm').value = a[4]; $('#rpmUnit').value = 'rpm'; EX = null; drawApps(); drawExamples(); liveHints(); });
 }
 function drawTypes() {
   $('#mountTypes').innerHTML = FAMILIES.map(f => `<button class="pick ${TYPES.has(f.family) ? 'on' : ''}" data-fam="${esc(f.family)}" title="${esc(f.type)}"><span class="thumb"><img src="${esc(f.image)}" alt=""></span><b>${esc(f.family.replace(/ shock absorber| isolator/i, ''))}</b><small>${esc(f.type)} · ${f.n} ${t('models')}</small></button>`).join('');
@@ -92,7 +138,7 @@ async function loadTypes() {
     FAMILIES = [...m.values()].sort((a, b) => b.family.startsWith('AT-RCM') - a.family.startsWith('AT-RCM')); drawTypes(); } catch (e) { console.warn('types', e.message); }
 }
 async function calc() {
-  const body = { application: APP, mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), disturbing_hz: Number($('#rpm').value) / 60, isolation_pct: Number($('#iso').value), cg_factor: Number($('#cg').value) };
+  const body = { application: APP, mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), disturbing_hz: speedHz(), isolation_pct: Number($('#iso').value), cg_factor: Number($('#cg').value), families: [...TYPES] };
   const bg = Number($('#bg').value), bms = Number($('#bms').value);
   if (bg > 0 || bms > 0) { if (!(bg > 0 && bms > 0)) { alert(t('bump_need')); $('#shockBox').open = true; return; }
     body.shock = { peak_g: bg, pulse_ms: bms, shape: $('#bshape').value, fragility_g: Number($('#bfrag').value) || null, sway_mm: Number($('#bsway').value) || null }; }
@@ -104,8 +150,8 @@ async function calc() {
   $('#reqOut').innerHTML = `<span class="pill">W = ${nf(r.W_kg)} kg / mount</span> ${r.fn_req_hz ? `<span class="pill">fn ≤ ${nf(r.fn_req_hz, 2)} Hz${r.fn_governed_by === 'shock' ? ' (bump)' : ''}</span> <span class="pill">δ ≥ ${nf(r.d_req_mm)} mm</span> <span class="pill">k ≤ ${nf(r.k_req_n_mm, 0)} N/mm</span>` : ''}`
     + (S ? `<div class="note ${S.feasible ? 'blue' : 'bad'}" style="margin-top:8px"><b>Bump ${nf(S.peak_g, 0)} g / ${nf(S.pulse_ms, 1)} ms ${esc(S.shape)}</b> — velocity change ${nf(S.dv_m_s, 2)} m/s${S.T != null ? ` · needs ${nf(S.T * 100, 0)} % transmissibility, fn ≤ ${nf(S.fn_max_hz, 1)} Hz, about ${nf(S.stroke_linear_mm, 0)} mm travel (ideal floor ${nf(S.stroke_floor_mm, 0)} mm)` : ''}.<br>${esc(S.verdict.charAt(0).toUpperCase() + S.verdict.slice(1))}.${!S.feasible ? ' ' + t('bump_options') : ''}</div>` : '');
   $$('.shock-col').forEach(x => x.classList.toggle('hidden', !S));
-  $('#tbl tbody').innerHTML = RES.candidates.length ? RES.candidates.map((c, i) => { const p = c.product; return `<tr data-i="${i}"><td><input type="radio" name="pick"></td><td><b>${esc(p.model)}</b></td><td><div style="display:flex;gap:8px;align-items:center;min-width:180px"><img src="${esc(p.image || 'img/series/RUBBER.svg')}" alt="" style="height:44px;width:70px;object-fit:contain;background:#F7F9FC;border-radius:6px"><small>${esc(p.family)}<br><span class="muted">${esc(p.type || '')}</span></small></div></td><td class="n">${p.load_min_kg ?? '—'}–${p.load_max_kg ?? '—'}</td><td class="n">${c.fn_hz ? c.fn_hz.toFixed(1) : '—'}</td><td class="n">${r.vibration ? nf(c.r, 2) : '—'}</td><td class="n">${r.vibration ? nf(c.isolation_pct, 0) : '—'}</td><td class="n">${c.static_deflection_mm ? c.static_deflection_mm.toFixed(1) : '—'}</td><td class="n">${(c.util * 100).toFixed(0)}%</td>${S ? `<td class="n">${c.shock ? nf(c.shock.a_out_g, 1) : '—'}</td><td class="n">${c.shock ? nf(c.shock.travel_mm, 1) : '—'}</td>` : ''}${PRICES ? `<td class="n price">${p.price_inr != null ? money(p.price_inr, 'INR') : '—'}</td><td class="n">${p.lead_time_days || '—'} d</td>` : ''}<td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`; }).join('')
-    : `<tr><td colspan="12"><div class="note bad">${t('no_result')}</div></td></tr>`;
+  $('#tbl tbody').innerHTML = RES.candidates.length ? RES.candidates.map((c, i) => { const p = c.product; return `<tr data-i="${i}"><td><input type="radio" name="pick"></td><td><b>${esc(p.model)}</b></td><td><div style="display:flex;gap:8px;align-items:center;min-width:180px"><img src="${esc(p.image || 'img/series/RUBBER.svg')}" alt="" style="height:44px;width:70px;object-fit:contain;background:#F7F9FC;border-radius:6px"><small>${esc(p.family)}<br><span class="muted">${esc(p.type || '')}</span></small></div></td><td class="n">${p.load_min_kg != null ? p.load_min_kg + '–' : '≤ '}${p.load_max_kg ?? '—'}</td><td class="n">${c.fn_hz ? c.fn_hz.toFixed(1) : '—'}</td><td class="n">${r.vibration ? nf(c.r, 2) : '—'}</td><td class="n">${r.vibration ? nf(c.isolation_pct, 0) : '—'}</td><td class="n">${c.static_deflection_mm ? c.static_deflection_mm.toFixed(1) : '—'}</td><td class="n">${(c.util * 100).toFixed(0)}%</td>${S ? `<td class="n">${c.shock ? nf(c.shock.a_out_g, 1) : '—'}</td><td class="n">${c.shock ? nf(c.shock.travel_mm, 1) : '—'}</td>` : ''}${PRICES ? `<td class="n price">${p.price_inr != null ? money(p.price_inr, 'INR') : '—'}</td><td class="n">${p.lead_time_days || '—'} d</td>` : ''}<td>${c.flags.map(f => `<span class="pill warn">${esc(f)}</span>`).join(' ') || `<span class="pill ok">${t('clear')}</span>`}</td></tr>`; }).join('')
+    : `<tr><td colspan="14"><div class="note bad">${r.vibration && r.fn_req_hz && r.fn_req_hz < 3 ? t('rub_fn_too_low', { fn: nf(r.fn_req_hz, 2), hz: nf(speedHz(), 2) }) : t('rub_no_result')}</div></td></tr>`;
   $$('#tbl tbody tr').forEach(tr => tr.onclick = () => { $$('#tbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); CHOSEN = RES.candidates[tr.dataset.i]; $('#toRfq').disabled = $('#dlReport').disabled = false; });
   $('#res').classList.remove('hidden'); $('#res').scrollIntoView({ behavior: 'smooth' });
 }
@@ -133,8 +179,8 @@ function contactOk() {
   $('#who').scrollIntoView({ behavior: 'smooth', block: 'center' }); setTimeout(() => $('#' + miss[0]).focus(), 400);
   return false;
 }
-function selectionBlock() { const p = CHOSEN.product, r = RES.required; return { case_id: 'RUBBER', inputs: { mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), rpm: Number($('#rpm').value), isolation_pct: Number($('#iso').value), ...(r.shock ? { shock: { peak_g: r.shock.peak_g, pulse_ms: r.shock.pulse_ms, shape: r.shock.shape, fragility_g: r.shock.fragility_g, sway_mm: r.shock.sway_mm } } : {}) }, chosen: p.model,
-  summary: { 'Application': t(APPS.find(a => a[0] === APP)[1]), 'Mass': $('#mass').value + ' kg on ' + $('#mounts').value + ' mounts', ...(r.vibration ? { 'Disturbing frequency': (Number($('#rpm').value) / 60).toFixed(1) + ' Hz' } : {}), 'Load per mount': nf(r.W_kg) + ' kg', ...(r.fn_req_hz ? { 'Required fn': '≤ ' + nf(r.fn_req_hz, 2) + ' Hz' } : {}), 'Selected fn': nf(CHOSEN.fn_hz, 2) + ' Hz', ...(r.vibration ? { 'Isolation': nf(CHOSEN.isolation_pct, 0) + ' %' } : {}),
+function selectionBlock() { const p = CHOSEN.product, r = RES.required; return { case_id: 'RUBBER', inputs: { mass_kg: Number($('#mass').value), mounts: Number($('#mounts').value), rpm: +(speedHz() * 60).toFixed(1), isolation_pct: Number($('#iso').value), ...(r.shock ? { shock: { peak_g: r.shock.peak_g, pulse_ms: r.shock.pulse_ms, shape: r.shock.shape, fragility_g: r.shock.fragility_g, sway_mm: r.shock.sway_mm } } : {}) }, chosen: p.model,
+  summary: { 'Application': t(APPS.find(a => a[0] === APP)[1]), 'Mass': $('#mass').value + ' kg on ' + $('#mounts').value + ' mounts', ...(r.vibration ? { 'Disturbing frequency': speedHz().toFixed(1) + ' Hz (' + (speedHz() * 60).toFixed(0) + ' rpm)' } : {}), 'Load per mount': nf(r.W_kg) + ' kg', ...(r.fn_req_hz ? { 'Required fn': '≤ ' + nf(r.fn_req_hz, 2) + ' Hz' } : {}), 'Selected fn': nf(CHOSEN.fn_hz, 2) + ' Hz', ...(r.vibration ? { 'Isolation': nf(CHOSEN.isolation_pct, 0) + ' %' } : {}),
     ...(r.shock ? { 'Bump': `${r.shock.peak_g} g / ${r.shock.pulse_ms} ms ${r.shock.shape}, Δv ${nf(r.shock.dv_m_s, 2)} m/s`, ...(r.shock.fragility_g ? { 'Equipment limit': r.shock.fragility_g + ' g' } : {}), ...(r.shock.sway_mm ? { 'Free travel': r.shock.sway_mm + ' mm' } : {}), ...(CHOSEN.shock ? { 'Bump reaching equipment': nf(CHOSEN.shock.a_out_g, 1) + ' g', 'Bump travel': nf(CHOSEN.shock.travel_mm, 1) + ' mm' } : {}) } : {}) } }; }
 $('#dlReport').onclick = async () => {
   if (!CHOSEN || !contactOk()) return;
@@ -165,6 +211,6 @@ $('#sendRfq').onclick = async () => {
     setTimeout(() => { $('#sentOverlay').hidden = true; startOver(out.number); }, 4200);
   } catch (e) { await held; overlay('failed', t('send_failed'), e.message, true); $('#rfqOut').innerHTML = `<div class="note bad">${esc(e.message)}</div>`; }
 };
-bootCommon('nav_rubber').then(async () => { drawApps(); loadTypes(); const me = AUTH.user; PRICES = !!me && ['admin', 'sales', 'dealer'].includes(me.role); if (PRICES) $$('.price-col').forEach(e => e.classList.remove('hidden')); document.addEventListener('langchange', () => { drawApps(); drawTypes(); }); });
+bootCommon('nav_rubber').then(async () => { drawApps(); drawExamples(); liveHints(); loadTypes(); const me = AUTH.user; PRICES = !!me && ['admin', 'sales', 'dealer'].includes(me.role); if (PRICES) $$('.price-col').forEach(e => e.classList.remove('hidden')); document.addEventListener('langchange', () => { drawApps(); drawTypes(); drawExamples(); liveHints(); }); });
 </script>
 </body></html>
