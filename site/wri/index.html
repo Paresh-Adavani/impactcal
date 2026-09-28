@@ -7,18 +7,18 @@
 <meta name="description" content="Free wire rope isolator selection software. Calculate natural frequency, shock transmissibility and stroke to JSS 55555, MIL-STD-810H, BR 3021 and MIL-S-901D. 114 AWRI &amp; ACWRI models, competitor cross-reference, downloadable engineering report and instant RFQ. By Adonitech, ISO certified manufacturer, India.">
 <meta name="keywords" content="wire rope isolator, wire rope isolator selection, wire rope isolator calculator, vibration isolator selection software, shock isolator calculator, anti vibration mount selection, wire rope mount, JSS 55555, MIL-STD-810H, MIL-S-901D, BR 3021, naval shock isolation, transmissibility calculator, natural frequency calculator, AWRI, ACWRI, Adonitech, wire rope isolator India, wire rope isolator manufacturer, helical wire rope isolator, cable mount isolator">
 <meta name="author" content="Adoni Tech">
-<link rel="canonical" href="https://impactcal.netlify.app/wri/">
+<link rel="canonical" href="https://impactcal.adonitech.co/wri/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Wire Rope Isolator Selector &amp; Calculator — Adonitech AWRI">
 <meta property="og:description" content="Free engineering-grade wire rope isolator selection tool. 114 models, naval &amp; military standards, shock time-history solver, instant RFQ. Also available as a free Android app.">
-<meta property="og:url" content="https://awri-selector.netlify.app/">
-<meta property="og:image" content="https://awri-selector.netlify.app/icon-512.png">
+<meta property="og:url" content="https://impactcal.adonitech.co/wri/">
+<meta property="og:image" content="https://impactcal.adonitech.co/wri/icon-512.png">
 <meta name="twitter:card" content="summary_large_image">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"SoftwareApplication","name":"AWRI Wire Rope Isolator Selector","applicationCategory":"EngineeringApplication","operatingSystem":"Android, Web","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},
 "description":"Wire rope isolator selection and calculation software for shock and vibration isolation. Supports JSS 55555, MIL-STD-810H, MIL-S-901D, BR 3021, MIL-STD-167, IEC 60068 and ASTM D4169.",
 "publisher":{"@type":"Organization","name":"Adoni Tech","url":"https://www.wireropeisolater.com/","email":"sales@adonitech.co.in","address":{"@type":"PostalAddress","addressLocality":"Satara & Pune","addressRegion":"Maharashtra","addressCountry":"IN"}},
-"downloadUrl":"https://awri-selector.netlify.app/AWRI_Selector.apk","softwareVersion":"1.0"}
+"downloadUrl":"https://impactcal.adonitech.co/wri/AWRI_Selector.apk","softwareVersion":"1.0"}
 </script>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -343,9 +343,9 @@ tr:hover td{background:var(--blue-xl)}
   </div>
   <div class="card">
     <h2>Build options — for your RFQ</h2>
-    <div class="sub">Material combination for the quoted AWRI build. Standard: EN8D lugs, Arkor treated, with SS 304 wire rope. Marine duty (open deck / salt spray): SS 304 lugs recommended.</div>
+    <div class="sub">Material combination for the quoted AWRI build. Standard: EN8D lugs, Arkor treated, with SS 304 wire rope. Marine duty (open deck / salt spray): SS 304 or SS 316 lugs recommended.</div>
     <div class="grid4">
-      <div class="f"><label>Lugs / retainer material</label><select id="o_lugs"><option>EN8D + Arkor treated</option><option>EN8D + Zinc plated</option><option>Aluminium alloy</option><option>SS 304</option></select></div>
+      <div class="f"><label>Lugs / retainer material</label><select id="o_lugs"><option>EN8D + Arkor treated</option><option>EN8D + Zinc plated</option><option>Aluminium alloy</option><option>SS 304</option><option>SS 316</option></select></div>
       <div class="f"><label>Wire rope</label><select id="o_wire"><option>SS 304</option><option>SS 302</option><option>Galvanised steel</option></select></div>
       <div class="f"><label>Duty</label><select id="o_duty"><option>Normal duty</option><option>Marine duty</option></select></div>
       <div class="f"><label>RFQ quantity <span class="qm" title="Defaults to isolators + stabilizers. Edit for spares / batch quantity.">?</span></label><input id="o_qty" type="number" min="1" placeholder="auto = N + stabilizers"></div>
@@ -358,7 +358,7 @@ tr:hover td{background:var(--blue-xl)}
 <!-- ============ PANE 4 : RESULTS ============ -->
 <div class="pane" id="pane4">
   <div id="resArea"></div>
-  <div class="navf"><button class="btn btn-g" onclick="go(3)">← Back</button><button class="btn btn-p" onclick="makeReport()">▼ Download report (PDF)</button></div>
+  <div class="navf"><button class="btn btn-g" onclick="go(3)">← Back</button><button class="btn btn-o" onclick="makeReport()">▼ Download report (PDF)</button><button class="btn btn-p" onclick="openRfq(false)">✉ Request quotation &amp; drawings →</button></div>
 </div>
 </div>
 
@@ -910,6 +910,7 @@ function runSelection(){
       if(nn){$('p_name').value=nn;saveProject();}
     }
   }
+  const busy=window.ICThumbs?ICThumbs.busy('Checking '+DATA.awri.length+' isolators…'):()=>{};
   const out=[];
   for(const md of DATA.awri){
     const r=evalModel(md,inp);
@@ -918,7 +919,7 @@ function runSelection(){
   out.sort((a,b)=>a.score-b.score);
   S.results={list:out,inp};
   $('btnReport').disabled=false;
-  renderResults(); go(4);
+  renderResults(); go(4); busy();
 }
 
 /* ================= SVG CHART BUILDERS ================= */
@@ -1028,6 +1029,7 @@ function renderResults(){
     <div style="display:flex;gap:10px;flex-wrap:wrap">
       <button class="btn btn-p btn-sm" onclick="showDetail(${bi})">Full engineering detail</button>
       <button class="btn btn-o btn-sm" onclick="makeReport()">▼ Download report</button>
+      <button class="btn btn-p btn-sm" onclick="openRfq(false)">✉ Request quotation &amp; drawings</button>
     </div>
   </div>
 
@@ -1115,13 +1117,14 @@ function flushMailQueue(){
   if(!q.length||!navigator.onLine)return;
   const rest=[];
   (async()=>{
-    for(const item of q){const ok=await postLead(item);if(!ok)rest.push(item);}
+    for(const item of q){const ok=item._kind==='rfq'?await postLead(item):await postReport(item);if(!ok)rest.push(item);}
     LS.setItem(mailQueueKey(),JSON.stringify(rest));
     if(q.length-rest.length>0)toast('Queued report copies emailed to Adonitech ✓');
   })();
 }
 /* full-screen confirmation, then back to the first screen (project details are kept) */
 function flashSent(number,msg){
+  if(window.ICThumbs){ ICThumbs.done('Request '+number+' sent', msg||'', 4000); setTimeout(()=>{try{S.results=null;}catch(e){}go(0);toast('Request '+number+' sent — thank you. Ready for the next selection.');},4200); return; }
   let o=document.getElementById('sentFlash');
   if(!o){o=document.createElement('div');o.id='sentFlash';o.style.cssText='position:fixed;inset:0;background:rgba(27,49,96,.72);display:flex;align-items:center;justify-content:center;z-index:9999';o.innerHTML='<div style="background:#fff;border-radius:16px;padding:28px 34px;max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);font-family:inherit"><div style="font-size:44px">✅</div><h3 id="sentFlashT" style="margin:8px 0 6px;color:#1B3160"></h3><p id="sentFlashM" style="color:#5A6672;margin:0"></p></div>';document.body.appendChild(o);}
   o.querySelector('#sentFlashT').textContent='Request '+number+' sent';o.querySelector('#sentFlashM').textContent=msg||'';o.style.display='flex';
@@ -1136,7 +1139,7 @@ async function postLead(payload){
     const body={ line:'wri', customer:{ company:payload.Customer||payload.Project||'Enquiry', contact:payload.Contact, email:payload.Email, phone:payload.Phone, country:(document.getElementById('p_country')||{}).value||'India' },
       project:{ name:payload.Project, equipment:payload.Equipment, prepared_by:(document.getElementById('p_eng')||{}).value||'' },
       selection:{ case_id:'WRI', standard:S.std, inputs:{ app:S.app, mnt:S.mnt, mass:inp.mass, N:inp.N, Ns:inp.Ns, frag:inp.frag, gv:inp.gv, gh:inp.gh, tau:inp.tau }, chosen:best.m, summary },
-      formats:['PDF'], message:payload.RFQ||'',
+      formats:payload._formats||['PDF'], message:payload.RFQ||'',
       items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:$('o_duty').value, lug:$('o_lugs').value, wire:$('o_wire').value }] };
     const r=await fetch('/api/rfq',{method:'POST',headers:Object.assign({'content-type':'application/json'},tok?{authorization:'Bearer '+tok}:{}),body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
@@ -1165,15 +1168,71 @@ function sendLeadCopy(best,inp){
     Verdict:best.pass?'PASS all checks':'REVIEW — some checks fail',
     Date:new Date().toLocaleString('en-IN')
   };
+  payload._kind='report';
   (async()=>{
-    const ok=await postLead(payload);
-    if(ok){toast('Report copy emailed to Adonitech ✓');}
+    const ok=await postReport(payload);
+    if(ok){ toast('Report registered — a copy is on its way to your inbox ✓'); setTimeout(()=>openRfq(true),900); }
     else{
       let q=[];try{q=JSON.parse(LS.getItem(mailQueueKey())||'[]');}catch(e){}
       q.push(payload);LS.setItem(mailQueueKey(),JSON.stringify(q));
       toast('Offline — report copy queued, will send automatically next time');
     }
   })();
+}
+/* report download = a report lead (Admin -> Report leads), no RFQ yet; the customer asks for a quotation separately */
+async function postReport(payload){
+  try{
+    const B=window.__wriBest||{}, best=B.best||{}, inp=B.inp||{};
+    const tok=(function(){try{return localStorage.getItem('ic_token')||'';}catch(e){return '';}})();
+    const summary={}; for(const k of ['Application','Standard','Mounting','Recommended','Results','Vibration','Shock','Verdict']) if(payload[k]) summary[k]=payload[k];
+    const body={ line:'wri', customer:{ company:payload.Customer||payload.Project||'Enquiry', contact:payload.Contact, email:payload.Email, phone:payload.Phone, country:(document.getElementById('p_country')||{}).value||'India' },
+      project:{ name:payload.Project||'Untitled', equipment:payload.Equipment },
+      selection:{ case_id:'WRI', standard:S.std, chosen:best.m, summary },
+      items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1 }] };
+    const r=await fetch('/api/selection',{method:'POST',headers:Object.assign({'content-type':'application/json'},tok?{authorization:'Bearer '+tok}:{}),body:JSON.stringify(body)});
+    const j=await r.json().catch(()=>({}));
+    if(r.ok){ window.__wriReport=j.number; return true; }
+    if(typeof toast==='function') toast('Could not register the report: '+(j.error||r.statusText)); return r.status>=400&&r.status<500;
+  }catch(e){ return false; }
+}
+/* quotation + drawings request (explicit), after the report or straight from the results */
+function openRfq(afterReport){
+  if(!S.results){toast('Run a selection first');return;}
+  const B=S.results, passList=B.list.filter(r=>r.pass), best=passList[0]||B.list[0]; window.__wriBest={best:best,inp:B.inp};
+  let m=document.getElementById('rfqModal');
+  if(!m){ m=document.createElement('div'); m.id='rfqModal'; m.style.cssText='position:fixed;inset:0;background:rgba(15,25,45,.55);z-index:9000;display:flex;align-items:center;justify-content:center;padding:16px'; document.body.appendChild(m); }
+  const me=(function(){try{return JSON.parse(localStorage.getItem('ic_user')||'null');}catch(e){return null;}})();
+  m.innerHTML=`<div class="card" style="max-width:520px;width:100%;margin:0;max-height:92vh;overflow:auto">
+    <h2 style="margin-top:0">${afterReport?'Would you like a quotation?':'Request quotation &amp; drawings'}</h2>
+    <div class="sub">${afterReport?'Your report is downloaded. ':''}ADONI TECH prices this selection and sends the quotation by e-mail${me&&(me.role==='sales'||me.role==='dealer')?' — as '+(me.role==='sales'?'sales':'a dealer')+' you get the draft quotation to check the items and send it yourself':''}.</div>
+    <div class="note" style="margin:10px 0"><b>${rfqQty()} × ${best.m}</b> · Lugs: ${$('o_lugs').value} · Wire rope: ${$('o_wire').value} · ${$('o_duty').value}</div>
+    <div class="grid2"><div class="f"><label>Quantity <span class="qm" title="Isolators + stabilizers; add spares if you want them quoted.">?</span></label><input id="rq_qty" type="number" min="1" value="${rfqQty()}"></div>
+      <div class="f"><label>Needed by <span class="qm" title="Optional — the date you need the isolators on site.">?</span></label><input id="rq_date" type="date"></div></div>
+    <div class="f"><label>Please also send</label>
+      <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_ga" checked style="width:auto"> GA drawing (PDF)</label>
+      <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_3d" style="width:auto"> 3D model (STEP)</label>
+      <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_tc" style="width:auto"> Test certificate / QAP</label></div>
+    <div class="f"><label>Message (optional)</label><textarea id="rq_msg" rows="2" placeholder="Delivery address, special requirements, tender reference …"></textarea></div>
+    <div class="navf" style="margin-top:10px"><button class="btn btn-g" id="rq_cancel">${afterReport?'Not now':'Cancel'}</button><button class="btn btn-p" id="rq_send">Send request →</button></div></div>`;
+  m.style.display='flex';
+  m.querySelector('#rq_cancel').onclick=()=>{m.style.display='none';};
+  m.querySelector('#rq_send').onclick=sendRfq;
+}
+function sendRfq(){
+  const em=$('p_email').value.trim();
+  if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)||!$('p_phone').value.trim()||!($('p_contact').value.trim()||$('p_cust').value.trim())){ toast('Please fill your name, e-mail and phone in step 1'); document.getElementById('rfqModal').style.display='none'; go(0); return; }
+  const q=Math.max(1,+$('rq_qty').value||1); $('o_qty').value=q;
+  const want=[['rq_ga','GA drawing (PDF)'],['rq_3d','3D model (STEP)'],['rq_tc','test certificate / QAP']].filter(([id])=>$(id).checked).map(x=>x[1]);
+  const B=window.__wriBest, best=B.best, inp=B.inp;
+  const payload={ Project:$('p_name').value, Customer:$('p_cust').value, Contact:$('p_contact').value, Email:em, Phone:$('p_phone').value, Equipment:$('p_equip').value+' · '+inp.mass+' kg',
+    Application:(APPS.find(a=>a.id===S.app)||{}).t||'', Standard:(STDS[S.std]||{}).name||'', Recommended:q+' × '+best.m,
+    Results:'util '+best.util.toFixed(0)+'% · fn '+best.fnV.toFixed(1)+' Hz · shock '+best.shV.tg.toFixed(1)+' g ≤ '+inp.frag+' g', Verdict:best.pass?'PASS all checks':'REVIEW — some checks fail',
+    RFQ:'Quotation requested'+(want.length?' + '+want.join(', '):'')+($('rq_date').value?' · needed by '+$('rq_date').value:'')+(window.__wriReport?' · report '+window.__wriReport:'')+($('rq_msg').value.trim()?' · '+$('rq_msg').value.trim():''),
+    _formats:['PDF'].concat($('rq_3d').checked?['STEP']:[]), _kind:'rfq' };
+  document.getElementById('rfqModal').style.display='none';
+  const busy=window.ICThumbs?ICThumbs.busy('Sending your request…'):()=>{};
+  (async()=>{ const ok=await postLead(payload); busy();
+    if(!ok){ let qq=[];try{qq=JSON.parse(LS.getItem(mailQueueKey())||'[]');}catch(e){} qq.push(payload);LS.setItem(mailQueueKey(),JSON.stringify(qq)); toast('Offline — request queued, will send automatically when online'); } })();
 }
 function lugOpt(label){return (DATA.lug_options||[]).find(o=>o.label===label)||null;}
 function fillBuildOptions(){
@@ -1192,7 +1251,7 @@ function dutyHint(){
   const o=lugOpt(lug), pct=o&&o.pct?(' Price: +'+o.pct+' % on the list price.'):'';
   let h='';
   if(marine&&galv)h='⚠ Marine duty: galvanised wire is not recommended for salt-spray exposure — choose SS 304 or SS 302 wire rope.';
-  else if(marine&&en8)h='⚠ Marine duty: '+lug+' lugs suit indoor and sheltered use — for open deck / salt spray choose SS 304 lugs.';
+  else if(marine&&en8)h='⚠ Marine duty: '+lug+' lugs suit indoor and sheltered use — for open deck / salt spray choose SS 304 or SS 316 lugs.';
   else if(marine&&alu)h='ℹ Marine duty with aluminium alloy lugs: acceptable for sheltered decks; SS 304 lugs recommended for open deck.';
   else if(marine)h='✔ All-stainless build — correct choice for marine / open-deck duty.';
   else if(en8)h='✔ '+(/arkor/i.test(lug)?'Standard build: EN8D lugs, Arkor treated.':lug+' lugs — list price.');
@@ -1236,7 +1295,7 @@ function openXref(){
      <div class="f"><label>Quantity</label><input id="x_qty" type="number" value="4" min="1"></div>
    </div>
    <div class="grid3">
-     <div class="f"><label>Lugs / retainer material</label><select id="x_lugs"><option>EN8D + Arkor treated</option><option>EN8D + Zinc plated</option><option>Aluminium alloy</option><option>SS 304</option></select></div>
+     <div class="f"><label>Lugs / retainer material</label><select id="x_lugs"><option>EN8D + Arkor treated</option><option>EN8D + Zinc plated</option><option>Aluminium alloy</option><option>SS 304</option><option>SS 316</option></select></div>
      <div class="f"><label>Wire rope</label><select id="x_wire"><option>SS 304</option><option>SS 302</option><option>Galvanised steel</option></select></div>
      <div class="f"><label>Duty</label><select id="x_duty"><option>Normal duty</option><option>Marine duty</option></select></div>
    </div>
@@ -1406,5 +1465,5 @@ setSine(STDS.JSS55555.sine);
 applyTheme(LS.getItem('atwri_theme')||'dark');
 fillBuildOptions();refreshProjList();recompute();flushMailQueue();['o_lugs','o_wire','o_duty'].forEach(id=>$(id).addEventListener('change',()=>{dutyHint();if(S.results)try{renderResults();}catch(e){}}));dutyHint();window.addEventListener('online',flushMailQueue);
 </script>
-<script src="/dampa.js?v=1" defer data-dampa="1"></script>
+<script src="/thumbs.js?v=1"></script><script src="/help.js?v=1" defer></script><script src="/dampa.js?v=1" defer data-dampa="1"></script>
 </body></html>

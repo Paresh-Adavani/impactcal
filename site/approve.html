@@ -11,7 +11,7 @@
   <a class="btn ghost" id="pdf" target="_blank" style="text-decoration:none">Preview PDF</a>
   <button class="btn ghost" id="self" hidden style="margin-left:auto">Download PDF &amp; send it myself</button><button class="btn" id="send">Send to customer</button>
 </div>
-<script src="common.js?v=6"></script>
+<script src="common.js?v=6"></script><script src="thumbs.js?v=1"></script><script src="help.js?v=1" defer></script>
 <script>
 const P = new URLSearchParams(location.search), ID = P.get('id'), T = P.get('t');
 const hdr = () => T ? { 'x-approve-token': T } : {};
@@ -126,6 +126,7 @@ $('#send').onclick = async () => {
     $('#send').disabled = true; $('#send').textContent = 'Sending…';
     const r = await api('approve/' + encodeURIComponent(ID) + '/send', { method: 'POST', headers: hdr(), body: { approved_by: ($('#by') || {}).value, drawings_mode: (document.querySelector('input[name=dm]:checked') || {}).value } });
     await load();
+    if (r.ok && window.ICThumbs) ICThumbs.done('Quotation sent', 'To ' + r.sent_to);
     $('#out').innerHTML = r.ok ? `<div class="note ok"><b>Sent to ${esc(r.sent_to)}.</b>${r.attached.length ? ' Attached: ' + r.attached.join(', ') : ''}${r.links.length ? ' · links: ' + r.links.length : ''}${r.missing.length ? ' · not available: ' + r.missing.join(', ') : ''}${D.access === 'dealer' ? ' ADONI TECH has a copy.' : ''}</div>` : `<div class="note bad">Saved as approved, but the mail failed: ${esc(r.reason)}.</div>`;
     window.scrollTo({ top: document.body.scrollHeight, behavior: 'smooth' });
   } catch (e) { alert(e.message); } finally { $('#send').disabled = false; $('#send').textContent = ADMIN() ? 'Approve & send to customer' : 'Send to customer'; }

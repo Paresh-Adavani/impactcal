@@ -3,4 +3,4 @@ Allow: /
 Disallow: /api/
 Disallow: /admin.html
 Disallow: /approve.html
-Sitemap: https://impactcal.netlify.app/sitemap.xml
+Sitemap: https://impactcal.adonitech.co/sitemap.xml

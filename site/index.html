@@ -44,7 +44,7 @@
   </section>
 </div>
 <footer>ADONI TECH · Satara MIDC, Maharashtra, India · GSTIN 27AHAPA3555B1Z1 · <a href="wri/knowledge.html">Knowledge base</a></footer>
-<script src="common.js?v=6"></script>
+<script src="common.js?v=6"></script><script src="thumbs.js?v=1"></script><script src="help.js?v=1" defer></script>
 <script>
 bootCommon('nav_home').then(() => { fetch('/api/dealer/program').then(r => r.json()).then(p => { if (p.cities && p.cities.length) $('#dealerCities').textContent = '📍 Now appointing in ' + p.cities.slice(0, 8).join(' · ') + (p.cities.length > 8 ? ' and more' : ''); }).catch(() => {}); const u = AUTH.user; if (u && (u.role === 'admin' || u.role === 'sales' || u.role === 'dealer')) $('#salesBox').hidden = false; });
 </script>
