@@ -77,7 +77,13 @@ office.pune.pincode,411041,
 office.pune.phone,,
 dealer.discount_pct,25,Standard dealer discount: ADONI TECH bills the dealer at list minus this %
 dealer.max_discount_pct,25,Max discount a dealer may give his customer below list (markup is free); deeper = special price
-freight.rate_per_kg,35,"Packing & freight to the dealer's godown (resale) or the customer's site (direct supply), Rs per kg of estimated product weight. India only - export stays ex-works"
+freight.courier,Shree Maruti Courier,Courier used for packing & freight on Indian quotations
+freight.home_state,27,State code where the home rate applies (27 = Maharashtra)
+freight.rate_home,50,Rs per kg of estimated product weight within the home state
+freight.rate_india,90,Rs per kg of estimated product weight to the rest of India
+freight.fuel_pct,10,Fuel surcharge % added on the courier charge
+freight.transit_home,2 days,Transit time printed for the home state
+freight.transit_india,4–5 days,Transit time printed for the rest of India
 dealer.markup,Free — as you decide,Dealer policy standard: markup rule
 dealer.routes,both,Dealer policy standard: both | resale | direct
 dealer.rule_resale,"Quotation in your own name, letterhead, GSTIN and bank. ADONI TECH invoices you at list price less your dealer discount, plus packing & freight to your godown and GST.",Dealer policy standard text
@@ -102,5 +108,5 @@ assistant.model,claude-sonnet-5,"Claude model: claude-sonnet-5 (best), claude-ha
 assistant.daily_limit_visitor,25,Messages per day for a website visitor who is not signed in
 assistant.daily_limit_user,120,Messages per day for a signed-in user
 assistant.monthly_cap_usd,40,DAMPA stops for the month when API usage reaches this many US dollars
-wri.lug_options,EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5,Wire rope isolator lug materials: label=surcharge % on list price; the first is the standard build (Admin -> Pricing & costing)
+wri.lug_options,EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5; SS 316=10,Wire rope isolator lug materials: label=surcharge % on list price; the first is the standard build (Admin -> Pricing & costing)
 wri.wire_options,SS 304; SS 302; Galvanised steel,Wire rope materials offered; the first is the standard

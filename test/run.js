@@ -98,9 +98,9 @@ const server = app.listen(0, async () => {
     // ---- wire rope isolator lug options: EN8D + Arkor standard, aluminium +2 %, SS 304 +5 % (admin setting)
     {
       const anonW = await fetch(base + '/wri/data').then(r => r.json());
-      ok('wri: lug choices offered, EN8D + Arkor treated is the standard, no % shown to the public', anonW.lug_options[0].label === 'EN8D + Arkor treated' && anonW.lug_options[0].default && anonW.lug_options.map(o => o.label).join('|') === 'EN8D + Arkor treated|EN8D + Zinc plated|Aluminium alloy|SS 304' && anonW.lug_options.every(o => o.pct === undefined) && anonW.wire_options[0] === 'SS 304');
+      ok('wri: lug choices offered, EN8D + Arkor treated is the standard, no % shown to the public', anonW.lug_options[0].label === 'EN8D + Arkor treated' && anonW.lug_options[0].default && anonW.lug_options.map(o => o.label).join('|') === 'EN8D + Arkor treated|EN8D + Zinc plated|Aluminium alloy|SS 304|SS 316' && anonW.lug_options.every(o => o.pct === undefined) && anonW.wire_options[0] === 'SS 304');
       const admW = await get('/wri/data');
-      ok('wri: price viewers see the surcharge (Al +2 %, SS 304 +5 %)', admW.lug_options[1].pct === 0 && admW.lug_options[2].pct === 2 && admW.lug_options[3].pct === 5);
+      ok('wri: price viewers see the surcharge (Al +2 %, SS 304 +5 %)', admW.lug_options[1].pct === 0 && admW.lug_options[2].pct === 2 && admW.lug_options[3].pct === 5 && admW.lug_options[4].pct === 10);
       const w127 = admW.prices['AWRI-127-60'].price;
       const lq = await post('/portal/quote', { customer: { company: 'Lug Test Pvt Ltd', contact: 'Test Engineer', email: 'eng@lugtest.in', phone: '+91 98220 55443' }, items: [
         { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1 }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Aluminium alloy' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'SS 304', wire: 'SS 302' }, { table: 'wire_rope_isolators', key: 'AWRI-127-60', qty: 1, lug: 'Gold plated' }] });
@@ -110,7 +110,7 @@ const server = app.listen(0, async () => {
       ok('wri: lug and wire printed on the line', /Lugs: EN8D \+ Arkor treated · Wire rope: SS 304/.test(lqq[0].description) && /Lugs: SS 304 · Wire rope: SS 302/.test(lqq[2].description) && lqq[2].lug_pct === 5);
       await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; Aluminium alloy=3; SS 304=6' });
       ok('wri: surcharges follow the admin setting', (await get('/wri/data')).lug_options[2].pct === 6);
-      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5' });
+      await put('/admin/settings', { 'wri.lug_options': 'EN8D + Arkor treated=0; EN8D + Zinc plated=0; Aluminium alloy=2; SS 304=5; SS 316=10' });
     }
     console.log('\n— CSV database (admin) —');
     const tables = await get('/admin/csv');
@@ -148,6 +148,8 @@ const server = app.listen(0, async () => {
     const qid = full.quotation_id;
     const Q = await get('/admin/quotation/' + qid);
     ok('supplier 27 + customer 27 -> intra-state, INR', Q.supply_type === 'intra' && Q.currency === 'INR');
+    { const kg = Math.ceil(Q.items.filter(i => i.kind === 'product').reduce((t, i) => t + (Number(i.weight_kg) || 0) * i.qty, 0));
+      ok('courier freight on the quotation: Pune customer -> Rs 50/kg + 10 % fuel, Shree Maruti Courier in the terms', kg > 0 && Q.freight === Math.ceil(kg * 50 + kg * 50 * 10 / 100) && /Rs 50\/kg \(Maharashtra\) \+ 10 % fuel surcharge/.test(Q.freight_label) && /Shree Maruti Courier/.test(Q.terms.delivery), `${kg} kg -> Rs ${Q.freight}`); }
     ok('line priced from the uploaded CSV, lead time carried', Q.items[0].rate === 18500 && Q.items[0].lead_time_days === 35 && Q.lead_time_days === 35);
     ok('mounting accessory line added', Q.items[1] && Q.items[1].kind === 'accessory');
     ok('approve link carries a signed token', /approve\.html\?id=.+&t=.+\..+/.test(Q.approve_url));
@@ -159,7 +161,7 @@ const server = app.listen(0, async () => {
     const items = Q.items.map((i, n) => n === 0 ? { ...i, rate: 18500, qty: 2 } : { ...i, rate: 650, qty: 2 });
     const Q2 = await fetch(`${base}/approve/${qid}?t=${tokenA}`, { method: 'PUT', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ items }) }).then(r => r.json());
     const t = Q2.totals;
-    ok('taxable = 2x18500 + 2x650', near(t.taxable, 38300), t.taxable);
+    ok('taxable = 2x18500 + 2x650 + courier freight', Math.abs(t.taxable - (38300 + Q2.freight)) < 0.01, t.taxable);
     ok('CGST = SGST = 9%', near(t.cgst, 38300 * 0.09) && near(t.sgst, 38300 * 0.09), `${t.cgst}/${t.sgst}`);
     ok('no IGST on an intra-state supply', t.igst === 0);
     ok('grand total is rounded to the rupee', Number.isInteger(t.grand_total), t.grand_total);
@@ -361,15 +363,15 @@ const server = app.listen(0, async () => {
     // ---- dealer rules: standard policy at sign-up, every point confirmed, own rules per dealer, versioned
     ok('policy: standard pricing policy e-mailed on first application (mail off -> attempted)', nda.policy_mail === false);
     const pol0 = await get('/admin/dealers/sales@newtrade.co.in/policy');
-    ok('policy: 13 rules with standard values', pol0.rules.length === 13 && pol0.rules.find(r => r.k === 'discount_pct').value === 25 && pol0.rules.find(r => r.k === 'freight_rate').value === 35 && pol0.rules.find(r => r.k === 'territory').value === 'Nashik, Dhule');
-    const own = { discount_pct: 30, routes: 'resale', freight_rate: 40, special: 'Keeps 10 pcs AKHG 100-200 in stock at Nashik' };
+    ok('policy: 13 rules with standard values', pol0.rules.length === 13 && pol0.rules.find(r => r.k === 'discount_pct').value === 25 && /Rs 50\/kg within Maharashtra.*Rs 90\/kg elsewhere.*10 % fuel/.test(pol0.rules.find(r => r.k === 'freight').value) && pol0.rules.find(r => r.k === 'territory').value === 'Nashik, Dhule');
+    const own = { discount_pct: 30, routes: 'resale', special: 'Keeps 10 pcs AKHG 100-200 in stock at Nashik' };
     const allRules = Object.fromEntries(pol0.rules.map(r => [r.k, own[r.k] !== undefined ? own[r.k] : r.value]));
     const notAll = await fetch(base + '/admin/dealers/sales@newtrade.co.in/policy', { method: 'POST', headers: H(), body: JSON.stringify({ rules: allRules, confirmed: ['discount_pct'], approve: true }) });
     ok('policy: refused until every point is ticked as agreed', notAll.status === 400);
     const prev = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: allRules, preview: true });
     ok('policy: preview shows his own values and the worked example', /30 %/.test(prev.html) && /Resale only/.test(prev.html) && /Keeps 10 pcs/.test(prev.html) && /Example/.test(prev.html) && !/Direct supply:/.test(prev.html));
     const conf = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: allRules, confirmed: pol0.rules.map(r => r.k), approve: true, note: 'Welcome aboard' });
-    ok('policy: confirm + approve -> version 1, own rules stored, dealer approved', conf.ok && conf.dealer.status === 'approved' && conf.dealer.policy.version === 1 && JSON.stringify(Object.keys(conf.dealer.rules).sort()) === JSON.stringify(['discount_pct', 'freight_rate', 'routes', 'special']), Object.keys(conf.dealer.rules).join(','));
+    ok('policy: confirm + approve -> version 1, own rules stored, dealer approved', conf.ok && conf.dealer.status === 'approved' && conf.dealer.policy.version === 1 && JSON.stringify(Object.keys(conf.dealer.rules).sort()) === JSON.stringify(['discount_pct', 'routes', 'special']), Object.keys(conf.dealer.rules).join(','));
     const nd2 = await loginAs('sales@newtrade.co.in');
     const ndme = await rq('GET', '/dealer/me', null, nd2.token);
     ok('policy: dealer sees his confirmed terms', ndme.policy.version === 1 && ndme.rules.find(r => r.k === 'discount_pct').value === 30);
@@ -378,7 +380,7 @@ const server = app.listen(0, async () => {
     ok('policy: "resale only" dealer cannot make a direct-supply quotation', ndDirect.status === 403);
     const ndq = await rq('POST', '/portal/quote', { customer: { company: 'Nashik Forge', contact: 'Amit Joshi', email: 'amit.joshi@nashikforge.in', phone: '+91 98230 45678' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 2 }] }, nd2.token);
     const ndg = await rq('GET', '/approve/' + ndq.quotation_id, null, nd2.token);
-    ok('policy: his own discount (30 %) and freight rate (Rs 40/kg) are used', ndg.billing.billing_discount_pct === 30 && ndg.billing.freight.rate === 40, `${ndg.billing.freight.kg_charged} kg x ${ndg.billing.freight.rate}`);
+    ok('policy: his own discount (30 %) is used; courier freight to his Maharashtra godown at Rs 50/kg + 10 %', ndg.billing.billing_discount_pct === 30 && ndg.billing.freight.rate === 50 && ndg.billing.freight.amount === Math.ceil(ndg.billing.freight.kg_charged * 50 + ndg.billing.freight.kg_charged * 50 * 10 / 100), `${ndg.billing.freight.kg_charged} kg x ${ndg.billing.freight.rate}`);
     const rev = await post('/admin/dealers/sales@newtrade.co.in/policy', { rules: { ...allRules, discount_pct: 25 }, confirmed: pol0.rules.map(r => r.k) });
     const polH = await get('/admin/dealers/sales@newtrade.co.in/policy');
     ok('policy: revision -> version 2, back on the standard discount, history kept', rev.dealer.policy.version === 2 && !('discount_pct' in rev.dealer.rules) && polH.history.length === 2);
@@ -417,12 +419,12 @@ const server = app.listen(0, async () => {
     const sq3 = await rq('POST', '/portal/quote', { save_customer: true, customer: { company: 'Uttam Galva', contact: 'Sneha Pawar', email: 'sneha.pawar@uttamgalva.in', phone: '+91 97300 11223' }, items: [{ table: 'shock_absorbers', key: akhg.key, qty: 1 }] }, krish.token);
     ok('customers: typing the same customer again links him, no duplicate', !sq3.customer_saved && sq3.customer_id === sq2.customer_id && (await rq('GET', '/customers?q=uttam', null, krish.token)).length === 1);
     }
-    // ---- resale: packing & freight Rs 35/kg to the dealer's godown
+    // ---- resale: courier packing & freight to the dealer's godown (Maharashtra Rs 50/kg + 10 % fuel)
     {
       const fq = await rq('GET', '/approve/' + pq.quotation_id, null, dlr.token), q0 = fq.quotation, b0 = fq.billing;
       const kg = Math.ceil(q0.items.filter(i => i.kind === 'product').reduce((s, i) => s + (Number(i.weight_kg) || 0) * i.qty, 0));
-      ok('resale: freight = Rs 35 x estimated weight, added to the dealer billing', kg > 0 && b0.route === 'resale' && b0.freight.amount === kg * 35 && Math.abs(b0.billing_total - (b0.billing_value + kg * 35)) < 0.01, `${kg} kg → Rs ${b0.freight.amount}`);
-      ok('resale: dealer quotation carries a plain "Packing & freight" line he can change', q0.freight === kg * 35 && q0.freight_label === 'Packing & freight');
+      ok('resale: freight to his Pune godown = Rs 50/kg + 10 % fuel, added to the dealer billing', kg > 0 && b0.route === 'resale' && b0.freight.amount === Math.ceil(kg * 50 + kg * 50 * 10 / 100) && Math.abs(b0.billing_total - (b0.billing_value + b0.freight.amount)) < 0.01, `${kg} kg → Rs ${b0.freight.amount}`);
+      ok('resale: his quotation to a Karnataka customer is pre-filled at the rest-of-India rate, plain "Packing & freight" line he can change', q0.freight === Math.ceil(kg * 90 + kg * 90 * 10 / 100) && q0.freight_label === 'Packing & freight');
     }
     // ---- direct supply: ADONI TECH letterhead, dealer commission = his discount - what he passes on, x quoted price
     {
@@ -431,11 +433,11 @@ const server = app.listen(0, async () => {
       let g = await rq('GET', '/approve/' + dp.quotation_id, null, dlr.token);
       ok('direct: ADONI TECH letterhead + bank, dealer shown as channel partner, GST from Maharashtra', g.quotation.route === 'direct' && !g.company.dealer && /ADONI TECH/.test(g.company.name) && g.company.channel_partner.company === 'Kumar Engineering Services' && g.bank.bank !== 'HDFC Bank' && g.quotation.supply_type === 'inter');
       const L0 = g.quotation.items[0].list_rate, kg = Math.ceil(g.quotation.items[0].weight_kg * 2);
-      ok('direct: packing & freight line to site = Rs 35 x weight, basis printed', g.quotation.freight === kg * 35 && /kg × Rs 35\/kg/.test(g.quotation.freight_label), g.quotation.freight_label);
+      ok('direct: courier freight to the Karnataka site = Rs 90/kg + 10 % fuel, basis printed', g.quotation.freight === Math.ceil(kg * 90 + kg * 90 * 10 / 100) && /kg × Rs 90\/kg \(rest of India\) \+ 10 % fuel surcharge/.test(g.quotation.freight_label), g.quotation.freight_label);
       const put = async (rate, disc) => { await rq('PUT', '/approve/' + dp.quotation_id, { items: g.quotation.items.map(i => ({ ...i, rate, discount_pct: disc })), freight: 0 }, dlr.token); return rq('GET', '/approve/' + dp.quotation_id, null, dlr.token); };
       g = await put(L0, 10);
       ok('direct: list 100, passes 10 % -> commission 15 % of list, ADONI keeps 75 %', Math.abs(g.billing.commission_value - 0.15 * L0 * 2) < 0.02 && Math.abs(g.billing.adoni_net - 0.75 * L0 * 2) < 0.02 && g.limit.ok, `commission ${g.billing.commission_value} on list ${L0} x2`);
-      ok('direct: dealer cannot change the freight line', g.quotation.freight === kg * 35);
+      ok('direct: dealer cannot change the freight line', g.quotation.freight === Math.ceil(kg * 90 + kg * 90 * 10 / 100));
       g = await put(L0 * 1.25, 10);
       ok('direct: markup to 125 and passes 10 % -> commission 15 % of 125 (18.75 per 100)', Math.abs(g.billing.commission_value - 0.1875 * L0 * 2) < 0.02 && Math.abs(g.billing.adoni_net - 0.9375 * L0 * 2) < 0.02, `commission ${g.billing.commission_value}`);
       g = await put(L0 * 1.25, 30);

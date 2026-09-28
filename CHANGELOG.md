@@ -1,4 +1,15 @@
 # Changelog
+## 2.10.0 — 28 Sep 2026 (courier freight, SS 316 lugs, WRI quotation request, field help)
+- **Packing & freight by courier (Shree Maruti Courier)** on every Indian quotation — ADONI TECH, direct supply, and the dealer's billing when he buys for stock:
+  - Rs 50 per kg of estimated product weight within Maharashtra (about 2 days), Rs 90 per kg to the rest of India (4–5 days), **plus 10 % fuel surcharge**, rounded up to the rupee.
+  - Printed as "Packing & freight by courier — N kg × Rs 90/kg (rest of India) + 10 % fuel surcharge", taxed at 18 %. Delivery terms name the courier and transit time.
+  - The rate follows the customer's state (place of supply); dealer billing uses the dealer's state (his godown). Staff can type a different figure; it then stays as typed.
+  - Admin → Dealers → Dealer terms: courier name, both rates, fuel surcharge % and transit times (settings `freight.*`). The dealer policy letter states the courier rule. Export stays ex-works.
+- **SS 316 lugs** added for wire rope isolators at **+10 %** (Admin → Pricing & costing → build options).
+- **Wire rope selector:** the report download is now a report lead (Admin → Report leads) and no longer an RFQ. After the download the customer is asked whether he wants a quotation. A new **"Request quotation & drawings"** button (results and last step) sends an RFQ with quantity, needed-by date, GA drawing / 3D STEP / test certificate wishes and a message. Sales and dealers land on the draft quotation to check the items before sending.
+- **Field help on every technical input** (shock absorber / crane buffer, rubber mount and wire rope selectors): on hover or typing, a side panel shows a small picture of what is meant, the unit (MKS), typical values and a plain explanation. On phones it is a slim sheet at the bottom.
+- **Thumbs-up feedback:** an animated 👍 while the selection runs, and a thumbs-up card when an RFQ or quotation is sent.
+- Public address changed to **https://impactcal.adonitech.co** (canonical links, sitemap, robots, e-mail links default).
 ## 2.9.2 — 27 Sep 2026 (rubber mount selector: running speed unit, examples)
 - **Running speed now has an rpm / Hz switch** and shows the other unit live ("= 50.0 Hz"). Below 300 rpm it warns that the number may be a frequency in Hz.
 - **Panel / cabinet preset fixed:** it filled 50 into the rpm box (read as 50 rpm, so fn ≤ 0.34 Hz and no result). It now fills 3000 rpm (= 50 Hz).

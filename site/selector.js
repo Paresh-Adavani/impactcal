@@ -93,7 +93,8 @@ function stdNote() { const s = META.standards.find(x => x.code === $('#standard'
 async function calculate() {
   const body = { duty: duty(), case_id: CASE, standard: $('#standard').value, series: [...SERIES].filter(s => META.series.some(x => x.series === s && x.group === GROUP)), limit: 200, currency: $('#curSel').value };
   const ms = $('#d_max_stroke'); if (ms && ms.value) body.max_stroke_mm = Number(ms.value);
-  RESULT = await api('select', { method: 'POST', body });
+  const busy = window.ICThumbs ? ICThumbs.busy('Checking the catalogue…') : () => {};
+  try { RESULT = await api('select', { method: 'POST', body }); } finally { busy(); }
   CHOSEN = null; EXPANDED = false; $('#toRfq').disabled = $('#dlReport').disabled = true;
   const d = RESULT.duty_applied;
   $('#dutyOut').innerHTML = !d ? `<div class="note bad">${t('no_result')}</div>`
@@ -177,7 +178,7 @@ function startOver(number) {
 }
 window.addEventListener('afterprint', () => { $('#report').hidden = true; });
 
-function overlay(state, title, msg, closable) { const o = $('#sentOverlay'); o.hidden = false; $('#sentIcon').textContent = state === 'sending' ? '✉️' : state === 'done' ? '✅' : '⚠️'; $('#sentTitle').textContent = title; $('#sentMsg').textContent = msg || ''; $('#sentClose').hidden = !closable; }
+function overlay(state, title, msg, closable) { const o = $('#sentOverlay'); if (state === 'done' && window.ICThumbs) { o.hidden = true; ICThumbs.done(title, msg, 3800); return; } o.hidden = false; $('#sentIcon').textContent = state === 'sending' ? '👍' : state === 'done' ? '✅' : '⚠️'; $('#sentIcon').className = state === 'sending' ? 'ict-nod' : ''; $('#sentTitle').textContent = title; $('#sentMsg').textContent = msg || ''; $('#sentClose').hidden = !closable; }
 $('#sentClose').onclick = () => { $('#sentOverlay').hidden = true; };
 
 async function sendRfq() {

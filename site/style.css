@@ -62,3 +62,5 @@ footer{color:var(--muted);font-size:12px;text-align:center;padding:24px 16px}
 @keyframes nb-pulse{0%,100%{box-shadow:0 0 0 3px #FFE3C8}50%{box-shadow:0 0 0 6px #F57C00}}
 
 input.need{border-color:#D14343!important;box-shadow:0 0 0 3px #FBD9D9}
+
+.ict-nod{display:inline-block;animation:ictNod2 .9s ease-in-out infinite;transform-origin:60% 85%}@keyframes ictNod2{0%,100%{transform:rotate(0)}40%{transform:rotate(-16deg)}70%{transform:rotate(6deg)}}@media (prefers-reduced-motion:reduce){.ict-nod{animation:none}}

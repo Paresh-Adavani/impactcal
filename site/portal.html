@@ -21,7 +21,7 @@
   <div class="tabs" id="tabs" hidden><button data-tab="newq" class="on">New quotation</button><button data-tab="customers">Customers</button><button data-tab="mine">My quotations</button><button data-tab="profile" id="tabProfile" hidden>My dealer profile</button></div>
   <div id="view"><div class="card">Loading…</div></div>
 </div>
-<script src="common.js?v=6"></script>
+<script src="common.js?v=6"></script><script src="thumbs.js?v=1"></script><script src="help.js?v=1" defer></script>
 <script>
 'use strict';
 const V = () => $('#view');
@@ -121,7 +121,7 @@ async function newq() {
     <div style="margin-top:8px"><label>Internal note (not printed)</label><textarea id="msg" rows="2"></textarea></div>
     ${u.role === 'dealer' ? `<h3 style="margin-top:16px">3 · How will the customer buy?</h3>
     <div class="routes">
-      <label class="route on"><input type="radio" name="route" value="resale" checked><b>I buy and resell</b><small>Quotation in <b>your name</b> (your letterhead, GSTIN, bank). ADONI TECH bills you at list − your dealer discount, plus packing &amp; freight to your godown (India, Rs ${esc(String(TERMS.freight_rate || 35))}/kg of estimated weight). Your discount or markup to the customer is your margin.</small></label>
+      <label class="route on"><input type="radio" name="route" value="resale" checked><b>I buy and resell</b><small>Quotation in <b>your name</b> (your letterhead, GSTIN, bank). ADONI TECH bills you at list − your dealer discount, plus packing &amp; freight by courier to your godown (India: Rs/kg by distance + fuel surcharge, on the estimated weight). Your discount or markup to the customer is your margin.</small></label>
       <label class="route"><input type="radio" name="route" value="direct"><b>Direct supply by ADONI TECH — I earn commission</b><small>Quotation on <b>ADONI TECH letterhead</b> with you as channel partner; the customer orders and pays ADONI TECH. Your commission = your dealer discount (${esc(String(TERMS.discount_pct || 25))} %) less the discount you pass on, on your quoted price. Example: list 100, you pass 10 % → 15 % commission; markup to 125 and pass 10 % → 15 % of 125. Paid after the customer pays in full, against your commission invoice.</small></label>
     </div>` : ''}
     <div class="row" style="margin-top:12px"><button class="btn" id="make">Create draft quotation →</button></div><div id="out"></div></div>`;
@@ -164,6 +164,7 @@ async function make() {
     if (!r.quotation_id) throw new Error('The request was saved as ' + r.number + ' but the draft could not be made. ADONI TECH has been alerted.');
     LINES = [];
     out.innerHTML = note('ok', `Draft <b>${esc(r.quotation)}</b> created — opening it…`);
+    if (window.ICThumbs) ICThumbs.done('Draft ' + r.quotation + ' ready', 'Check the items, then send it.', 1500);
     setTimeout(() => { location.href = 'approve.html?id=' + encodeURIComponent(r.quotation_id); }, 900);
   } catch (e) { out.innerHTML = note('bad', esc(e.message)); $('#make').disabled = false; $('#make').textContent = 'Create draft quotation →'; }
 }
