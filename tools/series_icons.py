@@ -181,30 +181,56 @@ MOUNTS = {'RS': 'Rear flange', 'FS': 'Front flange', 'SS': 'Front + rear flange'
 
 
 def mount(code):
-    x0, L, D, d = 46, 110, 38, 20          # rear end x0, front end x0+L (rod side)
+    x0, L, D, d = 50, 104, 38, 20          # rear end x0, front end x0+L (rod side)
     b = ''
     base = code in ('TM', 'FM')
+    BY = CY + 40                           # floor line for foot-mounted versions
     if base:
-        b += f'<rect x="20" y="{CY + 40}" width="200" height="4" fill="#9aa3ad"/>'
-        b += ''.join(f'<line x1="{20 + i}" y1="{CY + 44}" x2="{14 + i}" y2="{CY + 50}" stroke="#9aa3ad" stroke-width="1"/>' for i in range(4, 200, 8))
-    def flange(x):
-        return rect(x, CY - 32, 7, 64, 'steel', 1) + f'<circle cx="{x + 3.5}" cy="{CY - 25}" r="2.2" fill="#fff" {S}/><circle cx="{x + 3.5}" cy="{CY + 25}" r="2.2" fill="#fff" {S}/>'
-    def foot(x):
-        return (rect(x - 4, CY + D / 2 - 1, 8, 40 - D / 2 + 1, 'steel', 0) + rect(x - 14, CY + 34, 28, 6, 'steel', 1)
-                + f'<circle cx="{x - 9}" cy="{CY + 37}" r="1.6" fill="#fff"/><circle cx="{x + 9}" cy="{CY + 37}" r="1.6" fill="#fff"/>')
-    if code == 'RC':    # clevis fork at the rear
-        b += rect(x0 - 26, CY - 13, 26, 5, 'steel', 1) + rect(x0 - 26, CY + 8, 26, 5, 'steel', 1) + rect(x0 - 6, CY - 13, 6, 26, 'steel', 0)
-        b += f'<circle cx="{x0 - 17}" cy="{CY}" r="4" fill="url(#chrome)" {S}/><line x1="{x0 - 17}" y1="{CY - 16}" x2="{x0 - 17}" y2="{CY + 16}" stroke="#23272c" stroke-width="1.4"/>'
+        b += f'<rect x="16" y="{BY}" width="208" height="4" fill="#9aa3ad"/>'
+        b += ''.join(f'<line x1="{16 + i}" y1="{BY + 4}" x2="{10 + i}" y2="{BY + 10}" stroke="#9aa3ad" stroke-width="1"/>' for i in range(4, 208, 8))
+
+    def flange(x, down=False):             # flange plate; foot versions reach down to the lug
+        h2 = 32
+        s = rect(x, CY - h2, 7, 2 * h2 + (BY - CY - h2 if down else 0), 'steel', 1)
+        return s + f'<circle cx="{x + 3.5}" cy="{CY - 25}" r="2.2" fill="#fff" {S}/><circle cx="{x + 3.5}" cy="{CY + 25}" r="2.2" fill="#fff" {S}/>'
+
+    def lug(x, direction):                 # foot lug welded to the flange bottom: gusset + base pad with a bolt hole
+        w = 22 * direction
+        pad_x = x if direction > 0 else x + w
+        s = f'<path d="M{x},{CY + 14} L{x},{BY - 6} L{x + w},{BY - 6} Z" fill="url(#steel)" {S}/>'
+        s += rect(pad_x, BY - 6, abs(w), 6, 'steel', 1)
+        s += f'<circle cx="{x + w * 0.62:.1f}" cy="{BY - 3}" r="1.7" fill="#fff" {S}/>'
+        return s
+
+    def clevis(x, direction):              # fork with pin; direction -1 = pointing rearwards, +1 = forwards
+        L2 = 24
+        x1 = x if direction > 0 else x - L2
+        s = rect(x1, CY - 12, L2, 5, 'steel', 1) + rect(x1, CY + 7, L2, 5, 'steel', 1)
+        yoke = x if direction > 0 else x - 6
+        s += rect(yoke, CY - 12, 6, 24, 'steel', 0)
+        px = x + direction * (L2 - 8)
+        s += f'<circle cx="{px}" cy="{CY}" r="4" fill="url(#chrome)" {S}/><line x1="{px}" y1="{CY - 15}" x2="{px}" y2="{CY + 15}" stroke="#23272c" stroke-width="1.4"/>'
+        return s
+
+    if code == 'RC':
+        b += clevis(x0, -1)
     b += cyl(x0, L, D, 'yellow', 4)
-    b += cyl(x0 + L, 42, d, 'chrome', 0) + rect(x0 + L + 42, CY - 14, 9, 28, 'steel', 3)
-    if code in ('RS', 'SS', 'TM', 'FR'):
-        b += flange(x0 - 7)
-    if code in ('FS', 'SS', 'TM', 'FF'):
-        b += flange(x0 + L - 8)
+    rod_end = x0 + L + 40
+    b += cyl(x0 + L, 40, d, 'chrome', 0)
+    if code == 'RC':
+        b += clevis(rod_end, +1)            # clevis on the rod end as well
+    else:
+        b += rect(rod_end, CY - 14, 9, 28, 'steel', 3)
+    rear_f, front_f = x0 - 7, x0 + L - 8
+    if code in ('RS', 'SS', 'TM', 'FR', 'FM'):
+        b += flange(rear_f, down=(code == 'FM'))
+    if code in ('FS', 'SS', 'TM', 'FF', 'FM'):
+        b += flange(front_f, down=code in ('FM', 'TM'))
     if code == 'TM':
-        b += foot(x0 + L - 22)
+        b += lug(front_f + 7, +1)           # foot lug just in front of the front flange
     if code == 'FM':
-        b += foot(x0 + 16) + foot(x0 + L - 16)
+        b += lug(rear_f, -1) + lug(rear_f + 7, +1)   # lug under the rear flange
+        b += lug(front_f + 7, +1)                     # lug at the bottom right of the front flange
     b += f'<text x="120" y="22" font-size="14" font-weight="700" fill="#1B3160" font-family="Arial" text-anchor="middle">{code}</text>'
     b += f'<text x="120" y="{CY + 66}" font-size="11" fill="#1B3160" font-family="Arial" text-anchor="middle">{MOUNTS[code]}</text>'
     return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 4 220 136" stroke-linejoin="round"><title>{code} - {MOUNTS[code]}</title>{DEFS}{b}</svg>'
