@@ -65,3 +65,4 @@ input.need,select.need{border-color:#D14343!important;box-shadow:0 0 0 3px #FBD9
 
 .ict-nod{display:inline-block;animation:ictNod2 .9s ease-in-out infinite;transform-origin:60% 85%}@keyframes ictNod2{0%,100%{transform:rotate(0)}40%{transform:rotate(-16deg)}70%{transform:rotate(6deg)}}@media (prefers-reduced-motion:reduce){.ict-nod{animation:none}}
 label .req{color:#D14343;font-weight:700}
+.mpics{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:4px}.mpick{border:2px solid #D8E0EA;border-radius:10px;background:#fff;padding:2px;cursor:pointer}.mpick img{width:100%;display:block}.mpick.on{border-color:#F57C00;background:#FFF4E8}

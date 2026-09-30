@@ -200,7 +200,7 @@ const server = app.listen(0, async () => {
     ok('AD line prints mounting + rod end, foot mount priced as its own accessory line', /Mounting: Foot mount \(FM\)/.test(QA.items[0].description) && /Rod end: MC - metallic cap/.test(QA.items[0].description) && QA.items[1] && QA.items[1].kind === 'accessory' && QA.items[1].key === 'FM', QA.items.map(i => i.description).join(' | '));
     const akhg = await post('/rfq', { line: 'crane', customer: cust, items: [{ table: 'shock_absorbers', key: 'AKHG100200', model: 'AKHG 100-200', qty: 2, mounting_code: 'RS' }] }, { 'content-type': 'application/json' });
     const QK = await get('/admin/quotation/' + (await get('/admin/rfq/' + akhg.id)).quotation_id);
-    ok('AKHG rear flange printed, no extra flange charge', /Mounting: Rear flange \(RS\)/.test(QK.items[0].description) && QK.items.filter(i => i.kind === 'accessory').length === 0, QK.items.map(i => i.description).join(' | '));
+    ok('AKHG rear flange printed, no extra flange charge', /Mounting: Rear flange mount \(RS\)/.test(QK.items[0].description) && QK.items.filter(i => i.kind === 'accessory').length === 0, QK.items.map(i => i.description).join(' | '));
     const noMount = await fetch(base + '/rfq', { method: 'POST', headers: H(false), body: JSON.stringify({ line: 'wri', customer: cust, items: [{ table: 'wire_rope_isolators', key: 'AWRI-64-90', model: 'AWRI-64-90', qty: 4 }] }) });
     ok('WRI RFQ without a mounting option is refused', noMount.status === 400);
     const wrSpec = await post('/rfq', { line: 'wri', customer: cust, items: [{ table: 'wire_rope_isolators', key: 'AWRI-64-90', model: 'AWRI-64-90', qty: 4, wri_mount_code: 'D', remark: 'holes/threads: M8 tapped' }] }, { 'content-type': 'application/json' });

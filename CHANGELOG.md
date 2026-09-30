@@ -1,4 +1,8 @@
 # Changelog
+## 2.11.2 — 30 Sep 2026 (AKHG mounting types with pictures)
+- AKHG mountings per catalogue: RS rear flange, FS front flange, SS front + rear flange, RC rod clevis, TM front flange + foot + rear flange, FM front + rear foot — tap-the-picture choice in the RFQ step (site/img/mount/*.svg, column image in rfq_options.csv).
+- EI keeps its own codes FF front flange / FR rear flange, now with pictures too.
+
 ## 2.11.1 — 30 Sep 2026 (rod-end prices, WRI mounting pictures, new model-type pictures)
 - Rod end pricing: list price = NC (no cap, basic rate); MC metallic cap +1 %, PU cap +2 %, MC-PU +3 % (assumed, confirm) — column surcharge_pct in rfq_options.csv. Staff see the % in the choice; customers see only the priced quotation.
 - WRI mounting options A–S described (top bar / bottom bar: through hole, countersunk, threaded) with a tap-the-picture picker (site/img/wri-mount/*.svg).

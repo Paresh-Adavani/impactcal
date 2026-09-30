@@ -1,27 +1,27 @@
-key,series,field,code,label,required,is_default,accessory,surcharge_pct,note,status
-AKHG:mounting:FS,AKHG,mounting,FS,Front flange (FS),1,0,,,flange is part of the buffer - no extra charge,active
-AKHG:mounting:RS,AKHG,mounting,RS,Rear flange (RS),1,0,,,,active
-AKHG:mounting:SS,AKHG,mounting,SS,Front and rear flange (SS),1,0,,,,active
-AKHG:mounting:RC,AKHG,mounting,RC,Rod clevis (RC),1,0,,,,active
-AKHG:mounting:TM,AKHG,mounting,TM,TM mounting (as catalogue),1,0,,,,active
-AKHG:mounting:FM,AKHG,mounting,FM,Foot mount (FM),1,0,,,,active
-EI:mounting:FF,EI,mounting,FF,Front flange (FF),1,0,,,flange is part of the buffer - no extra charge,active
-EI:mounting:FR,EI,mounting,FR,Rear flange (FR),1,0,,,,active
-AD:mounting:TB,"AD,ADX",mounting,TB,Threaded body with 2 lock nuts (standard),1,0,,,,active
-AD:mounting:FN,"AD,ADX",mounting,FN,Flange mount (FN / SF),1,0,FF,,priced as accessory FF,active
-AD:mounting:FM,"AD,ADX",mounting,FM,Foot mount (FM),1,0,FM,,priced as accessory FM,active
-AD:mounting:CL,"AD,ADX",mounting,CL,Clevis mount (CL),1,0,CM,,priced as accessory CM,active
-AC:mounting:TB,"AC,ACX",mounting,TB,Threaded body with 2 lock nuts (standard),0,1,,,,active
-AC:mounting:FN,"AC,ACX",mounting,FN,Flange mount (FN / SF),0,0,FF,,priced as accessory FF,active
-AC:mounting:FM,"AC,ACX",mounting,FM,Foot mount (FM),0,0,FM,,priced as accessory FM,active
-AC:mounting:CL,"AC,ACX",mounting,CL,Clevis mount (CL),0,0,CM,,priced as accessory CM,active
-ROD:rod_end:NC,"AC,ACX,AD,ADX",rod_end,NC,NC - no cap (basic rate),1,0,,0,,active
-ROD:rod_end:PU,"AC,ACX,AD,ADX",rod_end,PU,PU - polyurethane cap,1,0,,2,,active
-ROD:rod_end:MC,"AC,ACX,AD,ADX",rod_end,MC,MC - metallic cap,1,0,,1,,active
-ROD:rod_end:MCPU,"AC,ACX,AD,ADX",rod_end,MCPU,MC-PU - metallic cap with PU button,1,0,,3,+3 % assumed (MC +1 plus PU +2) - confirm,active
-WRI:wri_mount:A,AWRI,wri_mount,A,A — top through hole / bottom countersunk,1,0,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
-WRI:wri_mount:B,AWRI,wri_mount,B,B — top countersunk / bottom countersunk,1,0,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
-WRI:wri_mount:C,AWRI,wri_mount,C,C — top through hole / bottom threaded,1,0,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
-WRI:wri_mount:D,AWRI,wri_mount,D,D — top threaded / bottom threaded,1,0,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
-WRI:wri_mount:E,AWRI,wri_mount,E,E — top threaded / bottom countersunk,1,0,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
-WRI:wri_mount:S,AWRI,wri_mount,S,S — top through hole / bottom through hole,1,0,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
+key,series,field,code,label,required,is_default,accessory,surcharge_pct,image,note,status
+AKHG:mounting:RS,AKHG,mounting,RS,Rear flange mount (RS),1,0,,,img/mount/RS.svg,flange / foot is part of the buffer - no extra charge,active
+AKHG:mounting:FS,AKHG,mounting,FS,Front flange mount (FS),1,0,,,img/mount/FS.svg,flange / foot is part of the buffer - no extra charge,active
+AKHG:mounting:SS,AKHG,mounting,SS,Front and rear flange mount (SS),1,0,,,img/mount/SS.svg,flange / foot is part of the buffer - no extra charge,active
+AKHG:mounting:RC,AKHG,mounting,RC,Rod clevis (RC),1,0,,,img/mount/RC.svg,,active
+AKHG:mounting:TM,AKHG,mounting,TM,"Front flange and foot, rear flange (TM)",1,0,,,img/mount/TM.svg,flange / foot is part of the buffer - no extra charge,active
+AKHG:mounting:FM,AKHG,mounting,FM,Front and rear foot mount (FM),1,0,,,img/mount/FM.svg,flange / foot is part of the buffer - no extra charge,active
+EI:mounting:FF,EI,mounting,FF,Front flange (FF),1,0,,,img/mount/FF.svg,flange is part of the buffer - no extra charge,active
+EI:mounting:FR,EI,mounting,FR,Rear flange (FR),1,0,,,img/mount/FR.svg,flange is part of the buffer - no extra charge,active
+AD:mounting:TB,"AD,ADX",mounting,TB,Threaded body with 2 lock nuts (standard),1,0,,,,,active
+AD:mounting:FN,"AD,ADX",mounting,FN,Flange mount (FN / SF),1,0,FF,,,priced as accessory FF,active
+AD:mounting:FM,"AD,ADX",mounting,FM,Foot mount (FM),1,0,FM,,,priced as accessory FM,active
+AD:mounting:CL,"AD,ADX",mounting,CL,Clevis mount (CL),1,0,CM,,,priced as accessory CM,active
+AC:mounting:TB,"AC,ACX",mounting,TB,Threaded body with 2 lock nuts (standard),0,1,,,,,active
+AC:mounting:FN,"AC,ACX",mounting,FN,Flange mount (FN / SF),0,0,FF,,,priced as accessory FF,active
+AC:mounting:FM,"AC,ACX",mounting,FM,Foot mount (FM),0,0,FM,,,priced as accessory FM,active
+AC:mounting:CL,"AC,ACX",mounting,CL,Clevis mount (CL),0,0,CM,,,priced as accessory CM,active
+ROD:rod_end:NC,"AC,ACX,AD,ADX",rod_end,NC,NC - no cap (basic rate),1,0,,0,,,active
+ROD:rod_end:PU,"AC,ACX,AD,ADX",rod_end,PU,PU - polyurethane cap,1,0,,2,,,active
+ROD:rod_end:MC,"AC,ACX,AD,ADX",rod_end,MC,MC - metallic cap,1,0,,1,,,active
+ROD:rod_end:MCPU,"AC,ACX,AD,ADX",rod_end,MCPU,MC-PU - metallic cap with PU button,1,0,,3,,+3 % assumed (MC +1 plus PU +2) - confirm,active
+WRI:wri_mount:A,AWRI,wri_mount,A,A — top through hole / bottom countersunk,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
+WRI:wri_mount:B,AWRI,wri_mount,B,B — top countersunk / bottom countersunk,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
+WRI:wri_mount:C,AWRI,wri_mount,C,C — top through hole / bottom threaded,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
+WRI:wri_mount:D,AWRI,wri_mount,D,D — top threaded / bottom threaded,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
+WRI:wri_mount:E,AWRI,wri_mount,E,E — top threaded / bottom countersunk,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
+WRI:wri_mount:S,AWRI,wri_mount,S,S — top through hole / bottom through hole,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active

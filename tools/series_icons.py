@@ -174,10 +174,49 @@ def wri(code):
     return b + '</svg>'
 
 
+# ---------------------------------------------------------------- AKHG / EI mounting types (site/img/mount/*.svg)
+OUTM = os.path.join(os.path.dirname(__file__), '..', 'site', 'img', 'mount')
+MOUNTS = {'RS': 'Rear flange', 'FS': 'Front flange', 'SS': 'Front + rear flange', 'RC': 'Rod clevis', 'TM': 'Front flange + foot, rear flange', 'FM': 'Front + rear foot',
+          'FF': 'Front flange (EI)', 'FR': 'Rear flange (EI)'}   # EI keeps its own codes
+
+
+def mount(code):
+    x0, L, D, d = 46, 110, 38, 20          # rear end x0, front end x0+L (rod side)
+    b = ''
+    base = code in ('TM', 'FM')
+    if base:
+        b += f'<rect x="20" y="{CY + 40}" width="200" height="4" fill="#9aa3ad"/>'
+        b += ''.join(f'<line x1="{20 + i}" y1="{CY + 44}" x2="{14 + i}" y2="{CY + 50}" stroke="#9aa3ad" stroke-width="1"/>' for i in range(4, 200, 8))
+    def flange(x):
+        return rect(x, CY - 32, 7, 64, 'steel', 1) + f'<circle cx="{x + 3.5}" cy="{CY - 25}" r="2.2" fill="#fff" {S}/><circle cx="{x + 3.5}" cy="{CY + 25}" r="2.2" fill="#fff" {S}/>'
+    def foot(x):
+        return (rect(x - 4, CY + D / 2 - 1, 8, 40 - D / 2 + 1, 'steel', 0) + rect(x - 14, CY + 34, 28, 6, 'steel', 1)
+                + f'<circle cx="{x - 9}" cy="{CY + 37}" r="1.6" fill="#fff"/><circle cx="{x + 9}" cy="{CY + 37}" r="1.6" fill="#fff"/>')
+    if code == 'RC':    # clevis fork at the rear
+        b += rect(x0 - 26, CY - 13, 26, 5, 'steel', 1) + rect(x0 - 26, CY + 8, 26, 5, 'steel', 1) + rect(x0 - 6, CY - 13, 6, 26, 'steel', 0)
+        b += f'<circle cx="{x0 - 17}" cy="{CY}" r="4" fill="url(#chrome)" {S}/><line x1="{x0 - 17}" y1="{CY - 16}" x2="{x0 - 17}" y2="{CY + 16}" stroke="#23272c" stroke-width="1.4"/>'
+    b += cyl(x0, L, D, 'yellow', 4)
+    b += cyl(x0 + L, 42, d, 'chrome', 0) + rect(x0 + L + 42, CY - 14, 9, 28, 'steel', 3)
+    if code in ('RS', 'SS', 'TM', 'FR'):
+        b += flange(x0 - 7)
+    if code in ('FS', 'SS', 'TM', 'FF'):
+        b += flange(x0 + L - 8)
+    if code == 'TM':
+        b += foot(x0 + L - 22)
+    if code == 'FM':
+        b += foot(x0 + 16) + foot(x0 + L - 16)
+    b += f'<text x="120" y="22" font-size="14" font-weight="700" fill="#1B3160" font-family="Arial" text-anchor="middle">{code}</text>'
+    b += f'<text x="120" y="{CY + 66}" font-size="11" fill="#1B3160" font-family="Arial" text-anchor="middle">{MOUNTS[code]}</text>'
+    return f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="10 4 220 136" stroke-linejoin="round"><title>{code} - {MOUNTS[code]}</title>{DEFS}{b}</svg>'
+
+
 if __name__ == '__main__':
     for k, f in ICONS.items():
         open(os.path.join(OUT, k + '.svg'), 'w').write(f())
     os.makedirs(OUTW, exist_ok=True)
     for k in WRI:
         open(os.path.join(OUTW, k + '.svg'), 'w').write(wri(k))
-    print('series icons:', len(ICONS), ' WRI mounting options:', len(WRI))
+    os.makedirs(OUTM, exist_ok=True)
+    for k in MOUNTS:
+        open(os.path.join(OUTM, k + '.svg'), 'w').write(mount(k))
+    print('series icons:', len(ICONS), ' WRI mounting options:', len(WRI), ' crane mountings:', len(MOUNTS))

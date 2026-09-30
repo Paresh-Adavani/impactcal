@@ -124,6 +124,14 @@ function specFill(series) {
     $(sel).classList.remove('need');
   };
   fill('#rmount', '#rmountBox', 'mounting'); fill('#rcap', '#rcapBox', 'rod_end');
+  // mounting pictures (AKHG / EI): tap a picture = choose it
+  const pics = sp.mounting && sp.mounting.options.some(x => x.image) ? sp.mounting.options.filter(x => x.image) : [];
+  $('#rmountPics').hidden = !pics.length;
+  $('#rmountPics').innerHTML = pics.length ? `<div class="mpics">${pics.map(x => `<button type="button" class="mpick" data-code="${esc(x.code)}" title="${esc(x.label)}"><img src="${esc(x.image)}" alt="${esc(x.label)}"></button>`).join('')}</div>` : '';
+  const mark = () => $$('#rmountPics .mpick').forEach(b => b.classList.toggle('on', b.dataset.code === $('#rmount').value));
+  $$('#rmountPics .mpick').forEach(b => b.onclick = () => { $('#rmount').value = b.dataset.code; $('#rmount').classList.remove('need'); mark(); });
+  $('#rmount').onchange = () => { $('#rmount').classList.remove('need'); mark(); };
+  mark();
 }
 function specMissing() {
   const sp = (CHOSEN && META.rfq_options && META.rfq_options[CHOSEN.series]) || {}, miss = [];
@@ -132,7 +140,7 @@ function specMissing() {
   return miss;
 }
 const selText = sel => { const o = $(sel).selectedOptions[0]; return o && o.value ? o.textContent.replace(/\s*\(\+[\d.]+ %\)$/, '') : ''; };
-['#rmount', '#rcap'].forEach(id => $(id).addEventListener('change', () => $(id).classList.remove('need')));
+$('#rcap').addEventListener('change', () => $('#rcap').classList.remove('need'));
 $('#showMore').onclick = () => { EXPANDED = !EXPANDED; renderRows(); };
 
 function buildReport() {
