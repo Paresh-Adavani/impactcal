@@ -1,4 +1,7 @@
 # Changelog
+## 2.11.3 — 30 Sep 2026 (rod-end caps: three choices)
+- Rod end for AC / ACX / AD / ADX: NC no cap (basic rate), MC metallic cap +1 %, PU cap (metallic housing with PU insert) +2 %. The separate MC-PU choice is removed — it is the same product as the PU cap.
+
 ## 2.11.2 — 30 Sep 2026 (AKHG mounting types with pictures)
 - AKHG mountings per catalogue: RS rear flange, FS front flange, SS front + rear flange, RC rod clevis, TM front flange + foot + rear flange, FM front + rear foot — tap-the-picture choice in the RFQ step (site/img/mount/*.svg, column image in rfq_options.csv).
 - EI keeps its own codes FF front flange / FR rear flange, now with pictures too.

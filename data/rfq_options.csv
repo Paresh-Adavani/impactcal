@@ -16,9 +16,8 @@ AC:mounting:FN,"AC,ACX",mounting,FN,Flange mount (FN / SF),0,0,FF,,,priced as ac
 AC:mounting:FM,"AC,ACX",mounting,FM,Foot mount (FM),0,0,FM,,,priced as accessory FM,active
 AC:mounting:CL,"AC,ACX",mounting,CL,Clevis mount (CL),0,0,CM,,,priced as accessory CM,active
 ROD:rod_end:NC,"AC,ACX,AD,ADX",rod_end,NC,NC - no cap (basic rate),1,0,,0,,,active
-ROD:rod_end:PU,"AC,ACX,AD,ADX",rod_end,PU,PU - polyurethane cap,1,0,,2,,,active
 ROD:rod_end:MC,"AC,ACX,AD,ADX",rod_end,MC,MC - metallic cap,1,0,,1,,,active
-ROD:rod_end:MCPU,"AC,ACX,AD,ADX",rod_end,MCPU,MC-PU - metallic cap with PU button,1,0,,3,,+3 % assumed (MC +1 plus PU +2) - confirm,active
+ROD:rod_end:PU,"AC,ACX,AD,ADX",rod_end,PU,PU - PU cap (metallic housing with PU insert),1,0,,2,,,active
 WRI:wri_mount:A,AWRI,wri_mount,A,A — top through hole / bottom countersunk,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
 WRI:wri_mount:B,AWRI,wri_mount,B,B — top countersunk / bottom countersunk,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
 WRI:wri_mount:C,AWRI,wri_mount,C,C — top through hole / bottom threaded,1,0,,,,mounting-bar holes per AWRI catalogue (top bar / bottom bar),active
