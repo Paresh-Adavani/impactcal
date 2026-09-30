@@ -1,7 +1,7 @@
 /* ImpactCal — field help.
  * When someone hovers over or types in a technical input, a side panel explains the field:
  * a small picture of what is meant, the unit (MKS), typical values and a plain-language note.
- * Desktop: floating panel on the right. Phone: a slim sheet at the bottom (tap ✕ to close).
+ * Desktop: floating panel on the right. Phone: a slim strip at the top, no picture; closes after 5 s, on scroll or on any other tap.
  * Works on dynamically drawn fields (event delegation on the input's id). */
 (function () {
   if (window.ICHelp) return;
@@ -117,7 +117,7 @@
   .ich.on{opacity:1;transform:none;pointer-events:auto}
   .ich h4{margin:0 22px 2px 0;font-size:15px;color:${N}}.ich .u{display:inline-block;background:#FFF1E3;color:#B85C00;border-radius:10px;padding:1px 8px;font-size:12px;font-weight:600;margin-bottom:4px}
   .ich .pic{background:#F7F9FC;border-radius:10px;margin:6px 0 8px}.ich p{margin:0 0 4px}.ich .ty{color:#5A6672;font-size:12.5px}.ich .x{position:absolute;right:10px;top:8px;border:0;background:none;font-size:18px;color:#8895A5;cursor:pointer}
-  @media (max-width:760px){.ich{left:8px;right:8px;bottom:8px;width:auto;display:grid;grid-template-columns:110px 1fr;gap:0 10px;padding:10px}.ich .pic{grid-row:1/5;margin:0;align-self:center}.ich .pic svg{height:90px}}`;
+  @media (max-width:760px){.ich{left:8px;right:8px;top:8px;bottom:auto;width:auto;padding:8px 34px 8px 12px;font-size:12.5px;transform:translateY(-10px)}.ich .pic{display:none}.ich h4{font-size:13.5px;display:inline;margin-right:6px}.ich .d{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin:2px 0}.ich .ty{font-size:11.5px}}`;
   let box = null, hideT = null, cur = null;
   function ensure() {
     if (box) return box;
@@ -135,7 +135,13 @@
       box.querySelector('.pic').innerHTML = PICS[pic] ? PICS[pic](hl) : ''; box.querySelector('h4').textContent = title;
       box.querySelector('.u').textContent = 'Unit: ' + unit; box.querySelector('.d').textContent = note; box.querySelector('.ty').textContent = typ ? 'Typical: ' + typ : ''; cur = id; }
     box.classList.add('on');
+    if (PHONE()) { shownAt = Date.now(); clearTimeout(phoneT); phoneT = setTimeout(() => hide(), 5000); }
   }
+  /* phones: the strip sits at the top and never blocks buttons - it closes after 5 s, on scroll, or on a tap anywhere else */
+  const PHONE = () => matchMedia('(max-width:760px)').matches;
+  let phoneT = null, shownAt = 0;   // the keyboard opening scrolls the page - ignore scroll for 1 s after showing
+  window.addEventListener('scroll', () => { if (PHONE() && Date.now() - shownAt > 1000 && box && box.classList.contains('on')) hide(true); }, { passive: true });
+  document.addEventListener('touchstart', e => { if (PHONE() && box && box.classList.contains('on') && !box.contains(e.target) && !key(e.target)) hide(true); }, { passive: true });
   function hide(now) { clearTimeout(hideT); hideT = setTimeout(() => { if (box) box.classList.remove('on'); cur = null; if (now === true) { muted = true; setTimeout(() => { muted = false; }, 4000); } }, now === true ? 0 : 350); }
   const key = el => (el && el.id && H[el.id] ? el.id : null);
   document.addEventListener('focusin', e => { const k = key(e.target); if (k) show(k); });

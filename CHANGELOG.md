@@ -1,4 +1,8 @@
 # Changelog
+## 2.10.1 — 30 Sep 2026 (phone fix)
+- Help panel on phones is now a slim strip at the top (no picture) that closes after 5 s, on scroll or on any other tap — it had been covering the lower fields and the Calculate button on the selector (crane buffers, WRI, rubber).
+- Selection report: rows grow with wrapped text, ≤ printed as <=, raw application codes hidden.
+
 ## 2.10.0 — 28 Sep 2026 (courier freight, SS 316 lugs, WRI quotation request, field help)
 - **Packing & freight by courier (Shree Maruti Courier)** on every Indian quotation — ADONI TECH, direct supply, and the dealer's billing when he buys for stock:
   - Rs 50 per kg of estimated product weight within Maharashtra (about 2 days), Rs 90 per kg to the rest of India (4–5 days), **plus 10 % fuel surcharge**, rounded up to the rupee.
