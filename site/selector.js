@@ -64,8 +64,7 @@ async function boot() {
   await bootCommon('nav_shock');
   META = await api('meta');
   $('#standard').innerHTML = META.standards.map(s => `<option value="${s.code}">${esc(s.name)}</option>`).join('');
-  $('#rmount').innerHTML = '<option value="">—</option>' + META.accessories.filter(a => a.kind === 'mounting').map(a => `<option>${esc(a.name)}</option>`).join('');
-  $('#rcap').innerHTML = '<option value="">—</option>' + META.accessories.filter(a => a.kind === 'cap').map(a => `<option>${esc(a.name)}</option>`).join('');
+  specFill(null);
   $('#pcountry').innerHTML = COUNTRIES.map(c => `<option>${c}</option>`).join('');
   const c = META.company;
   $('#rAddr').innerHTML = `${esc(c.addr1 || '')}, ${esc(c.addr2 || '')}<br>${esc(c.city || '')} ${esc(c.pincode || '')} · ${esc(c.state_name || '')}, India<br>${esc(c.tel || '')} · ${esc(c.phone || '')} · ${esc(c.email || '')}<br><b>GSTIN ${esc(c.gstin || '')}</b>`;
@@ -113,6 +112,27 @@ function renderRows() {
   $$('#resTbl tbody tr').forEach(tr => tr.onclick = () => { $$('#resTbl tbody tr').forEach(x => x.classList.remove('sel')); tr.classList.add('sel'); tr.querySelector('input').checked = true; CHOSEN = rows[tr.dataset.i]; $('#toRfq').disabled = $('#dlReport').disabled = false; });
   const more = all.length - TOP, b = $('#showMore'); b.hidden = more <= 0; b.textContent = EXPANDED ? t('show_best', { n: TOP }) : t('show_more', { n: more });
 }
+/* RFQ specification: mounting and rod end offered per series (data/rfq_options.csv). Required ones must be chosen -
+   they print on the quotation and later on the supply order. */
+function specFill(series) {
+  const sp = (series && META.rfq_options && META.rfq_options[series]) || {};
+  const fill = (sel, box, f) => {
+    const o = sp[f]; $(box).hidden = !o; $(box + ' .req').hidden = !(o && o.required); if (!o) { $(sel).innerHTML = ''; return; }
+    const def = o.options.find(x => x.is_default);
+    $(sel).innerHTML = (o.required && !def ? `<option value="">${esc(t('spec_choose'))}</option>` : o.required ? '' : '<option value="">—</option>') +
+      o.options.map(x => `<option value="${esc(x.code)}"${def && def.code === x.code ? ' selected' : ''}>${esc(x.label)}</option>`).join('');
+    $(sel).classList.remove('need');
+  };
+  fill('#rmount', '#rmountBox', 'mounting'); fill('#rcap', '#rcapBox', 'rod_end');
+}
+function specMissing() {
+  const sp = (CHOSEN && META.rfq_options && META.rfq_options[CHOSEN.series]) || {}, miss = [];
+  if (sp.mounting && sp.mounting.required && !$('#rmount').value) { miss.push(t('f_mount')); $('#rmount').classList.add('need'); }
+  if (sp.rod_end && sp.rod_end.required && !$('#rcap').value) { miss.push(t('f_cap')); $('#rcap').classList.add('need'); }
+  return miss;
+}
+const selText = sel => { const o = $(sel).selectedOptions[0]; return o && o.value ? o.textContent : ''; };
+['#rmount', '#rcap'].forEach(id => $(id).addEventListener('change', () => $(id).classList.remove('need')));
 $('#showMore').onclick = () => { EXPANDED = !EXPANDED; renderRows(); };
 
 function buildReport() {
@@ -185,6 +205,8 @@ async function sendRfq() {
   if (!CHOSEN) return;
   const cust = { company: $('#pcust').value || $('#pname').value || 'Enquiry', contact: $('#pcontact').value, email: $('#pemail').value, phone: $('#pphone').value, gstin: $('#pgstin').value, country: $('#pcountry').value || 'India' };
   if (!cust.email || !cust.phone || !cust.contact) { $('#rfqOut').innerHTML = `<div class="note bad">${t('need_contact')}</div>`; contactOk(); return; }
+  const miss = specMissing();
+  if (miss.length) { $('#rfqOut').innerHTML = `<div class="note bad">${esc(t('spec_missing', { x: miss.join(' / ') }))}</div>`; ($('#rmount').classList.contains('need') ? $('#rmount') : $('#rcap')).focus(); return; }
   overlay('sending', t('sending'), t('sending_sub'));
   const held = new Promise(r => setTimeout(r, 900));
   try {
@@ -194,7 +216,7 @@ async function sendRfq() {
       selection: { case_id: CASE, standard: RESULT.standard.code, inputs: duty(), chosen_bk: c.bk,
         summary: { 'Impact case': t(CASE_ART[CASE][1]), 'Standard': RESULT.standard.name, 'Design velocity': d.v.toFixed(3) + ' m/s', 'Energy per impact': fmt(c.E_t) + ' Nm', 'Energy per hour': fmt(c.E_tc) + ' Nm/h', 'Effective mass': fmt(c.m_e) + ' kg', 'Deceleration': c.a.toFixed(2) + ' m/s²', 'Utilisation': `${(c.u_stroke * 100).toFixed(0)}% per stroke, ${(c.u_hour * 100).toFixed(0)}% per hour` } },
       formats: [...$('#rfmt').selectedOptions].map(o => o.value), message: $('#rmsg').value,
-      items: [{ table: 'shock_absorbers', key: c.bk, model: c.model, qty: Number($('#rqty').value) || 1, mounting: $('#rmount').value, cap: $('#rcap').value }] } });
+      items: [{ table: 'shock_absorbers', key: c.bk, model: c.model, qty: Number($('#rqty').value) || 1, mounting_code: $('#rmount').value, mounting: selText('#rmount'), cap_code: $('#rcap').value, cap: selText('#rcap') }] } });
     await held;
     overlay('done', t('sent_title', { n: r.number }), (r.ack && r.ack.ok) ? t('sent_ack') : t('sent_noack'), true);
     $('#rfqOut').innerHTML = `<div class="note ok"><b>${t('sent_title', { n: r.number })}</b> ${t('sent_note')}</div>`;
@@ -208,7 +230,7 @@ $$('.step').forEach(s => s.addEventListener('click', () => step(s.dataset.s)));
 $('#tabCrane').onclick = () => setGroup('crane'); $('#tabInd').onclick = () => setGroup('industrial');
 $('#standard').onchange = stdNote; $('#curSel').onchange = () => { if (RESULT) calculate().catch(e => alert(e.message)); };
 $('#calc').onclick = () => calculate().catch(e => alert(e.message));
-$('#toRfq').onclick = () => { $('#rfqLines').innerHTML = `<div class="note blue" style="display:flex;gap:14px;align-items:center"><img src="${art(CASE)}" alt="" style="max-height:64px"><span><b>${esc(CHOSEN.model)}</b> — ${fmt(CHOSEN.stroke_mm)} mm, ${fmt(CHOSEN.nm_per_cycle)} Nm/cycle${META.prices && CHOSEN.price != null ? ` · <span class="price">${money(CHOSEN.price, RESULT.currency)}</span> · ${CHOSEN.lead_time_days || '—'} d` : ''}<br><span class="muted">${esc(t(CASE_ART[CASE][1]))} · ${esc(RESULT.standard.name)}</span></span></div>`; step(5); };
+$('#toRfq').onclick = () => { $('#rfqLines').innerHTML = `<div class="note blue" style="display:flex;gap:14px;align-items:center"><img src="${art(CASE)}" alt="" style="max-height:64px"><span><b>${esc(CHOSEN.model)}</b> — ${fmt(CHOSEN.stroke_mm)} mm, ${fmt(CHOSEN.nm_per_cycle)} Nm/cycle${META.prices && CHOSEN.price != null ? ` · <span class="price">${money(CHOSEN.price, RESULT.currency)}</span> · ${CHOSEN.lead_time_days || '—'} d` : ''}<br><span class="muted">${esc(t(CASE_ART[CASE][1]))} · ${esc(RESULT.standard.name)}</span></span></div>`; specFill(CHOSEN.series); $('#rfqOut').innerHTML = ''; step(5); };
 $('#sendRfq').onclick = () => sendRfq();
 $('#loadExample').onclick = () => { Object.assign(S, { pname: 'Bay 3 gantry — end stops', pcust: 'Example Engineering Ltd.', pcontact: 'R. Kulkarni', pequip: '20 t EOT crane, 22 m span', pby: 'P. Adavani', d_m: 20000, d_v: 40, d_P: 15, d_C: 20, d_n: 2, group: 'crane', case: 'C1' }); save(); location.href = 'selector.html?group=crane'; };
 $('#pgstin').addEventListener('blur', async () => { const g = $('#pgstin').value.trim(); if (!g) { $('#gstinMsg').innerHTML = ''; return; } const v = await api('gstin/' + encodeURIComponent(g));

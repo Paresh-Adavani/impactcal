@@ -1,4 +1,11 @@
 # Changelog
+## 2.11.0 — 30 Sep 2026 (RFQ specification: mounting, rod end, WRI mounting option; drawings in 48 h)
+- New table data/rfq_options.csv (Admin → CSV database): mounting / rod-end / WRI mounting-option choices per series.
+- Customer must choose before the RFQ goes: mounting for AKHG (FS, RS, SS, RC, TM, FM), EI (FF, FR), AD / ADX (threaded body, flange, foot, clevis); rod end for AC, ACX, AD, ADX (N, PU, MC, MC-PU); wire rope isolators mounting option A, B, C, D, E or S (+ optional hole / thread details). Nothing pre-selected.
+- The choice prints on the quotation line ("Mounting: …", "Rod end: …", "Mounting option D") and is kept on the line for the supply order. AD/ADX/AC/ACX flange, foot and clevis are priced as accessory lines; AKHG / EI flanges carry no extra charge.
+- Sales / dealer RFQs and portal quotations may leave an option open — it prints "to be confirmed". The portal shows the same choices per line.
+- Drawings: customers are told GA drawings (PDF) and 3D files (STEP) follow within 48 hours (selector, WRI request box, acknowledgement mail, selection report). Approval page reminds staff the GA library is under review.
+
 ## 2.10.1 — 30 Sep 2026 (phone fix)
 - Help panel on phones is now a slim strip at the top (no picture) that closes after 5 s, on scroll or on any other tap — it had been covering the lower fields and the Calculate button on the selector (crane buffers, WRI, rubber).
 - Selection report: rows grow with wrapped text, ≤ printed as <=, raw application codes hidden.

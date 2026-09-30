@@ -114,7 +114,7 @@ const server = app.listen(0, async () => {
     }
     console.log('\n— CSV database (admin) —');
     const tables = await get('/admin/csv');
-    ok('nine tables listed', tables.length === 9, tables.map(t => t.table).join(','));
+    ok('ten tables listed', tables.length === 10, tables.map(t => t.table).join(','));
     const text = await fetch(base + '/admin/csv/shock_absorbers', { headers: H() }).then(r => r.text());
     const parsed = csv.parse(text);
     ok('download parses, 311 rows, has lead_time_days & price_inr', parsed.rows.length === 311 && parsed.header.includes('lead_time_days') && parsed.header.includes('price_inr'));
@@ -187,6 +187,26 @@ const server = app.listen(0, async () => {
     const rev = await post('/admin/rfq/' + rfq.id + '/quote', {});
     ok('revision keeps the number, bumps rev', rev.quotation.number === Q.number && rev.quotation.rev === 1, `${rev.quotation.number} rev ${rev.quotation.rev}`);
 
+    console.log('\n— RFQ specification: mounting / rod end / WRI mounting option —');
+    const meta2 = await get('/meta');
+    ok('meta carries RFQ options: AKHG mounting required, AD rod end required, AWRI options A-S', meta2.rfq_options.AKHG.mounting.required && meta2.rfq_options.AD.rod_end.required && meta2.rfq_options.AWRI.wri_mount.options.map(o => o.code).join('') === 'ABCDES' && !meta2.rfq_options.AKHG.rod_end);
+    const cust = { company: 'Spec Test Works', contact: 'S. Patil', email: 'spec@spectest.in', phone: '+91 98220 11223', country: 'India' };
+    const noCap = await fetch(base + '/rfq', { method: 'POST', headers: H(false), body: JSON.stringify({ line: 'industrial', customer: cust, items: [{ table: 'shock_absorbers', key: 'AD4250', model: 'AD-42-50', qty: 2, mounting_code: 'TB' }] }) });
+    const noCapJ = await noCap.json();
+    ok('customer RFQ without a rod end is refused and says what to choose', noCap.status === 400 && /Rod end/.test(noCapJ.error), noCapJ.error);
+    const okAd = await post('/rfq', { line: 'industrial', customer: cust, items: [{ table: 'shock_absorbers', key: 'AD4250', model: 'AD-42-50', qty: 2, mounting_code: 'FM', cap_code: 'MC' }] }, { 'content-type': 'application/json' });
+    const QA = await get('/admin/quotation/' + (await get('/admin/rfq/' + okAd.id)).quotation_id);
+    ok('AD line prints mounting + rod end, foot mount priced as its own accessory line', /Mounting: Foot mount \(FM\)/.test(QA.items[0].description) && /Rod end: MC - metallic cap/.test(QA.items[0].description) && QA.items[1] && QA.items[1].kind === 'accessory' && QA.items[1].key === 'FM', QA.items.map(i => i.description).join(' | '));
+    const akhg = await post('/rfq', { line: 'crane', customer: cust, items: [{ table: 'shock_absorbers', key: 'AKHG100200', model: 'AKHG 100-200', qty: 2, mounting_code: 'RS' }] }, { 'content-type': 'application/json' });
+    const QK = await get('/admin/quotation/' + (await get('/admin/rfq/' + akhg.id)).quotation_id);
+    ok('AKHG rear flange printed, no extra flange charge', /Mounting: Rear flange \(RS\)/.test(QK.items[0].description) && QK.items.filter(i => i.kind === 'accessory').length === 0, QK.items.map(i => i.description).join(' | '));
+    const noMount = await fetch(base + '/rfq', { method: 'POST', headers: H(false), body: JSON.stringify({ line: 'wri', customer: cust, items: [{ table: 'wire_rope_isolators', key: 'AWRI-64-90', model: 'AWRI-64-90', qty: 4 }] }) });
+    ok('WRI RFQ without a mounting option is refused', noMount.status === 400);
+    const wrSpec = await post('/rfq', { line: 'wri', customer: cust, items: [{ table: 'wire_rope_isolators', key: 'AWRI-64-90', model: 'AWRI-64-90', qty: 4, wri_mount_code: 'D', remark: 'holes/threads: M8 tapped' }] }, { 'content-type': 'application/json' });
+    const QW = await get('/admin/quotation/' + (await get('/admin/rfq/' + wrSpec.id)).quotation_id);
+    ok('WRI quotation line carries the mounting option for the lug order', /Mounting option D/.test(QW.items[0].description) && QW.items[0].wri_mount_code === 'D' && /M8 tapped/.test(QW.items[0].description), QW.items[0].description);
+    ok('staff RFQ without a rod end prints "to be confirmed"', /Rod end: to be confirmed/.test(Q.items[0].description), Q.items[0].description);
+
     console.log('\n— export (Germany, USD) —');
     const rfx = await post('/rfq', { line: 'wri', customer: { company: 'Beispiel GmbH', contact: 'H. Müller', email: 'h@example.de', phone: '+49 1', country: 'Germany' }, items: [{ table: 'wire_rope_isolators', key: 'AWRI-16-10', model: 'AWRI-16-10', qty: 4 }] });
     const QX = await get('/admin/quotation/' + (await get('/admin/rfq/' + rfx.id)).quotation_id);
@@ -196,7 +216,7 @@ const server = app.listen(0, async () => {
 
     console.log('\n— exports & audit —');
     const ex = await fetch(base + '/admin/export/rfqs.csv', { headers: H() }).then(r => r.text());
-    ok('RFQ export lists every request', csv.parse(ex).rows.length === 3, csv.parse(ex).rows.length + ' rows (2 RFQs + the lug-price test quotation)');
+    ok('RFQ export lists every request', csv.parse(ex).rows.length === 6, csv.parse(ex).rows.length + ' rows (2 RFQs + the lug-price test quotation + 3 specification RFQs)');
     const au = await get('/admin/audit?days=1');
     ok('audit trail records the approval', au.some(a => a.what === 'quotation.send'));
     ok('mail verify reports cleanly when unconfigured', (await get('/admin/mail/verify')).ok === false);
@@ -505,7 +525,7 @@ const server = app.listen(0, async () => {
     ok('dampa: runs WRI selection tool, then offers RFQ card', c2.status === 200 && c2.tools.join() === 'select_wire_rope_isolator,prepare_rfq' && c2.rfq && c2.rfq.items[0].model === 'AWRI-127-90', c2.tools.join());
     const toolRes = JSON.stringify(seen.find(b => /tool_result/.test(JSON.stringify(b.messages[b.messages.length - 1]))).messages.slice(-1));
     ok('dampa: tool result carries real candidates, no price for visitor', /AWRI-127-90/.test(toolRes) && !/list_price_inr/.test(toolRes));
-    const rq2 = await post('/rfq', { line: 'wri', customer: { company: 'Bharat Naval Systems', contact: 'Arun Menon', email: 'arun.menon@bharatnaval.in', phone: '+91 98470 12345' }, items: [{ table: 'wire_rope_isolators', key: 'AWRI-127-90', model: 'AWRI-127-90', qty: 4 }], selection: { case_id: 'DAMPA', summary: { mass: '280 kg' } }, message: 'Prepared with DAMPA', assistant_conversation: c1.conversation_id }, { 'content-type': 'application/json' });
+    const rq2 = await post('/rfq', { line: 'wri', customer: { company: 'Bharat Naval Systems', contact: 'Arun Menon', email: 'arun.menon@bharatnaval.in', phone: '+91 98470 12345' }, items: [{ table: 'wire_rope_isolators', key: 'AWRI-127-90', model: 'AWRI-127-90', qty: 4, wri_mount_code: 'C' }], selection: { case_id: 'DAMPA', summary: { mass: '280 kg' } }, message: 'Prepared with DAMPA', assistant_conversation: c1.conversation_id }, { 'content-type': 'application/json' });
     const al = await get('/admin/assistant');
     const row = al.conversations.find(x => x.id === c1.conversation_id);
     ok('dampa: admin sees conversation, files, cost and linked RFQ', row && row.files === 2 && row.rfq === rq2.number && al.usage.usd > 0, JSON.stringify(row));

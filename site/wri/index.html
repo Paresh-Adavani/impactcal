@@ -1165,19 +1165,20 @@ function flashSent(number,msg){
 async function postLead(payload){
   /* ImpactCal: create the RFQ in the approval workflow (server prices it and alerts the approver) */
   try{
-    const B=window.__wriBest||{}, best=B.best||{}, inp=B.inp||{};
+    const B=window.__wriBest||{}, best=B.best||{}, inp=B.inp||{}, X=payload._xref||null, MT=payload._mount||window.__wriMount||{};
     const tok=(function(){try{return localStorage.getItem('ic_token')||'';}catch(e){return '';}})();
     const summary={}; for(const k of ['Application','Standard','Mounting','Recommended','Results','Vibration','Shock','Verdict']) if(payload[k]) summary[k]=payload[k];
     const body={ line:'wri', customer:{ company:payload.Customer||payload.Project||'Enquiry', contact:payload.Contact, email:payload.Email, phone:payload.Phone, country:(document.getElementById('p_country')||{}).value||'India' },
       project:{ name:payload.Project, equipment:payload.Equipment, prepared_by:(document.getElementById('p_eng')||{}).value||'' },
       selection:{ case_id:'WRI', standard:S.std, inputs:{ app:S.app, mnt:S.mnt, mass:inp.mass, N:inp.N, Ns:inp.Ns, frag:inp.frag, gv:inp.gv, gh:inp.gh, tau:inp.tau }, chosen:best.m, summary },
       formats:payload._formats||['PDF'], message:payload.RFQ||'',
-      items:[{ table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:$('o_duty').value, lug:$('o_lugs').value, wire:$('o_wire').value }] };
+      items:[ X ? { table:'wire_rope_isolators', key:X.model, model:X.model, qty:X.qty, remark:[X.duty, 'replaces '+X.ref].filter(Boolean).join(' · '), lug:X.lug, wire:X.wire, wri_mount_code:MT.code||'', wri_mount:MT.label||'' }
+        : { table:'wire_rope_isolators', key:best.m, model:best.m, qty:(typeof rfqQty==='function'?rfqQty():inp.N)||1, remark:[$('o_duty').value, MT.detail?'holes/threads: '+MT.detail:''].filter(Boolean).join(' · '), lug:$('o_lugs').value, wire:$('o_wire').value, wri_mount_code:MT.code||'', wri_mount:MT.label||'' }] };
     const r=await fetch('/api/rfq',{method:'POST',headers:Object.assign({'content-type':'application/json'},tok?{authorization:'Bearer '+tok}:{}),body:JSON.stringify(body)});
     const j=await r.json().catch(()=>({}));
     if(r.ok){ const me=(function(){try{return JSON.parse(localStorage.getItem('ic_user')||'null');}catch(e){return null;}})();
       if(j.quotation_id&&me&&(me.role==='dealer'||me.role==='sales')){ flashSent(j.number,'Draft quotation '+j.quotation+' is ready — opening it now.'); setTimeout(()=>{location.href='/approve.html?id='+encodeURIComponent(j.quotation_id);},1500); return true; }
-      flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. We normally reply within one working day.':'We have it. Our engineer will come back to you, normally within one working day.'); return true; }
+      flashSent(j.number, (j.ack&&j.ack.ok)?'A copy is on its way to your inbox. Quotation normally within one working day; drawings / 3D files within 48 hours.':'We have it. Quotation normally within one working day; drawings / 3D files within 48 hours.'); return true; }
     if(typeof toast==='function') toast('Could not send: '+(j.error||r.statusText)); return false;
   }catch(e){ return false; }
 }
@@ -1228,6 +1229,10 @@ async function postReport(payload){
   }catch(e){ return false; }
 }
 /* quotation + drawings request (explicit), after the report or straight from the results */
+function wriMountOptions(){
+  const o=(DATA.wri_mount&&DATA.wri_mount.options)||['A','B','C','D','E','S'].map(c=>({code:c,label:'Mounting option '+c+' (catalogue)'}));
+  return '<option value="">— please choose —</option>'+o.map(x=>'<option value="'+x.code+'">'+x.label+'</option>').join('');
+}
 function openRfq(afterReport){
   if(!S.results){toast('Run a selection first');return;}
   const B=S.results, passList=B.list.filter(r=>r.pass), best=passList[0]||B.list[0]; window.__wriBest={best:best,inp:B.inp};
@@ -1240,10 +1245,13 @@ function openRfq(afterReport){
     <div class="note" style="margin:10px 0"><b>${rfqQty()} × ${best.m}</b> · Lugs: ${$('o_lugs').value} · Wire rope: ${$('o_wire').value} · ${$('o_duty').value}</div>
     <div class="grid2"><div class="f"><label>Quantity <span class="qm" title="Isolators + stabilizers; add spares if you want them quoted.">?</span></label><input id="rq_qty" type="number" min="1" value="${rfqQty()}"></div>
       <div class="f"><label>Needed by <span class="qm" title="Optional — the date you need the isolators on site.">?</span></label><input id="rq_date" type="date"></div></div>
+    <div class="grid2"><div class="f"><label>Mounting option <b style="color:#D14343">*</b> <span class="qm" title="Catalogue mounting option A, B, C, D, E or S — decides how the mounting holes / threads in the lugs are made. It is printed on our quotation and on the supply order.">?</span></label><select id="rq_mount">${wriMountOptions()}</select></div>
+      <div class="f"><label>Hole / thread details <span class="qm" title="Optional — e.g. M8 tapped, Ø9 through holes, inserts, special pitch.">?</span></label><input id="rq_mdet" placeholder="e.g. M8 tapped / Ø9 through"></div></div>
     <div class="f"><label>Please also send</label>
       <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_ga" checked style="width:auto"> GA drawing (PDF)</label>
       <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_3d" style="width:auto"> 3D model (STEP)</label>
       <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_tc" style="width:auto"> Test certificate / QAP</label></div>
+    <div class="note" style="margin:6px 0 10px;font-size:13px">GA drawings (PDF) and 3D files (STEP) are normally sent within <b>48 hours</b> of your request.</div>
     <div class="f"><label>Message (optional)</label><textarea id="rq_msg" rows="2" placeholder="Delivery address, special requirements, tender reference …"></textarea></div>
     <div class="navf" style="margin-top:10px"><button class="btn btn-g" id="rq_cancel">${afterReport?'Not now':'Cancel'}</button><button class="btn btn-p" id="rq_send">Send request →</button></div></div>`;
   m.style.display='flex';
@@ -1253,14 +1261,16 @@ function openRfq(afterReport){
 function sendRfq(){
   const em=$('p_email').value.trim();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)||!$('p_phone').value.trim()||!($('p_contact').value.trim()||$('p_cust').value.trim())){ toast('Please fill your name, e-mail and phone in step 1'); document.getElementById('rfqModal').style.display='none'; go(0); return; }
+  if(!$('rq_mount').value){ toast('Please choose the mounting option (A, B, C, D, E or S) — it decides how the lugs are made'); $('rq_mount').focus(); $('rq_mount').style.borderColor='#D14343'; return; }
+  window.__wriMount={ code:$('rq_mount').value, label:$('rq_mount').selectedOptions[0].textContent, detail:$('rq_mdet').value.trim() };
   const q=Math.max(1,+$('rq_qty').value||1); $('o_qty').value=q;
   const want=[['rq_ga','GA drawing (PDF)'],['rq_3d','3D model (STEP)'],['rq_tc','test certificate / QAP']].filter(([id])=>$(id).checked).map(x=>x[1]);
   const B=window.__wriBest, best=B.best, inp=B.inp;
   const payload={ Project:$('p_name').value, Customer:$('p_cust').value, Contact:$('p_contact').value, Email:em, Phone:$('p_phone').value, Equipment:$('p_equip').value+' · '+inp.mass+' kg',
     Application:(APPS.find(a=>a.id===S.app)||{}).t||'', Standard:(STDS[S.std]||{}).name||'', Recommended:q+' × '+best.m,
     Results:'util '+best.util.toFixed(0)+'% · fn '+best.fnV.toFixed(1)+' Hz · shock '+best.shV.tg.toFixed(1)+' g ≤ '+inp.frag+' g', Verdict:best.pass?'PASS all checks':'REVIEW — some checks fail',
-    RFQ:'Quotation requested'+(want.length?' + '+want.join(', '):'')+($('rq_date').value?' · needed by '+$('rq_date').value:'')+(window.__wriReport?' · report '+window.__wriReport:'')+($('rq_msg').value.trim()?' · '+$('rq_msg').value.trim():''),
-    _formats:['PDF'].concat($('rq_3d').checked?['STEP']:[]), _kind:'rfq' };
+    RFQ:'Quotation requested · '+window.__wriMount.label.replace(/\s*\(catalogue\)$/,'')+(window.__wriMount.detail?' ('+window.__wriMount.detail+')':'')+(want.length?' + '+want.join(', '):'')+($('rq_date').value?' · needed by '+$('rq_date').value:'')+(window.__wriReport?' · report '+window.__wriReport:'')+($('rq_msg').value.trim()?' · '+$('rq_msg').value.trim():''),
+    _formats:['PDF'].concat($('rq_3d').checked?['STEP']:[]), _kind:'rfq', _mount:window.__wriMount };
   document.getElementById('rfqModal').style.display='none';
   const busy=window.ICThumbs?ICThumbs.busy('Sending your request…'):()=>{};
   (async()=>{ const ok=await postLead(payload); busy();
@@ -1364,12 +1374,15 @@ function xrefFind(){
      </div>
      <div style="font-size:11px;color:var(--ink-3)">Direct dimensional &amp; performance equivalent for like-for-like replacement. For a new design, run the full selection flow (steps 1–5) to verify shock &amp; vibration compliance.</div>
    </div>
+   <div class="f" style="max-width:360px"><label>Mounting option <b style="color:#D14343">*</b> <span class="qm" title="Catalogue mounting option A, B, C, D, E or S — decides how the lugs are made. Printed on the quotation and the supply order.">?</span></label><select id="x_mount">${wriMountOptions()}</select></div>
+   <div class="note" style="margin:6px 0 10px;font-size:13px">GA drawings (PDF) and 3D files (STEP) are normally sent within <b>48 hours</b> of your request.</div>
    <button class="btn btn-p" onclick="xrefRFQ()">Send RFQ to Adonitech</button>`;
 }
 function xrefRFQ(){
   const em=$('x_email').value.trim(), ph=$('x_phone').value.trim();
   if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(em)){toast('Enter a valid email');$('x_email').focus();return;}
   if(!ph){toast('Enter a phone number');$('x_phone').focus();return;}
+  if(!$('x_mount').value){toast('Please choose the mounting option (A, B, C, D, E or S)');$('x_mount').focus();return;}
   $('p_email').value=$('p_email').value||em; $('p_phone').value=$('p_phone').value||ph;
   const {ref,md}=S.xref;
   const payload={
@@ -1380,7 +1393,8 @@ function xrefRFQ(){
     Quantity:$('x_qty').value,
     Build:'Lugs: '+$('x_lugs').value+' · Wire: '+$('x_wire').value+' · '+$('x_duty').value,
     Customer:$('p_cust').value||'—', Project:$('p_name').value||'—',
-    Email:em, Phone:ph, Date:new Date().toLocaleString('en-IN')
+    Email:em, Phone:ph, Date:new Date().toLocaleString('en-IN'),
+    _mount:{ code:$('x_mount').value, label:$('x_mount').selectedOptions[0].textContent, detail:'' }, _xref:{ model:md.m, qty:+$('x_qty').value||1, lug:$('x_lugs').value, wire:$('x_wire').value, duty:$('x_duty').value, ref:ref.m }, _kind:'rfq'
   };
   (async()=>{
     const ok=await postLead(payload);
