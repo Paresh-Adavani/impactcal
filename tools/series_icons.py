@@ -20,6 +20,7 @@ DEFS = '''<defs>
 <linearGradient id="blue" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8dbbff"/><stop offset=".45" stop-color="#1f6fe0"/><stop offset="1" stop-color="#0b3a86"/></linearGradient>
 <linearGradient id="red" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ff8a80"/><stop offset=".45" stop-color="#d81c1c"/><stop offset="1" stop-color="#761010"/></linearGradient>
 <linearGradient id="steel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e3e8ee"/><stop offset=".5" stop-color="#a6b0bb"/><stop offset="1" stop-color="#5b6570"/></linearGradient>
+<pattern id="hatch" width="4" height="4" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="4" height="4" fill="#c3cad2"/><line x1="0" y1="0" x2="0" y2="4" stroke="#4a525b" stroke-width="1"/></pattern>
 <linearGradient id="pu" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#555"/><stop offset=".5" stop-color="#1b1b1b"/><stop offset="1" stop-color="#000"/></linearGradient>
 </defs>'''
 S = 'stroke="#23272c" stroke-width="1.1"'
@@ -42,6 +43,16 @@ def nut(x, D):                          # hex lock nut, side view
     h = D * 1.45
     return (rect(x, CY - h / 2, 7, h, 'steel', 1) + f'<line x1="{x}" y1="{CY - h / 4:.1f}" x2="{x + 7}" y2="{CY - h / 4:.1f}" stroke="#555" stroke-width=".6"/>'
             f'<line x1="{x}" y1="{CY + h / 4:.1f}" x2="{x + 7}" y2="{CY + h / 4:.1f}" stroke="#555" stroke-width=".6"/>')
+
+
+def sflange(x, top, bot, holes, w=7):
+    """flange plate cut in section (hatched) with bolt holes running through its thickness, and centre lines"""
+    s = f'<rect x="{x:.1f}" y="{top:.1f}" width="{w}" height="{bot - top:.1f}" fill="url(#hatch)" {S}/>'
+    for hy in holes:
+        s += f'<rect x="{x:.1f}" y="{hy - 2.4:.1f}" width="{w}" height="4.8" fill="#fff"/>'
+        s += f'<line x1="{x:.1f}" y1="{hy - 2.4:.1f}" x2="{x + w:.1f}" y2="{hy - 2.4:.1f}" stroke="#23272c" stroke-width=".9"/><line x1="{x:.1f}" y1="{hy + 2.4:.1f}" x2="{x + w:.1f}" y2="{hy + 2.4:.1f}" stroke="#23272c" stroke-width=".9"/>'
+        s += f'<line x1="{x - 4:.1f}" y1="{hy:.1f}" x2="{x + w + 4:.1f}" y2="{hy:.1f}" stroke="#23272c" stroke-width=".5" stroke-dasharray="4 1.5 1 1.5"/>'
+    return s
 
 
 def label(t, sub=''):
@@ -77,8 +88,7 @@ def akhg():
     # body 46, rod 26 (0.56 x body), front flange 70 x 8, striker cap 34
     x0, L, D, d = 22, 118, 46, 26
     b = cyl(x0, L, D, 'yellow', 4)
-    b += rect(x0 + L - 10, CY - 35, 9, 70, 'steel', 1)          # front flange at the rod end
-    b += f'<circle cx="{x0 + L - 5.5}" cy="{CY - 27}" r="2.6" fill="#fff" {S}/><circle cx="{x0 + L - 5.5}" cy="{CY + 27}" r="2.6" fill="#fff" {S}/>'
+    b += sflange(x0 + L - 10, CY - 35, CY + 35, (CY - 28, CY + 28), 9)      # front flange at the rod end, in section
     b += cyl(x0 + L - 1, 44, d, 'chrome', 0)
     b += rect(x0 + L + 43, CY - 17, 10, 34, 'steel', 3)         # striker cap
     b += badge(x0 + 48, 'N₂ gas return')
@@ -104,7 +114,7 @@ def heavy(front, name, sub):
     x0, L, D, d = 26 if not front else 20, 116, 56, 28
     b = cyl(x0, L, D, 'yellow', 5)
     fx = x0 + L - 10 if front else x0 - 8
-    b += rect(fx, CY - 38, 9, 76, 'steel', 1) + f'<circle cx="{fx + 4.5}" cy="{CY - 30}" r="2.8" fill="#fff" {S}/><circle cx="{fx + 4.5}" cy="{CY + 30}" r="2.8" fill="#fff" {S}/>'
+    b += sflange(fx, CY - 38, CY + 38, (CY - 30, CY + 30), 9)
     b += cyl(x0 + L - 1, 36, d, 'chrome', 0) + rect(x0 + L + 35, CY - 19, 10, 38, 'steel', 3)
     b += badge(x0 + 50, 'internal N₂')
     return svg(b, name, sub)
@@ -190,16 +200,16 @@ def mount(code):
         b += ''.join(f'<line x1="{16 + i}" y1="{BY + 4}" x2="{10 + i}" y2="{BY + 10}" stroke="#9aa3ad" stroke-width="1"/>' for i in range(4, 208, 8))
 
     def flange(x, down=False):             # flange plate; foot versions reach down to the lug
-        h2 = 32
-        s = rect(x, CY - h2, 7, 2 * h2 + (BY - CY - h2 if down else 0), 'steel', 1)
-        return s + f'<circle cx="{x + 3.5}" cy="{CY - 25}" r="2.2" fill="#fff" {S}/><circle cx="{x + 3.5}" cy="{CY + 25}" r="2.2" fill="#fff" {S}/>'
+        return sflange(x, CY - 32, BY - 6 if down else CY + 32, (CY - 25, CY + 25))
 
     def lug(x, direction):                 # foot lug welded to the flange bottom: gusset + base pad with a bolt hole
         w = 22 * direction
         pad_x = x if direction > 0 else x + w
         s = f'<path d="M{x},{CY + 14} L{x},{BY - 6} L{x + w},{BY - 6} Z" fill="url(#steel)" {S}/>'
-        s += rect(pad_x, BY - 6, abs(w), 6, 'steel', 1)
-        s += f'<circle cx="{x + w * 0.62:.1f}" cy="{BY - 3}" r="1.7" fill="#fff" {S}/>'
+        hx = x + w * 0.62                  # base pad in section with a vertical bolt hole
+        s += f'<rect x="{pad_x:.1f}" y="{BY - 6}" width="{abs(w)}" height="6" fill="url(#hatch)" {S}/>'
+        s += f'<rect x="{hx - 2:.1f}" y="{BY - 6}" width="4" height="6" fill="#fff"/><line x1="{hx - 2:.1f}" y1="{BY - 6}" x2="{hx - 2:.1f}" y2="{BY}" stroke="#23272c" stroke-width=".9"/><line x1="{hx + 2:.1f}" y1="{BY - 6}" x2="{hx + 2:.1f}" y2="{BY}" stroke="#23272c" stroke-width=".9"/>'
+        s += f'<line x1="{hx:.1f}" y1="{BY - 10}" x2="{hx:.1f}" y2="{BY + 3}" stroke="#23272c" stroke-width=".5" stroke-dasharray="4 1.5 1 1.5"/>'
         return s
 
     def clevis(x, direction):              # fork with pin; direction -1 = pointing rearwards, +1 = forwards
