@@ -229,7 +229,7 @@ def mount(code):
     if code == 'TM':
         b += lug(front_f + 7, +1)           # foot lug just in front of the front flange
     if code == 'FM':
-        b += lug(rear_f, -1) + lug(rear_f + 7, +1)   # lug under the rear flange
+        b += lug(rear_f, -1)                          # rear lug on the left, away from the body
         b += lug(front_f + 7, +1)                     # lug at the bottom right of the front flange
     b += f'<text x="120" y="22" font-size="14" font-weight="700" fill="#1B3160" font-family="Arial" text-anchor="middle">{code}</text>'
     b += f'<text x="120" y="{CY + 66}" font-size="11" fill="#1B3160" font-family="Arial" text-anchor="middle">{MOUNTS[code]}</text>'
