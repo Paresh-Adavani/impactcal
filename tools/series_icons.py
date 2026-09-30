@@ -200,7 +200,7 @@ def mount(code):
         b += ''.join(f'<line x1="{16 + i}" y1="{BY + 4}" x2="{10 + i}" y2="{BY + 10}" stroke="#9aa3ad" stroke-width="1"/>' for i in range(4, 208, 8))
 
     def flange(x, down=False):             # flange plate; foot versions reach down to the lug
-        return sflange(x, CY - 32, BY - 6 if down else CY + 32, (CY - 25, CY + 25))
+        return sflange(x, CY - 32, BY if down else CY + 32, (CY - 25, CY + 25))   # foot versions: flange bottom flush with the foot pad on the floor
 
     def lug(x, direction):                 # foot lug welded to the flange bottom: gusset + base pad with a bolt hole
         w = 22 * direction
