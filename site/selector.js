@@ -120,7 +120,7 @@ function specFill(series) {
     const o = sp[f]; $(box).hidden = !o; $(box + ' .req').hidden = !(o && o.required); if (!o) { $(sel).innerHTML = ''; return; }
     const def = o.options.find(x => x.is_default);
     $(sel).innerHTML = (o.required && !def ? `<option value="">${esc(t('spec_choose'))}</option>` : o.required ? '' : '<option value="">—</option>') +
-      o.options.map(x => `<option value="${esc(x.code)}"${def && def.code === x.code ? ' selected' : ''}>${esc(x.label)}</option>`).join('');
+      o.options.map(x => `<option value="${esc(x.code)}"${def && def.code === x.code ? ' selected' : ''}>${esc(x.label)}${x.surcharge_pct ? ` (+${x.surcharge_pct} %)` : ''}</option>`).join('');
     $(sel).classList.remove('need');
   };
   fill('#rmount', '#rmountBox', 'mounting'); fill('#rcap', '#rcapBox', 'rod_end');
@@ -131,7 +131,7 @@ function specMissing() {
   if (sp.rod_end && sp.rod_end.required && !$('#rcap').value) { miss.push(t('f_cap')); $('#rcap').classList.add('need'); }
   return miss;
 }
-const selText = sel => { const o = $(sel).selectedOptions[0]; return o && o.value ? o.textContent : ''; };
+const selText = sel => { const o = $(sel).selectedOptions[0]; return o && o.value ? o.textContent.replace(/\s*\(\+[\d.]+ %\)$/, '') : ''; };
 ['#rmount', '#rcap'].forEach(id => $(id).addEventListener('change', () => $(id).classList.remove('need')));
 $('#showMore').onclick = () => { EXPANDED = !EXPANDED; renderRows(); };
 

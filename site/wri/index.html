@@ -438,7 +438,7 @@ const DATA = (function(){
   try {
     var tok=''; try{ tok=localStorage.getItem('ic_token')||''; }catch(e){}
     var x=new XMLHttpRequest(); x.open('GET','/api/wri/data',false); if(tok) x.setRequestHeader('authorization','Bearer '+tok); x.send();
-    if(x.status===200){ var j=JSON.parse(x.responseText); if(j.awri&&j.awri.length) return Object.assign({}, DATA_FALLBACK, {awri:j.awri, prices:j.prices||{}, fx:j.fx, prices_visible:!!j.prices_visible, lug_options:j.lug_options||[], wire_options:j.wire_options||[]}); }
+    if(x.status===200){ var j=JSON.parse(x.responseText); if(j.awri&&j.awri.length) return Object.assign({}, DATA_FALLBACK, {awri:j.awri, prices:j.prices||{}, fx:j.fx, prices_visible:!!j.prices_visible, lug_options:j.lug_options||[], wire_options:j.wire_options||[], wri_mount:j.wri_mount||null}); }
   } catch(e) { console.warn('wri data', e); }
   return Object.assign({}, DATA_FALLBACK, {prices:{}, prices_visible:false});
 })();
@@ -1229,6 +1229,11 @@ async function postReport(payload){
   }catch(e){ return false; }
 }
 /* quotation + drawings request (explicit), after the report or straight from the results */
+function wriMountPics(selId){
+  const codes=((DATA.wri_mount&&DATA.wri_mount.options)||[]).map(o=>o.code); const list=codes.length?codes:['A','B','C','D','E','S'];
+  return '<div class="wmgrid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px">'+list.map(c=>'<button type="button" class="wmpick" data-wm="'+c+'" data-sel="'+selId+'" onclick="pickWm(this)" style="border:2px solid #D8E0EA;border-radius:10px;background:#fff;padding:2px;cursor:pointer"><img src="/img/wri-mount/'+c+'.svg" alt="Mounting option '+c+'" style="width:100%;display:block"></button>').join('')+'</div>';
+}
+function pickWm(b){ const sel=document.getElementById(b.dataset.sel); sel.value=b.dataset.wm; sel.style.borderColor=''; b.parentNode.querySelectorAll('.wmpick').forEach(x=>{x.style.borderColor=x===b?'#F57C00':'#D8E0EA';x.style.background=x===b?'#FFF4E8':'#fff';}); }
 function wriMountOptions(){
   const o=(DATA.wri_mount&&DATA.wri_mount.options)||['A','B','C','D','E','S'].map(c=>({code:c,label:'Mounting option '+c+' (catalogue)'}));
   return '<option value="">— please choose —</option>'+o.map(x=>'<option value="'+x.code+'">'+x.label+'</option>').join('');
@@ -1245,8 +1250,9 @@ function openRfq(afterReport){
     <div class="note" style="margin:10px 0"><b>${rfqQty()} × ${best.m}</b> · Lugs: ${$('o_lugs').value} · Wire rope: ${$('o_wire').value} · ${$('o_duty').value}</div>
     <div class="grid2"><div class="f"><label>Quantity <span class="qm" title="Isolators + stabilizers; add spares if you want them quoted.">?</span></label><input id="rq_qty" type="number" min="1" value="${rfqQty()}"></div>
       <div class="f"><label>Needed by <span class="qm" title="Optional — the date you need the isolators on site.">?</span></label><input id="rq_date" type="date"></div></div>
-    <div class="grid2"><div class="f"><label>Mounting option <b style="color:#D14343">*</b> <span class="qm" title="Catalogue mounting option A, B, C, D, E or S — decides how the mounting holes / threads in the lugs are made. It is printed on our quotation and on the supply order.">?</span></label><select id="rq_mount">${wriMountOptions()}</select></div>
-      <div class="f"><label>Hole / thread details <span class="qm" title="Optional — e.g. M8 tapped, Ø9 through holes, inserts, special pitch.">?</span></label><input id="rq_mdet" placeholder="e.g. M8 tapped / Ø9 through"></div></div>
+    <div class="f"><label>Mounting option <b style="color:#D14343">*</b> <span class="qm" title="Catalogue mounting option A, B, C, D, E or S — how the holes in the top and bottom mounting bars are made (through hole, countersunk or threaded). It is printed on our quotation and on the supply order.">?</span> <span style="font-weight:400;color:#5A6672">— tap the picture</span></label>
+      ${wriMountPics('rq_mount')}<select id="rq_mount" style="margin-top:6px">${wriMountOptions()}</select></div>
+    <div class="f"><label>Hole / thread details <span class="qm" title="Optional — e.g. M8 tapped, Ø9 through holes, inserts, special pitch.">?</span></label><input id="rq_mdet" placeholder="e.g. M8 tapped / Ø9 through"></div>
     <div class="f"><label>Please also send</label>
       <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_ga" checked style="width:auto"> GA drawing (PDF)</label>
       <label style="display:flex;gap:8px;align-items:center;font-weight:400;margin:4px 0"><input type="checkbox" id="rq_3d" style="width:auto"> 3D model (STEP)</label>
@@ -1257,6 +1263,7 @@ function openRfq(afterReport){
   m.style.display='flex';
   m.querySelector('#rq_cancel').onclick=()=>{m.style.display='none';};
   m.querySelector('#rq_send').onclick=sendRfq;
+  m.querySelector('#rq_mount').onchange=e=>{const b=m.querySelector('.wmpick[data-wm="'+e.target.value+'"]'); if(b) pickWm(b);};
 }
 function sendRfq(){
   const em=$('p_email').value.trim();
@@ -1374,7 +1381,7 @@ function xrefFind(){
      </div>
      <div style="font-size:11px;color:var(--ink-3)">Direct dimensional &amp; performance equivalent for like-for-like replacement. For a new design, run the full selection flow (steps 1–5) to verify shock &amp; vibration compliance.</div>
    </div>
-   <div class="f" style="max-width:360px"><label>Mounting option <b style="color:#D14343">*</b> <span class="qm" title="Catalogue mounting option A, B, C, D, E or S — decides how the lugs are made. Printed on the quotation and the supply order.">?</span></label><select id="x_mount">${wriMountOptions()}</select></div>
+   <div class="f" style="max-width:480px"><label>Mounting option <b style="color:#D14343">*</b> <span class="qm" title="Catalogue mounting option A, B, C, D, E or S — how the holes in the top and bottom mounting bars are made. Printed on the quotation and the supply order.">?</span> <span style="font-weight:400;color:#5A6672">— tap the picture</span></label>${wriMountPics('x_mount')}<select id="x_mount" style="margin-top:6px">${wriMountOptions()}</select></div>
    <div class="note" style="margin:6px 0 10px;font-size:13px">GA drawings (PDF) and 3D files (STEP) are normally sent within <b>48 hours</b> of your request.</div>
    <button class="btn btn-p" onclick="xrefRFQ()">Send RFQ to Adonitech</button>`;
 }

@@ -196,6 +196,7 @@ const server = app.listen(0, async () => {
     ok('customer RFQ without a rod end is refused and says what to choose', noCap.status === 400 && /Rod end/.test(noCapJ.error), noCapJ.error);
     const okAd = await post('/rfq', { line: 'industrial', customer: cust, items: [{ table: 'shock_absorbers', key: 'AD4250', model: 'AD-42-50', qty: 2, mounting_code: 'FM', cap_code: 'MC' }] }, { 'content-type': 'application/json' });
     const QA = await get('/admin/quotation/' + (await get('/admin/rfq/' + okAd.id)).quotation_id);
+    ok('metallic cap +1 % on the AD list price (NC = basic rate): 11,800 -> 11,918 -> 12,000', QA.items[0].rate_inr === 12000, QA.items[0].rate_inr);
     ok('AD line prints mounting + rod end, foot mount priced as its own accessory line', /Mounting: Foot mount \(FM\)/.test(QA.items[0].description) && /Rod end: MC - metallic cap/.test(QA.items[0].description) && QA.items[1] && QA.items[1].kind === 'accessory' && QA.items[1].key === 'FM', QA.items.map(i => i.description).join(' | '));
     const akhg = await post('/rfq', { line: 'crane', customer: cust, items: [{ table: 'shock_absorbers', key: 'AKHG100200', model: 'AKHG 100-200', qty: 2, mounting_code: 'RS' }] }, { 'content-type': 'application/json' });
     const QK = await get('/admin/quotation/' + (await get('/admin/rfq/' + akhg.id)).quotation_id);
@@ -204,7 +205,7 @@ const server = app.listen(0, async () => {
     ok('WRI RFQ without a mounting option is refused', noMount.status === 400);
     const wrSpec = await post('/rfq', { line: 'wri', customer: cust, items: [{ table: 'wire_rope_isolators', key: 'AWRI-64-90', model: 'AWRI-64-90', qty: 4, wri_mount_code: 'D', remark: 'holes/threads: M8 tapped' }] }, { 'content-type': 'application/json' });
     const QW = await get('/admin/quotation/' + (await get('/admin/rfq/' + wrSpec.id)).quotation_id);
-    ok('WRI quotation line carries the mounting option for the lug order', /Mounting option D/.test(QW.items[0].description) && QW.items[0].wri_mount_code === 'D' && /M8 tapped/.test(QW.items[0].description), QW.items[0].description);
+    ok('WRI quotation line carries the mounting option for the lug order', /Mounting option D — top threaded \/ bottom threaded/.test(QW.items[0].description) && QW.items[0].wri_mount_code === 'D' && /M8 tapped/.test(QW.items[0].description), QW.items[0].description);
     ok('staff RFQ without a rod end prints "to be confirmed"', /Rod end: to be confirmed/.test(Q.items[0].description), Q.items[0].description);
 
     console.log('\n— export (Germany, USD) —');
